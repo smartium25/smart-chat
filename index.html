@@ -253,7 +253,7 @@ small{color:var(--sub);}
 <div class="send">
 <input id="txt" placeholder="Mensaje..." onkeypress="if(event.key==='Enter')sendText()">
 <input type="file" id="media" hidden onchange="sendFile()">
-<button class="blue" onclick="media.click()">📎</button>
+<button class="blue" onclick="media.click()">Subir foto, video o archivo</button>
 <button class="blue" onclick="sendText()">Enviar</button>
 <button onclick="closeChat()" style="background:#555;color:#fff">X</button>
 </div>
@@ -283,7 +283,7 @@ small{color:var(--sub);}
 </div>
 
 <script>
-const API="http://localhost:8080";
+const API="https://groundwater-chosen-desktops-dialog.trycloudflare.com";
 let ME=localStorage.getItem("username")||"";
 
 let target="";
