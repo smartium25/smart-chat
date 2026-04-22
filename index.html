@@ -1,9 +1,10 @@
-,<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Smart-Chat</title>
+
 <style>
 :root{
 --primary:#00bcd4;
@@ -15,7 +16,9 @@
 --green:#4caf50;
 --red:#f44336;
 }
+
 *{margin:0;padding:0;box-sizing:border-box;}
+
 body{
 font-family:Segoe UI,sans-serif;
 background:var(--bg);
@@ -32,6 +35,7 @@ justify-content:center;
 align-items:center;
 padding:20px;
 }
+
 .box{
 width:100%;
 max-width:430px;
@@ -40,16 +44,19 @@ padding:36px;
 border-radius:24px;
 border:1px solid var(--border);
 }
+
 .box h1{
 text-align:center;
 color:var(--primary);
 margin-bottom:10px;
 }
+
 .box p{
 text-align:center;
 color:var(--sub);
 margin-bottom:24px;
 }
+
 input{
 width:100%;
 padding:14px;
@@ -60,6 +67,7 @@ background:#1d1d1d;
 color:#fff;
 margin-bottom:12px;
 }
+
 button{
 border:none;
 padding:14px;
@@ -67,18 +75,30 @@ border-radius:12px;
 cursor:pointer;
 font-weight:700;
 }
+
 .full{width:100%;}
 .blue{background:var(--primary);color:#000;}
+
 .line{
 background:none;
 border:1px solid var(--primary);
 color:var(--primary);
 margin-top:10px;
 }
-#msg{text-align:center;margin-top:15px;color:var(--sub);min-height:22px;}
+
+#msg{
+text-align:center;
+margin-top:15px;
+color:var(--sub);
+min-height:22px;
+}
 
 /* APP */
-#app{display:none;height:100vh;}
+#app{
+display:none;
+height:100vh;
+}
+
 .wrap{
 display:grid;
 grid-template-columns:320px 1fr 320px;
@@ -86,6 +106,7 @@ height:100vh;
 gap:2px;
 background:var(--border);
 }
+
 .panel{
 background:var(--bg);
 padding:16px;
@@ -93,6 +114,7 @@ display:flex;
 flex-direction:column;
 overflow:hidden;
 }
+
 .title{
 background:var(--card);
 padding:14px;
@@ -102,10 +124,12 @@ font-weight:700;
 color:var(--primary);
 margin-bottom:14px;
 }
+
 .scroll{
 flex:1;
 overflow-y:auto;
 }
+
 .user{
 display:flex;
 align-items:center;
@@ -115,17 +139,28 @@ padding:10px;
 border-radius:14px;
 margin-bottom:10px;
 }
+
 .user img{
-width:44px;height:44px;border-radius:50%;
+width:44px;
+height:44px;
+border-radius:50%;
 object-fit:cover;
 border:2px solid var(--primary);
 }
+
 .online,.offline{
-width:10px;height:10px;border-radius:50%;
+width:10px;
+height:10px;
+border-radius:50%;
 }
+
 .online{background:var(--green);}
 .offline{background:#666;}
-.name{flex:1;font-weight:600;}
+
+.name{
+flex:1;
+font-weight:600;
+}
 
 .center{
 background:#1a1a1a;
@@ -133,6 +168,7 @@ display:flex;
 flex-direction:column;
 height:100vh;
 }
+
 #profile{
 flex:1;
 display:flex;
@@ -141,21 +177,29 @@ justify-content:center;
 align-items:center;
 padding:30px;
 }
+
 .big{
-width:170px;height:170px;
+width:170px;
+height:170px;
 border-radius:50%;
 overflow:hidden;
 border:4px solid var(--primary);
 margin-bottom:20px;
 background:var(--card);
 }
-.big img{width:100%;height:100%;object-fit:cover;}
+
+.big img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
 
 #chat{
 display:none;
 height:100%;
 flex-direction:column;
 }
+
 #chatHead{
 padding:15px;
 background:var(--card);
@@ -163,6 +207,7 @@ color:var(--primary);
 text-align:center;
 font-weight:700;
 }
+
 #msgs{
 flex:1;
 overflow-y:auto;
@@ -171,16 +216,34 @@ display:flex;
 flex-direction:column;
 gap:10px;
 }
+
 .msg{
 padding:10px 14px;
 border-radius:14px;
 max-width:72%;
 word-break:break-word;
 }
-.me{align-self:flex-end;background:var(--primary);color:#000;}
-.them{align-self:flex-start;background:var(--card);}
-.msg img{max-width:220px;border-radius:12px;}
-.msg video{max-width:240px;border-radius:12px;}
+
+.me{
+align-self:flex-end;
+background:var(--primary);
+color:#000;
+}
+
+.them{
+align-self:flex-start;
+background:var(--card);
+}
+
+.msg img{
+max-width:220px;
+border-radius:12px;
+}
+
+.msg video{
+max-width:240px;
+border-radius:12px;
+}
 
 .send{
 display:flex;
@@ -188,17 +251,24 @@ gap:8px;
 padding:12px;
 background:var(--card);
 }
-.send input{margin:0;}
-small{color:var(--sub);}
+
+.send input{
+margin:0;
+}
+
+small{
+color:var(--sub);
+}
 </style>
 </head>
+
 <body>
 
 <!-- LOGIN -->
 <div id="auth">
 <div class="box">
 <h1>SMART-CHAT</h1>
-<p>Inicia sesión o crea cuenta (cuentas de Smart-Web no sirven)</p>
+<p>Inicia sesión o crea cuenta</p>
 
 <input id="user" placeholder="Usuario">
 <input id="pass" type="password" placeholder="Contraseña">
@@ -253,13 +323,12 @@ small{color:var(--sub);}
 <div class="send">
 <input id="txt" placeholder="Mensaje..." onkeypress="if(event.key==='Enter')sendText()">
 <input type="file" id="media" hidden onchange="sendFile()">
-<button class="blue" onclick="media.click()">Subir foto, video o archivo</button>
+<button class="blue" onclick="media.click()">Archivo</button>
 <button class="blue" onclick="sendText()">Enviar</button>
 <button onclick="closeChat()" style="background:#555;color:#fff">X</button>
 </div>
 
 </div>
-
 </div>
 
 <!-- RIGHT -->
@@ -284,29 +353,33 @@ small{color:var(--sub);}
 
 <script>
 const API="https://groundwater-chosen-desktops-dialog.trycloudflare.com";
-let ME=localStorage.getItem("username")||"";
 
+let ME=localStorage.getItem("username") || "";
 let target="";
 let isGroup=false;
-let timer=null;
+let ws=null;
 
 /* AUTO LOGIN */
-if(ME) showApp();
-
-/* AUTH */
-
-function text(t,c="#aaa"){
-let m=document.getElementById("msg");
-m.innerText=t;
-m.style.color=c;
+if(ME){
+showApp();
 }
 
+/* MSG */
+function text(t,c="#aaa"){
+msg.innerText=t;
+msg.style.color=c;
+}
+
+/* AUTH */
 async function register(){
 
 let u=user.value.trim();
 let p=pass.value.trim();
 
-if(!u||!p){text("Completa campos","#f44336");return;}
+if(!u || !p){
+text("Completa campos","#f44336");
+return;
+}
 
 let r=await fetch(API+"/api/register",{
 method:"POST",
@@ -319,9 +392,8 @@ let d=await r.json();
 if(r.ok){
 text("Cuenta creada","#4caf50");
 }else{
-text(d.detail||"Error","#f44336");
+text(d.detail || "Error","#f44336");
 }
-
 }
 
 async function login(){
@@ -329,7 +401,10 @@ async function login(){
 let u=user.value.trim();
 let p=pass.value.trim();
 
-if(!u||!p){text("Completa campos","#f44336");return;}
+if(!u || !p){
+text("Completa campos","#f44336");
+return;
+}
 
 let r=await fetch(API+"/api/login",{
 method:"POST",
@@ -344,14 +419,13 @@ localStorage.setItem("username",u);
 ME=u;
 showApp();
 }else{
-text(d.detail||"Error","#f44336");
+text(d.detail || "Error","#f44336");
 }
-
 }
 
 /* APP */
-
 function showApp(){
+
 auth.style.display="none";
 app.style.display="block";
 
@@ -360,8 +434,7 @@ mypfp.src=`${API}/media/pfp/${ME}.jpg?${Date.now()}`;
 
 loadUsers();
 loadGroups();
-
-setInterval(loadUsers,5000);
+connectSocket();
 }
 
 function logout(){
@@ -369,8 +442,30 @@ localStorage.removeItem("username");
 location.reload();
 }
 
-/* USERS */
+/* SOCKET */
+function connectSocket(){
 
+ws=new WebSocket(`wss://groundwater-chosen-desktops-dialog.trycloudflare.com/ws/${ME}`);
+
+ws.onmessage=(event)=>{
+
+let data=JSON.parse(event.data);
+
+if(data.type==="chat"){
+if(target) loadMsgs();
+}
+
+if(data.type==="users"){
+loadUsers();
+}
+};
+
+ws.onclose=()=>{
+setTimeout(connectSocket,2000);
+};
+}
+
+/* USERS */
 async function loadUsers(){
 
 let r=await fetch(`${API}/api/users/list/${ME}`);
@@ -398,11 +493,9 @@ selector.innerHTML+=`
 `;
 
 });
-
 }
 
 /* GROUPS */
-
 async function loadGroups(){
 
 let r=await fetch(`${API}/api/groups/list/${ME}`);
@@ -420,7 +513,6 @@ groups.innerHTML+=`
 `;
 
 });
-
 }
 
 async function createGroup(){
@@ -429,22 +521,24 @@ let n=gname.value.trim();
 if(!n)return;
 
 let members=[...document.querySelectorAll(".pick:checked")]
-.map(x=>x.value).join(",");
+.map(x=>x.value)
+.join(",");
 
 let fd=new FormData();
 fd.append("owner",ME);
 fd.append("name",n);
 fd.append("members",members);
 
-await fetch(API+"/api/groups/create",{method:"POST",body:fd});
+await fetch(API+"/api/groups/create",{
+method:"POST",
+body:fd
+});
 
 gname.value="";
 loadGroups();
-
 }
 
 /* CHAT */
-
 function openPrivate(u){
 target=u;
 isGroup=false;
@@ -464,18 +558,17 @@ chat.style.display="flex";
 chatHead.innerText=t;
 
 loadMsgs();
-
-if(timer)clearInterval(timer);
-timer=setInterval(loadMsgs,1500);
 }
 
 function closeChat(){
 chat.style.display="none";
 profile.style.display="flex";
-clearInterval(timer);
+target="";
 }
 
 async function loadMsgs(){
+
+if(!target)return;
 
 let url=isGroup
 ?`${API}/api/groups/get/${ME}/${target}`
@@ -487,11 +580,12 @@ let data=await r.json();
 msgs.innerHTML=data.map(m=>{
 
 let cls=m.sender===ME?"me":"them";
-let c=m.message||"";
+let c=m.message || "";
 
 if(m.type==="image"){
 c=`<img src="${API}/media/chat/${m.file}">`;
 }
+
 if(m.type==="video"){
 c=`<video controls src="${API}/media/chat/${m.file}"></video>`;
 }
@@ -506,9 +600,11 @@ msgs.scrollTop=msgs.scrollHeight;
 async function sendText(){
 
 let m=txt.value.trim();
-if(!m)return;
+if(!m || !target)return;
 
-let url=isGroup?API+"/api/groups/send":API+"/api/chat/send";
+let url=isGroup
+?API+"/api/groups/send"
+:API+"/api/chat/send";
 
 await fetch(url,{
 method:"POST",
@@ -527,16 +623,22 @@ loadMsgs();
 async function sendFile(){
 
 let f=media.files[0];
-if(!f)return;
+if(!f || !target)return;
 
 let fd=new FormData();
 fd.append("sender",ME);
 fd.append("receiver",target);
 fd.append("file",f);
 
-let url=isGroup?API+"/api/groups/upload":API+"/api/chat/upload";
+let url=isGroup
+?API+"/api/groups/upload"
+:API+"/api/chat/upload";
 
-await fetch(url,{method:"POST",body:fd});
+await fetch(url,{
+method:"POST",
+body:fd
+});
+
 loadMsgs();
 }
 
@@ -549,7 +651,10 @@ let fd=new FormData();
 fd.append("username",ME);
 fd.append("file",f);
 
-await fetch(API+"/api/user/pfp",{method:"POST",body:fd});
+await fetch(API+"/api/user/pfp",{
+method:"POST",
+body:fd
+});
 
 mypfp.src=`${API}/media/pfp/${ME}.jpg?${Date.now()}`;
 loadUsers();
