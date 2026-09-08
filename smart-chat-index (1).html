@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Smart-Chat</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#101010;color:#fff;height:100vh;overflow:hidden}.app{height:100vh;display:grid;grid-template-columns:280px 1fr}.sidebar{background:#171717;border-right:1px solid #303030;display:flex;flex-direction:column}.brand{padding:20px;border-bottom:1px solid #303030;font-weight:700;color:#00bcd4;font-size:20px}.me{padding:16px;border-bottom:1px solid #303030;display:flex;align-items:center;gap:12px}.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#2b2b2b;border:1px solid #444}.me-name{font-weight:600}.me-status{font-size:12px;color:#777}.side-actions{padding:12px;border-bottom:1px solid #303030;display:flex;gap:8px}.btn{border:0;border-radius:8px;padding:9px 12px;cursor:pointer;font-weight:600}.primary{background:#00bcd4;color:#000}.secondary{background:#2a2a2a;color:#fff}.danger{background:#5b2424;color:#fff}.section-title{padding:14px 16px 8px;color:#777;font-size:12px;text-transform:uppercase}.users{overflow:auto;flex:1}.user,.room{padding:11px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}.user:hover,.room:hover,.selected{background:#242424}.mini{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#2b2b2b}.user-info{min-width:0;flex:1}.user-name,.room-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.online{font-size:11px;color:#58a6ff}.rooms{max-height:30%;overflow:auto;border-top:1px solid #303030}.main{display:flex;flex-direction:column;min-width:0}.topbar{height:64px;border-bottom:1px solid #303030;background:#171717;display:flex;align-items:center;padding:0 18px;justify-content:space-between}.chat-title{font-size:18px;font-weight:600}.chat-sub{font-size:12px;color:#777}.messages{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:9px}.msg{max-width:min(70%,620px);padding:10px 13px;border-radius:14px;background:#222;border:1px solid #303030}.mine{align-self:flex-end;background:#073840;border-color:#09606c}.msg-meta{font-size:11px;color:#777;margin-top:5px}.media{max-width:100%;border-radius:10px;margin-top:5px}.composer{border-top:1px solid #303030;background:#171717;padding:12px;display:flex;gap:8px}.composer input{flex:1;background:#101010;color:#fff;border:1px solid #444;border-radius:10px;padding:12px;outline:none}.file-label{display:flex;align-items:center;justify-content:center;background:#2a2a2a;border-radius:10px;padding:0 12px;cursor:pointer}.empty{margin:auto;color:#777;text-align:center}.modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.box{background:#1b1b1b;border:1px solid #333;border-radius:14px;padding:20px;width:min(420px,100%)}.box h3{margin-top:0}.box input,.box select{width:100%;margin:8px 0;padding:11px;border-radius:8px;border:1px solid #444;background:#101010;color:#fff}.row{display:flex;gap:8px;margin-top:10px}.error{color:#ff8a80;font-size:13px;min-height:18px}.success{color:#81c784;font-size:13px;min-height:18px}
+@media(max-width:760px){.app{grid-template-columns:82px 1fr}.brand,.me-name,.me-status,.side-actions,.section-title,.user-info,.room-name{display:none}.me{justify-content:center}.users,.rooms{display:block}.user,.room{justify-content:center;padding:12px 8px}.sidebar{overflow:hidden}.topbar{padding:0 12px}.msg{max-width:85%}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="brand">Smart-Chat</div>
+<div class="me">
+<img id="myAvatar" class="avatar" alt="">
+<div><div id="myName" class="me-name">Cargando...</div><div class="me-status">Conectado</div></div>
+</div>
+<div class="side-actions">
+<button id="newGroup" class="btn primary">Nuevo grupo</button>
+<button id="logout" class="btn secondary">Salir</button>
+</div>
+<div class="section-title">Usuarios</div>
+<div id="users" class="users"></div>
+<div class="section-title">Grupos</div>
+<div id="rooms" class="rooms"></div>
+</aside>
+<main class="main">
+<div class="topbar"><div><div id="chatTitle" class="chat-title">Smart-Chat</div><div id="chatSub" class="chat-sub">Selecciona un usuario o grupo</div></div></div>
+<div id="messages" class="messages"><div class="empty">Selecciona una conversación.</div></div>
+<div class="composer">
+<label class="file-label">📎<input id="fileInput" type="file" hidden accept="image/*,video/*"></label>
+<input id="messageInput" placeholder="Escribe un mensaje..." autocomplete="off">
+<button id="send" class="btn primary">Enviar</button>
+</div>
+</main>
+</div>
+
+<div id="groupModal" class="modal">
+<div class="box">
+<h3>Crear grupo</h3>
+<input id="groupName" placeholder="Nombre del grupo">
+<div id="groupMembers"></div>
+<div id="groupError" class="error"></div>
+<div class="row"><button id="cancelGroup" class="btn secondary">Cancelar</button><button id="createGroup" class="btn primary">Crear</button></div>
+</div>
+</div>
+
+<script>
+const KN_AUTH_API="http://127.0.0.1:8000";
+const LOCAL_API=location.protocol==="file:"?"":location.origin;
+const API=window.SMART_CHAT_API||"http://127.0.0.1:8002";
+const TOKEN_KEY="knfoundation_token";
+let token=localStorage.getItem(TOKEN_KEY);
+let me=null;
+let currentTarget=null;
+let currentType=null;
+let socket=null;
+
+const $=id=>document.getElementById(id);
+
+function authHeaders(extra={}){return {Authorization:`Bearer ${token}`,...extra}}
+function showError(target,text){target.textContent=text||"Error."}
+function pfpUrl(value){
+ if(!value)return "";
+ if(/^https?:\/\//.test(value))return value;
+ if(value.startsWith("/pfp/"))return KN_AUTH_API+value;
+ if(value.startsWith("/media/"))return API+value;
+ return value;
+}
+async function readJson(r){try{return await r.json()}catch{return {}}}
+async function api(path,options={}){
+ const r=await fetch(API+path,{...options,headers:{...authHeaders(),...(options.headers||{})}});
+ const data=await readJson(r);
+ if(!r.ok)throw new Error(typeof data.detail==="string"?data.detail:(data.message||"Error en Smart-Chat."));
+ return data;
+}
+
+async function checkAuth(){
+ if(!token){location.href="https://smartium25.github.io/auth/?redirect="+encodeURIComponent(location.href);return false}
+ try{
+  const r=await fetch(KN_AUTH_API+"/api/me",{headers:authHeaders()});
+  if(!r.ok)throw new Error();
+  const data=await r.json();
+  me=data.user;
+  $("myName").textContent=me.username||"Usuario";
+  const p=pfpUrl(me.pfp||me.profile_picture);
+  if(p)$("myAvatar").src=p;
+  return true;
+ }catch{
+  localStorage.removeItem(TOKEN_KEY);
+  location.href="https://smartium25.github.io/auth/?redirect="+encodeURIComponent(location.href);
+  return false;
+ }
+}
+
+function connectSocket(){
+ if(socket){try{socket.close()}catch{}}
+ if(!me)return;
+ socket=new WebSocket(API.replace(/^http:/,"ws:").replace(/^https:/,"wss:")+"/ws/"+encodeURIComponent(me.username)+"?token="+encodeURIComponent(token));
+ socket.onmessage=async e=>{try{const d=JSON.parse(e.data);if(d.type==="chat"&&currentTarget){loadMessages()}}catch{}};
+ socket.onopen=()=>{socket.pingTimer=setInterval(()=>{try{socket.send("ping")}catch{}},25000)};
+ socket.onclose=()=>{if(socket?.pingTimer)clearInterval(socket.pingTimer)};
+}
+
+async function loadUsers(){
+ const data=await api("/api/users/list/"+encodeURIComponent(me.username));
+ const list=Array.isArray(data)?data:(data.users||[]);
+ $("users").innerHTML="";
+ list.forEach(u=>{
+  const el=document.createElement("div");el.className="user";
+  const img=document.createElement("img");img.className="mini";const p=pfpUrl(u.pfp||u.profile_picture);if(p)img.src=p;
+  const info=document.createElement("div");info.className="user-info";
+  info.innerHTML=`<div class="user-name"></div><div class="online">${u.online?"En línea":"Desconectado"}</div>`;info.querySelector(".user-name").textContent=u.username;
+  el.append(img,info);el.onclick=()=>openChat(u.username,"private");$("users").appendChild(el);
+ });
+}
+
+async function loadGroups(){
+ const data=await api("/api/groups/list/"+encodeURIComponent(me.username));
+ const list=Array.isArray(data)?data:(data.groups||[]);
+ $("rooms").innerHTML="";
+ list.forEach(g=>{
+  const el=document.createElement("div");el.className="room";
+  el.innerHTML='<div class="mini">👥</div><div class="room-name"></div>';
+  el.querySelector(".room-name").textContent=g.name;
+  el.onclick=()=>openChat(g.name,"group");$("rooms").appendChild(el);
+ });
+}
+
+async function openChat(target,type){
+ currentTarget=target;currentType=type;
+ $("chatTitle").textContent=target;
+ $("chatSub").textContent=type==="group"?"Grupo":"Chat privado";
+ await loadMessages();
+}
+
+async function loadMessages(){
+ if(!currentTarget)return;
+ const path=currentType==="group"
+  ?"/api/groups/get/"+encodeURIComponent(me.username)+"/"+encodeURIComponent(currentTarget)
+  :"/api/chat/get/"+encodeURIComponent(me.username)+"/"+encodeURIComponent(currentTarget);
+ try{
+  const data=await api(path);renderMessages(Array.isArray(data)?data:(data.messages||[]));
+ }catch(e){renderMessages([]);console.error(e)}
+}
+
+function renderMessages(list){
+ const box=$("messages");box.innerHTML="";
+ if(!list.length){box.innerHTML='<div class="empty">No hay mensajes todavía.</div>';return}
+ list.forEach(m=>{
+  const wrap=document.createElement("div");wrap.className="msg "+(m.sender===me.username?"mine":"");
+  if(m.message){const text=document.createElement("div");text.textContent=m.message;wrap.appendChild(text)}
+  if(m.file){
+   const url=API+"/media/chat/"+encodeURIComponent(m.file);
+   if(m.type==="image"){const img=document.createElement("img");img.src=url;img.className="media";wrap.appendChild(img)}
+   else if(m.type==="video"){const v=document.createElement("video");v.src=url;v.controls=true;v.className="media";wrap.appendChild(v)}
+  }
+  const meta=document.createElement("div");meta.className="msg-meta";meta.textContent=(m.sender||"")+" · "+(m.date||"");wrap.appendChild(meta);box.appendChild(wrap);
+ });
+ box.scrollTop=box.scrollHeight;
+}
+
+async function sendMessage(){
+ const text=$("messageInput").value.trim();if(!text||!currentTarget)return;
+ const path=currentType==="group"?"/api/groups/send":"/api/chat/send";
+ try{
+  await api(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({receiver:currentTarget,message:text})});
+  $("messageInput").value="";await loadMessages();
+ }catch(e){alert(e.message)}
+}
+
+async function sendFile(file){
+ if(!file||!currentTarget)return;
+ const fd=new FormData();fd.append("receiver",currentTarget);fd.append("file",file);
+ const path=currentType==="group"?"/api/groups/upload":"/api/chat/upload";
+ try{await api(path,{method:"POST",body:fd});await loadMessages();}catch(e){alert(e.message)}
+}
+
+async function openGroupModal(){
+ $("groupName").value="";$("groupError").textContent="";
+ const data=await api("/api/users/list/"+encodeURIComponent(me.username));
+ const users=Array.isArray(data)?data:(data.users||[]);
+ $("groupMembers").innerHTML="";
+ users.forEach(u=>{
+  const label=document.createElement("label");label.style.display="block";label.style.margin="8px 0";
+  label.innerHTML=`<input type="checkbox" value="${u.username}"> `;
+  label.append(document.createTextNode(u.username));$("groupMembers").appendChild(label);
+ });
+ $("groupModal").classList.add("open");
+}
+
+async function createGroup(){
+ const name=$("groupName").value.trim();
+ if(!name){showError($("groupError"),"Escribe un nombre de grupo.");return}
+ const members=[...$("groupMembers").querySelectorAll("input:checked")].map(x=>x.value);
+ const fd=new FormData();fd.append("name",name);fd.append("members",members.join(","));
+ try{await api("/api/groups/create",{method:"POST",body:fd});$("groupModal").classList.remove("open");await loadGroups();openChat(name,"group")}catch(e){showError($("groupError"),e.message)}
+}
+
+$("send").onclick=sendMessage;
+$("messageInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendMessage()});
+$("fileInput").onchange=e=>{if(e.target.files[0])sendFile(e.target.files[0]);e.target.value=""};
+$("newGroup").onclick=openGroupModal;
+$("cancelGroup").onclick=()=>$("groupModal").classList.remove("open");
+$("createGroup").onclick=createGroup;
+$("logout").onclick=async()=>{try{await api("/api/logout",{method:"POST"})}catch{}localStorage.removeItem(TOKEN_KEY);location.href="https://smartium25.github.io/auth/"};
+
+(async()=>{
+ if(await checkAuth()){
+  try{await loadUsers();await loadGroups();}catch(e){console.error(e)}
+  connectSocket();
+ }
+})();
+</script>
+</body>
+</html>
