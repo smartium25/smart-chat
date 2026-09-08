@@ -2,3225 +2,525 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Smart-Chat</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    html,
-    body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-
-        background: #080808;
-        color: #ffffff;
-
-        font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
-    }
-
-    button,
-    input {
-        font-family: inherit;
-    }
-
-    button {
-        cursor: pointer;
-    }
-
-    :root {
-        --bg: #080808;
-        --panel: #141414;
-        --panel-2: #191919;
-        --panel-3: #202020;
-        --border: #303030;
-
-        --text: #eeeeee;
-        --muted: #777777;
-
-        --cyan: #20d7ca;
-        --cyan-hover: #2de2d4;
-
-        --green: #22c55e;
-    }
-
-    /* =========================
-       APP
-       ========================= */
-
-    .app {
-        width: 100%;
-        height: 100%;
-
-        display: grid;
-
-        grid-template-columns:
-            30%
-            40%
-            30%;
-
-        background: var(--bg);
-    }
-
-    /* =========================
-       COLUMNAS
-       ========================= */
-
-    .column {
-        min-width: 0;
-        min-height: 0;
-        height: 100%;
-    }
-
-    .left-column {
-        background: var(--panel-2);
-        border-right: 1px solid var(--border);
-
-        padding: 10px;
-
-        overflow-y: auto;
-    }
-
-    .center-column {
-        background: var(--bg);
-
-        border-right: 1px solid var(--border);
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .right-column {
-        background: var(--panel);
-
-        padding: 10px;
-
-        overflow-y: auto;
-    }
-
-    /* =========================
-       TITULOS
-       ========================= */
-
-    .section-title {
-        margin: 0 0 9px;
-
-        font-size: 13px;
-        font-weight: bold;
-
-        color: var(--cyan);
-    }
-
-    /* =========================
-       USUARIOS
-       ========================= */
-
-    .users {
-        display: flex;
-        flex-direction: column;
-
-        gap: 6px;
-    }
-
-    .user-card {
-        min-width: 0;
-
-        display: flex;
-        align-items: center;
-
-        gap: 7px;
-
-        padding: 6px;
-
-        background: #212121;
-
-        border: 1px solid #303030;
-
-        border-radius: 8px;
-    }
-
-    .avatar-wrapper {
-        position: relative;
-
-        width: 31px;
-        height: 31px;
-
-        flex: 0 0 31px;
-    }
-
-    .avatar {
-        width: 31px;
-        height: 31px;
-
-        object-fit: cover;
-
-        border-radius: 50%;
-
-        background: #333333;
-
-        border: 1px solid #444444;
-
-        display: block;
-    }
-
-    .status-dot {
-        position: absolute;
-
-        width: 8px;
-        height: 8px;
-
-        right: -1px;
-        bottom: -1px;
-
-        border-radius: 50%;
-
-        border: 2px solid #212121;
-
-        background: #555555;
-    }
-
-    .status-dot.online {
-        background: var(--green);
-    }
-
-    .user-name {
-        min-width: 0;
-
-        flex: 1;
-
-        color: var(--text);
-
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-
-        font-size: 10px;
-    }
-
-    .chat-button {
-        flex: 0 0 auto;
-
-        border: 0;
-
-        border-radius: 5px;
-
-        padding: 5px 8px;
-
-        background: var(--cyan);
-
-        color: #07100f;
-
-        font-size: 9px;
-        font-weight: bold;
-    }
-
-    .chat-button:hover {
-        background: var(--cyan-hover);
-    }
-
-    /* =========================
-       PERFIL
-       ========================= */
-
-    .profile {
-        display: flex;
-        flex-direction: column;
-
-        align-items: center;
-
-        text-align: center;
-    }
-
-    .profile-avatar {
-        width: 82px;
-        height: 82px;
-
-        object-fit: cover;
-
-        border-radius: 50%;
-
-        background: #222222;
-
-        border: 3px solid var(--cyan);
-
-        box-shadow:
-            0 0 16px rgba(32, 215, 202, 0.12);
-    }
-
-    .profile-name {
-        margin-top: 9px;
-
-        color: #ffffff;
-
-        font-size: 13px;
-        font-weight: bold;
-    }
-
-    .profile-label {
-        margin-top: 3px;
-
-        color: #606060;
-
-        font-size: 8px;
-    }
-
-    .logout-button {
-        margin-top: 12px;
-
-        height: 29px;
-
-        padding: 0 12px;
-
-        border-radius: 6px;
-
-        background: #292929;
-
-        border: 1px solid #383838;
-
-        color: #dddddd;
-
-        font-size: 9px;
-        font-weight: bold;
-    }
-
-    .logout-button:hover {
-        background: #363636;
-    }
-
-    /* =========================
-       GRUPOS
-       ========================= */
-
-    .create-group-button,
-    .groups-button {
-        width: 100%;
-        height: 32px;
-
-        border-radius: 6px;
-
-        font-size: 9px;
-        font-weight: bold;
-    }
-
-    .create-group-button {
-        background: var(--cyan);
-        color: #06100f;
-    }
-
-    .create-group-button:hover {
-        background: var(--cyan-hover);
-    }
-
-    .groups-button {
-        margin-top: 6px;
-
-        background: #282828;
-
-        border: 1px solid #353535;
-
-        color: #dddddd;
-    }
-
-    .groups-button:hover {
-        background: #333333;
-    }
-
-    .group-name-input {
-        width: 100%;
-        height: 31px;
-
-        margin-top: 8px;
-
-        padding: 0 8px;
-
-        background: #202020;
-
-        border: 1px solid #363636;
-
-        border-radius: 6px;
-
-        color: #ffffff;
-
-        font-size: 9px;
-    }
-
-    .group-name-input::placeholder {
-        color: #707070;
-    }
-
-    .group-name-input:focus {
-        border-color: var(--cyan);
-    }
-
-    .members-title {
-        margin-top: 9px;
-        margin-bottom: 6px;
-
-        color: #777777;
-
-        font-size: 8px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    .member-list {
-        display: flex;
-        flex-direction: column;
-
-        gap: 5px;
-    }
-
-    .member-item {
-        display: flex;
-        align-items: center;
-
-        min-height: 27px;
-
-        padding: 5px 7px;
-
-        background: #1c1c1c;
-
-        border: 1px solid #303030;
-
-        border-radius: 6px;
-    }
-
-    .member-item input {
-        margin: 0;
-
-        accent-color: var(--cyan);
-    }
-
-    .member-item label {
-        margin-left: 7px;
-
-        color: #dddddd;
-
-        cursor: pointer;
-
-        font-size: 9px;
-    }
-
-    /* =========================
-       ESTADO
-       ========================= */
-
-    .status {
-        position: fixed;
-
-        left: 6px;
-        bottom: 6px;
-
-        z-index: 9999;
-
-        max-width: calc(100% - 12px);
-
-        padding: 6px 9px;
-
-        border-radius: 6px;
-
-        background: rgba(20, 20, 20, 0.97);
-
-        border: 1px solid #333333;
-
-        color: #777777;
-
-        font-size: 8px;
-
-        opacity: 0;
-        pointer-events: none;
-
-        transform: translateY(4px);
-
-        transition:
-            opacity .18s ease,
-            transform .18s ease;
-    }
-
-    .status.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .status.error {
-        color: #ff7070;
-    }
-
-    .status.success {
-        color: var(--cyan);
-    }
-
-    /* =========================
-       CHAT
-       ========================= */
-
-    .chat {
-        position: fixed;
-
-        inset: 0;
-
-        z-index: 200;
-
-        display: none;
-
-        grid-template-rows:
-            45px
-            minmax(0, 1fr)
-            43px;
-
-        background: #080808;
-    }
-
-    .chat.open {
-        display: grid;
-    }
-
-    .chat-header {
-        display: flex;
-        align-items: center;
-
-        gap: 7px;
-
-        padding: 7px;
-
-        background: #171717;
-
-        border-bottom: 1px solid var(--border);
-    }
-
-    .back-button {
-        width: 29px;
-        height: 29px;
-
-        border-radius: 6px;
-
-        background: #2a2a2a;
-
-        color: #eeeeee;
-
-        font-size: 14px;
-    }
-
-    .back-button:hover {
-        background: #353535;
-    }
-
-    .chat-avatar {
-        width: 29px;
-        height: 29px;
-
-        object-fit: cover;
-
-        border-radius: 50%;
-
-        background: #333333;
-    }
-
-    .chat-title-area {
-        min-width: 0;
-
-        flex: 1;
-    }
-
-    .chat-title {
-        color: #ffffff;
-
-        font-size: 10px;
-        font-weight: bold;
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .chat-subtitle {
-        margin-top: 2px;
-
-        color: #666666;
-
-        font-size: 8px;
-    }
-
-    .messages {
-        min-height: 0;
-
-        display: flex;
-        flex-direction: column;
-
-        gap: 6px;
-
-        padding: 9px;
-
-        overflow-y: auto;
-    }
-
-    .empty-chat {
-        margin: auto;
-
-        color: #555555;
-
-        font-size: 9px;
-    }
-
-    .message {
-        max-width: 76%;
-
-        padding: 6px 8px;
-
-        border-radius: 7px;
-
-        line-height: 1.35;
-
-        overflow-wrap: anywhere;
-
-        font-size: 10px;
-    }
-
-    .message.mine {
-        align-self: flex-end;
-
-        background: #19bcb0;
-
-        color: #06100f;
-    }
-
-    .message.other {
-        align-self: flex-start;
-
-        background: #252525;
-
-        color: #eeeeee;
-    }
-
-    .message-time {
-        display: block;
-
-        margin-top: 3px;
-
-        opacity: .5;
-
-        font-size: 7px;
-    }
-
-    .message-image {
-        max-width: 100%;
-
-        display: block;
-
-        border-radius: 5px;
-    }
-
-    .message-video {
-        width: 100%;
-        max-width: 260px;
-
-        display: block;
-
-        border-radius: 5px;
-    }
-
-    .message-bar {
-        display: flex;
-
-        gap: 5px;
-
-        padding: 6px;
-
-        background: #171717;
-
-        border-top: 1px solid var(--border);
-    }
-
-    .message-input {
-        min-width: 0;
-
-        flex: 1;
-
-        height: 31px;
-
-        padding: 0 9px;
-
-        background: #222222;
-
-        border: 1px solid #383838;
-
-        border-radius: 6px;
-
-        color: #ffffff;
-
-        font-size: 9px;
-    }
-
-    .message-input:focus {
-        border-color: var(--cyan);
-    }
-
-    .send-button {
-        width: 40px;
-
-        border-radius: 6px;
-
-        background: var(--cyan);
-
-        color: #06100f;
-
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .send-button:hover {
-        background: var(--cyan-hover);
-    }
-
-    /* =========================
-       MODAL GRUPOS
-       ========================= */
-
-    .groups-overlay {
-        position: fixed;
-
-        inset: 0;
-
-        z-index: 500;
-
-        display: none;
-
-        align-items: center;
-        justify-content: center;
-
-        background: rgba(0, 0, 0, .70);
-    }
-
-    .groups-overlay.open {
-        display: flex;
-    }
-
-    .groups-modal {
-        width: min(290px, 88vw);
-
-        max-height: 80vh;
-
-        padding: 12px;
-
-        background: #171717;
-
-        border: 1px solid #343434;
-
-        border-radius: 9px;
-
-        overflow-y: auto;
-    }
-
-    .groups-modal-title {
-        margin: 0 0 8px;
-
-        color: var(--cyan);
-
-        font-size: 12px;
-    }
-
-    .group-list {
-        display: flex;
-        flex-direction: column;
-
-        gap: 5px;
-    }
-
-    .group-card {
-        padding: 7px 8px;
-
-        background: #222222;
-
-        border: 1px solid #303030;
-
-        border-radius: 6px;
-    }
-
-    .group-card-name {
-        color: #eeeeee;
-
-        font-size: 10px;
-    }
-
-    .group-card-owner {
-        margin-top: 2px;
-
-        color: #707070;
-
-        font-size: 8px;
-    }
-
-    /* =========================
-       SCROLLBAR
-       ========================= */
-
-    ::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #393939;
-
-        border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    /* =========================
-       PEQUEÑO
-       ========================= */
-
-    @media (max-width: 500px) {
-        .app {
-            grid-template-columns:
-                32%
-                36%
-                32%;
-        }
-
-        .left-column,
-        .right-column {
-            padding: 6px;
-        }
-
-        .profile-avatar {
-            width: 65px;
-            height: 65px;
-        }
-
-        .user-card {
-            padding: 5px;
-        }
-
-        .chat-button {
-            padding: 4px 6px;
-        }
-    }
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#080808;color:#fff;font-family:Arial;overflow:hidden}
+#app{display:none;width:100%;height:100%;grid-template-columns:30% 40% 30%}
+#app.ready{display:grid}
+
+.left,.right{padding:10px;background:#191919;overflow:auto}
+.left{border-right:1px solid #303030}
+.right{border-left:1px solid #303030}
+.center{display:flex;align-items:center;justify-content:center;background:#080808}
+
+.title{color:#20d7ca;font-size:13px;font-weight:bold;margin-bottom:10px}
+
+.user{
+    display:flex;align-items:center;gap:7px;
+    background:#212121;border:1px solid #303030;
+    border-radius:8px;padding:6px;margin-bottom:6px
+}
+.avatar-small{width:31px;height:31px;border-radius:50%;object-fit:cover;background:#333}
+.name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+
+.chat-btn,.create-btn{
+    background:#20d7ca;color:#07100f;border:0;border-radius:5px;
+    padding:6px 8px;font-size:9px;font-weight:bold;cursor:pointer
+}
+
+.profile{text-align:center}
+.profile img{
+    width:150px;height:150px;
+    border-radius:50%;object-fit:cover;
+    background:#292929;
+    border:3px solid #20d7ca
+}
+.profile-name{margin-top:10px;font-size:15px;font-weight:bold}
+.profile-source{color:#666;font-size:8px;margin-top:4px}
+.logout{
+    margin-top:12px;padding:7px 12px;
+    background:#292929;color:#ddd;
+    border:1px solid #383838;border-radius:6px;
+    cursor:pointer;font-size:9px
+}
+
+input{
+    width:100%;height:31px;margin:7px 0;
+    padding:0 8px;background:#202020;
+    border:1px solid #383838;border-radius:6px;color:white
+}
+
+#groups{margin-top:7px}
+.group{padding:7px;background:#222;border:1px solid #303030;border-radius:6px;margin-top:5px;font-size:9px}
+
+.status{
+    position:fixed;bottom:6px;left:6px;
+    background:#181818;border:1px solid #333;
+    padding:6px 9px;border-radius:6px;
+    font-size:8px;color:#777;opacity:0
+}
+.status.show{opacity:1}.status.error{color:#ff7070}.status.ok{color:#20d7ca}
+
+.chat{
+    position:fixed;inset:0;background:#080808;
+    display:none;grid-template-rows:45px 1fr 43px;z-index:10
+}
+.chat.open{display:grid}
+.chat-head{display:flex;align-items:center;gap:7px;padding:7px;background:#171717;border-bottom:1px solid #303030}
+.back{width:29px;height:29px;background:#292929;color:#fff;border:0;border-radius:6px;cursor:pointer}
+.chat-head img{width:29px;height:29px;border-radius:50%;object-fit:cover}
+.chat-name{font-size:10px;font-weight:bold}
+.messages{overflow:auto;padding:9px;display:flex;flex-direction:column;gap:6px}
+.msg{max-width:75%;padding:7px 8px;border-radius:7px;font-size:10px}
+.mine{align-self:flex-end;background:#19bcb0;color:#06100f}
+.other{align-self:flex-start;background:#252525}
+.bar{display:flex;gap:5px;padding:6px;background:#171717;border-top:1px solid #303030}
+.bar input{margin:0}.send{width:40px;background:#20d7ca;border:0;border-radius:6px;cursor:pointer}
+
+@media(max-width:500px){
+    #app{grid-template-columns:32% 36% 32%}
+}
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div id="app">
 
-    <!-- ================================================
-         USUARIOS
-         ================================================ -->
-
-    <aside class="column left-column">
-
-        <h2 class="section-title">
-            Usuarios
-        </h2>
-
-        <div
-            id="userList"
-            class="users"
-        >
-            <div class="empty-chat">
-                Cargando...
-            </div>
-        </div>
-
+    <aside class="left">
+        <div class="title">Usuarios</div>
+        <div id="users">Cargando...</div>
     </aside>
 
-
-    <!-- ================================================
-         PERFIL
-         ================================================ -->
-
-    <main class="column center-column">
-
-        <section class="profile">
-
-            <img
-                id="profileAvatar"
-                class="profile-avatar"
-                src=""
-                alt="Perfil"
-            >
-
-            <div
-                id="profileName"
-                class="profile-name"
-            >
-                @...
-            </div>
-
-            <div class="profile-label">
-                Kn Foundation Account
-            </div>
-
-            <button
-                id="logoutButton"
-                class="logout-button"
-                type="button"
-            >
-                LOG OUT
-            </button>
-
-        </section>
-
+    <main class="center">
+        <div class="profile">
+            <img id="myPfp" alt="PFP">
+            <div id="myName" class="profile-name">@...</div>
+            <div class="profile-source">Kn Foundation Account</div>
+            <button id="logout" class="logout">LOG OUT</button>
+        </div>
     </main>
 
+    <aside class="right">
+        <div class="title">Grupos</div>
 
-    <!-- ================================================
-         GRUPOS
-         ================================================ -->
+        <input id="groupName" placeholder="Nombre del grupo">
 
-    <aside class="column right-column">
-
-        <h2 class="section-title">
-            Grupos
-        </h2>
-
-        <button
-            id="createGroupButton"
-            class="create-group-button"
-            type="button"
-        >
+        <button id="createGroup" class="create-btn">
             Crear Grupo
         </button>
 
-        <input
-            id="groupName"
-            class="group-name-input"
-            type="text"
-            maxlength="80"
-            placeholder="Nombre del grupo"
-        >
-
-        <div class="members-title">
-            Miembros
+        <div class="title" style="margin-top:15px">
+            Mis grupos
         </div>
 
-        <div
-            id="memberList"
-            class="member-list"
-        >
-            <div class="empty-chat">
-                Cargando...
-            </div>
-        </div>
-
-        <button
-            id="groupsButton"
-            class="groups-button"
-            type="button"
-        >
-            Mis Grupos
-        </button>
-
+        <div id="groups">Cargando...</div>
     </aside>
 
 </div>
 
+<section id="chat" class="chat">
 
-<!-- ================================================
-     CHAT
-     ================================================ -->
-
-<section
-    id="chat"
-    class="chat"
->
-
-    <header class="chat-header">
-
-        <button
-            id="backButton"
-            class="back-button"
-            type="button"
-        >
-            ←
-        </button>
-
-        <img
-            id="chatAvatar"
-            class="chat-avatar"
-            src=""
-            alt=""
-        >
-
-        <div class="chat-title-area">
-
-            <div
-                id="chatTitle"
-                class="chat-title"
-            >
-                Chat
-            </div>
-
-            <div
-                id="chatSubtitle"
-                class="chat-subtitle"
-            >
-                --
-            </div>
-
+    <header class="chat-head">
+        <button id="back" class="back">←</button>
+        <img id="chatPfp">
+        <div>
+            <div id="chatName" class="chat-name">Chat</div>
         </div>
-
     </header>
 
+    <div id="messages" class="messages"></div>
 
-    <div
-        id="messages"
-        class="messages"
-    >
-        <div class="empty-chat">
-            No hay mensajes.
-        </div>
-    </div>
-
-
-    <form
-        id="messageForm"
-        class="message-bar"
-    >
-
-        <input
-            id="messageInput"
-            class="message-input"
-            type="text"
-            maxlength="5000"
-            autocomplete="off"
-            placeholder="Escribe un mensaje..."
-        >
-
-        <button
-            class="send-button"
-            type="submit"
-        >
-            →
-        </button>
-
+    <form id="form" class="bar">
+        <input id="message" placeholder="Escribe un mensaje..." maxlength="5000">
+        <button class="send">→</button>
     </form>
 
 </section>
 
-
-<!-- ================================================
-     GRUPOS MODAL
-     ================================================ -->
-
-<div
-    id="groupsOverlay"
-    class="groups-overlay"
->
-
-    <div class="groups-modal">
-
-        <h3 class="groups-modal-title">
-            Mis Grupos
-        </h3>
-
-        <div
-            id="groupList"
-            class="group-list"
-        ></div>
-
-    </div>
-
-</div>
-
-
-<!-- ================================================
-     MENSAJES DE ESTADO
-     ================================================ -->
-
-<div
-    id="status"
-    class="status"
-></div>
-
+<div id="status" class="status"></div>
 
 <script>
-"use strict";
+const API="https://programs-sweet-limited-files.trycloudflare.com";
+const AUTH="https://smartium25.github.io/auth";
 
-/* =====================================================
-   CONFIGURACIÓN
-   ===================================================== */
+let token=null,currentUser=null,target=null,socket=null;
 
-const API =
-    "https://programs-sweet-limited-files.trycloudflare.com";
+const $=id=>document.getElementById(id);
 
-const AUTH_URL =
-    "https://smartium25.github.io/auth";
-
-
-/*
- * Smart-Chat NO administra cuentas.
- *
- * Kn Foundation es quien administra:
- *
- * - usuario
- * - contraseña
- * - sesión
- * - PFP
- *
- * Smart-Chat solamente consume esa información.
- */
+const app=$("app");
+const users=$("users");
+const groups=$("groups");
+const status=$("status");
 
 
-/* =====================================================
-   ESTADO
-   ===================================================== */
-
-let token = null;
-
-let currentUser = null;
-
-let currentTarget = null;
-
-let currentTargetData = null;
-
-let socket = null;
-
-let refreshTimer = null;
-
-let reconnectTimer = null;
-
-
-/* =====================================================
-   CLAVES COMPATIBLES DE TOKEN
-   ===================================================== */
-
-const TOKEN_KEYS = [
-    "token",
-    "access_token",
-    "kn_token",
-    "auth_token"
-];
-
-
-/* =====================================================
-   DOM
-   ===================================================== */
-
-const userList =
-    document.getElementById(
-        "userList"
-    );
-
-const profileAvatar =
-    document.getElementById(
-        "profileAvatar"
-    );
-
-const profileName =
-    document.getElementById(
-        "profileName"
-    );
-
-const logoutButton =
-    document.getElementById(
-        "logoutButton"
-    );
-
-const memberList =
-    document.getElementById(
-        "memberList"
-    );
-
-const groupName =
-    document.getElementById(
-        "groupName"
-    );
-
-const createGroupButton =
-    document.getElementById(
-        "createGroupButton"
-    );
-
-const groupsButton =
-    document.getElementById(
-        "groupsButton"
-    );
-
-const chat =
-    document.getElementById(
-        "chat"
-    );
-
-const backButton =
-    document.getElementById(
-        "backButton"
-    );
-
-const chatAvatar =
-    document.getElementById(
-        "chatAvatar"
-    );
-
-const chatTitle =
-    document.getElementById(
-        "chatTitle"
-    );
-
-const chatSubtitle =
-    document.getElementById(
-        "chatSubtitle"
-    );
-
-const messages =
-    document.getElementById(
-        "messages"
-    );
-
-const messageForm =
-    document.getElementById(
-        "messageForm"
-    );
-
-const messageInput =
-    document.getElementById(
-        "messageInput"
-    );
-
-const groupsOverlay =
-    document.getElementById(
-        "groupsOverlay"
-    );
-
-const groupList =
-    document.getElementById(
-        "groupList"
-    );
-
-const statusBox =
-    document.getElementById(
-        "status"
-    );
-
-
-/* =====================================================
-   PLACEHOLDER PFP
-   ===================================================== */
-
-function placeholderAvatar() {
-
-    return (
-        "data:image/svg+xml;charset=UTF-8," +
-        encodeURIComponent(`
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="100"
-                height="100"
-                viewBox="0 0 100 100"
-            >
-                <rect
-                    width="100"
-                    height="100"
-                    fill="#303030"
-                />
-
-                <circle
-                    cx="50"
-                    cy="36"
-                    r="18"
-                    fill="#777777"
-                />
-
-                <path
-                    d="
-                        M18 92
-                        C20 66,
-                        80 66,
-                        82 92
-                    "
-                    fill="#777777"
-                />
-            </svg>
-        `)
-    );
+function show(text,type=""){
+    status.textContent=text;
+    status.className="status show "+type;
+    clearTimeout(show.t);
+    show.t=setTimeout(()=>status.className="status",2500);
 }
 
 
-/* =====================================================
-   PFP URL
-   ===================================================== */
-
-function getPfpURL(
-    pfp
-) {
-
-    if (
-        !pfp
-    ) {
-        return placeholderAvatar();
-    }
-
-    const value =
-        String(pfp).trim();
-
-    if (
-        !value
-    ) {
-        return placeholderAvatar();
-    }
-
-    if (
-        value.startsWith("data:")
-    ) {
-        return value;
-    }
-
-    if (
-        value.startsWith("http://") ||
-        value.startsWith("https://")
-    ) {
-        return value;
-    }
-
-    if (
-        value.startsWith("/")
-    ) {
-        return (
-            "http://127.0.0.1:8000" +
-            value
-        );
-    }
-
-    return (
-        "http://127.0.0.1:8000/" +
-        value
-    );
+function placeholder(){
+    return "data:image/svg+xml,"+encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <rect width="100" height="100" fill="#303030"/>
+            <circle cx="50" cy="35" r="18" fill="#777"/>
+            <path d="M18 92C20 68 80 68 82 92" fill="#777"/>
+        </svg>
+    `);
 }
 
 
-/* =====================================================
-   PROTEGER IMAGEN
-   ===================================================== */
-
-function protectImage(
-    image
-) {
-
-    image.addEventListener(
-        "error",
-        () => {
-            image.src =
-                placeholderAvatar();
-        },
-        {
-            once: true
-        }
-    );
+function pfp(v){
+    if(!v)return placeholder();
+    if(v.startsWith("http")||v.startsWith("data:"))return v;
+    return "http://127.0.0.1:8000/"+v.replace(/^\/+/,"");
 }
 
 
-/* =====================================================
-   STATUS
-   ===================================================== */
+function getToken(){
 
-function showStatus(
-    text,
-    type = ""
-) {
-
-    statusBox.textContent =
-        text;
-
-    statusBox.className =
-        "status show " +
-        type;
-
-    clearTimeout(
-        showStatus.timer
+    const hash=new URLSearchParams(
+        location.hash.replace(/^#/,"")
     );
 
-    showStatus.timer =
-        setTimeout(
-            () => {
+    const query=new URLSearchParams(location.search);
 
-                statusBox.className =
-                    "status";
-
-            },
-            3000
-        );
+    return hash.get("token") ||
+           hash.get("access_token") ||
+           query.get("token") ||
+           query.get("access_token") ||
+           localStorage.getItem("token");
 }
 
 
-/* =====================================================
-   TOKEN GUARDADO
-   ===================================================== */
+function goAuth(){
 
-function getStoredToken() {
+    const url=AUTH+"?redirect="+
+        encodeURIComponent(location.href)+
+        "&app=smart-chat";
 
-    for (
-        const key of TOKEN_KEYS
-    ) {
-
-        const value =
-            localStorage.getItem(
-                key
-            );
-
-        if (
-            value &&
-            value.trim()
-        ) {
-
-            return value.trim();
-        }
-    }
-
-    return null;
+    location.replace(url);
 }
 
 
-/* =====================================================
-   GUARDAR TOKEN
-   ===================================================== */
+async function api(path,options={}){
 
-function saveToken(
-    value
-) {
+    const headers={...(options.headers||{})};
 
-    if (
-        !value
-    ) {
-        return;
-    }
+    if(token)
+        headers.Authorization="Bearer "+token;
 
-    const clean =
-        value.trim();
+    const r=await fetch(API+path,{...options,headers});
 
-    if (
-        !clean
-    ) {
-        return;
-    }
+    let data=null;
 
-    localStorage.setItem(
-        "token",
-        clean
-    );
+    try{data=await r.json()}catch{}
 
-    localStorage.setItem(
-        "access_token",
-        clean
-    );
-}
-
-
-/* =====================================================
-   BORRAR TOKEN
-   ===================================================== */
-
-function clearTokens() {
-
-    for (
-        const key of TOKEN_KEYS
-    ) {
-
-        localStorage.removeItem(
-            key
-        );
-    }
-}
-
-
-/* =====================================================
-   TOKEN DEVUELTO POR AUTH
-   ===================================================== */
-
-function getReturnedToken() {
-
-    /*
-     * Preferimos fragmento:
-     *
-     * index.html#token=...
-     *
-     * porque no forma parte del request HTTP.
-     */
-
-    const hash =
-        window.location.hash
-            .replace(/^#/, "");
-
-    if (
-        hash
-    ) {
-
-        const hashParams =
-            new URLSearchParams(
-                hash
-            );
-
-        const hashToken =
-            hashParams.get(
-                "token"
-            ) ||
-            hashParams.get(
-                "access_token"
-            );
-
-        if (
-            hashToken
-        ) {
-            return hashToken;
-        }
-    }
-
-
-    /*
-     * Compatibilidad con Auth que
-     * devuelva ?token=...
-     */
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    return (
-        params.get("token") ||
-        params.get("access_token") ||
-        null
-    );
-}
-
-
-/* =====================================================
-   LIMPIAR TOKEN DE LA URL
-   ===================================================== */
-
-function cleanReturnedToken() {
-
-    try {
-
-        if (
-            window.history &&
-            window.history.replaceState
-        ) {
-
-            /*
-             * Con hash quitamos solamente
-             * el hash.
-             */
-
-            if (
-                window.location.hash
-            ) {
-
-                window.history.replaceState(
-                    {},
-                    document.title,
-                    window.location.pathname +
-                    window.location.search
-                );
-            }
-
-
-            /*
-             * Compatibilidad con ?token=
-             */
-
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
-
-            let changed =
-                false;
-
-            [
-                "token",
-                "access_token"
-            ].forEach(
-                key => {
-
-                    if (
-                        params.has(key)
-                    ) {
-
-                        params.delete(key);
-
-                        changed =
-                            true;
-                    }
-                }
-            );
-
-            if (
-                changed
-            ) {
-
-                const query =
-                    params.toString();
-
-                const clean =
-                    window.location.pathname +
-                    (
-                        query
-                            ? "?" + query
-                            : ""
-                    );
-
-                window.history.replaceState(
-                    {},
-                    document.title,
-                    clean
-                );
-            }
-        }
-
-    } catch (
-        error
-    ) {
-
-        console.error(
-            error
-        );
-    }
-}
-
-
-/* =====================================================
-   URL DE RETORNO
-   ===================================================== */
-
-function getReturnURL() {
-
-    return window.location.href;
-}
-
-
-/* =====================================================
-   LOGIN
-   ===================================================== */
-
-function redirectToAuth() {
-
-    const returnURL =
-        getReturnURL();
-
-    const params =
-        new URLSearchParams();
-
-    params.set(
-        "redirect",
-        returnURL
-    );
-
-    params.set(
-        "return_url",
-        returnURL
-    );
-
-    params.set(
-        "app",
-        "smart-chat"
-    );
-
-    window.location.replace(
-        AUTH_URL +
-        "?" +
-        params.toString()
-    );
-}
-
-
-/* =====================================================
-   API
-   ===================================================== */
-
-async function apiFetch(
-    path,
-    options = {}
-) {
-
-    const headers = {
-        ...(options.headers || {})
-    };
-
-    if (
-        token
-    ) {
-
-        headers[
-            "Authorization"
-        ] =
-            "Bearer " +
-            token;
-    }
-
-    const response =
-        await fetch(
-            API + path,
-            {
-                ...options,
-                headers
-            }
-        );
-
-    let data =
-        null;
-
-    try {
-
-        data =
-            await response.json();
-
-    } catch {
-
-        data =
-            null;
-    }
-
-    if (
-        !response.ok
-    ) {
-
-        const errorMessage =
-            data &&
-            data.detail
-                ? data.detail
-                : (
-                    "Error HTTP " +
-                    response.status
-                );
-
-        const error =
-            new Error(
-                errorMessage
-            );
-
-        error.status =
-            response.status;
-
-        throw error;
+    if(!r.ok){
+        const e=new Error(data?.detail||"Error HTTP "+r.status);
+        e.status=r.status;
+        throw e;
     }
 
     return data;
 }
 
 
-/* =====================================================
-   MI CUENTA
-   ===================================================== */
+async function loadMe(){
 
-async function loadMyAccount() {
+    const d=await api("/api/me");
 
-    const data =
-        await apiFetch(
-            "/api/me"
-        );
+    if(!d?.user?.username)
+        throw new Error("No se pudo obtener la cuenta.");
 
-    if (
-        !data ||
-        !data.user
-    ) {
+    currentUser=d.user.username;
 
-        throw new Error(
-            "Kn Foundation no devolvió la cuenta."
-        );
-    }
+    $("myName").textContent="@"+currentUser;
 
-    const user =
-        data.user;
-
-
-    currentUser =
-        user.username;
-
-
-    if (
-        !currentUser
-    ) {
-
-        throw new Error(
-            "Kn Foundation no devolvió un usuario válido."
-        );
-    }
-
-
-    const pfp =
-        user.pfp ||
-        user.profile_picture;
-
-
-    profileName.textContent =
-        "@" +
-        currentUser;
-
-
-    profileAvatar.src =
-        getPfpURL(
-            pfp
-        );
-
-
-    protectImage(
-        profileAvatar
-    );
+    $("myPfp").src=
+        pfp(d.user.pfp||d.user.profile_picture);
 }
 
 
-/* =====================================================
-   USUARIOS
-   ===================================================== */
+async function loadUsers(){
 
-async function loadUsers() {
+    const list=await api(
+        "/api/users/list/"+
+        encodeURIComponent(currentUser)
+    );
 
-    if (
-        !currentUser
-    ) {
+    users.innerHTML="";
+
+    if(!Array.isArray(list)||!list.length){
+        users.textContent="No hay usuarios.";
         return;
     }
 
+    list.forEach(u=>{
 
-    const data =
-        await apiFetch(
-            "/api/users/list/" +
-            encodeURIComponent(
-                currentUser
-            )
-        );
+        const row=document.createElement("div");
+        row.className="user";
 
+        const img=document.createElement("img");
+        img.className="avatar-small";
+        img.src=pfp(u.pfp||u.profile_picture);
 
-    if (
-        !Array.isArray(data)
-    ) {
+        const name=document.createElement("div");
+        name.className="name";
+        name.textContent=u.username;
 
-        renderUsers(
-            []
-        );
+        const btn=document.createElement("button");
+        btn.className="chat-btn";
+        btn.textContent="Chat";
+        btn.onclick=()=>openChat(u);
 
-        return;
-    }
-
-
-    renderUsers(
-        data
-    );
-
-
-    renderGroupMembers(
-        data
-    );
+        row.append(img,name,btn);
+        users.appendChild(row);
+    });
 }
 
 
-/* =====================================================
-   RENDER USUARIOS
-   ===================================================== */
+async function loadGroups(){
 
-function renderUsers(
-    users
-) {
+    const list=await api(
+        "/api/groups/list/"+
+        encodeURIComponent(currentUser)
+    );
 
-    userList.innerHTML =
-        "";
+    groups.innerHTML="";
 
-
-    if (
-        users.length === 0
-    ) {
-
-        userList.innerHTML =
-            `
-                <div class="empty-chat">
-                    No hay usuarios.
-                </div>
-            `;
-
+    if(!Array.isArray(list)||!list.length){
+        groups.textContent="No tienes grupos.";
         return;
     }
 
-
-    for (
-        const user of users
-    ) {
-
-        if (
-            !user ||
-            !user.username
-        ) {
-            continue;
-        }
-
-
-        const card =
-            document.createElement(
-                "div"
-            );
-
-        card.className =
-            "user-card";
-
-
-        const avatarWrapper =
-            document.createElement(
-                "div"
-            );
-
-        avatarWrapper.className =
-            "avatar-wrapper";
-
-
-        const avatar =
-            document.createElement(
-                "img"
-            );
-
-        avatar.className =
-            "avatar";
-
-        avatar.alt =
-            user.username;
-
-        avatar.src =
-            getPfpURL(
-                user.pfp ||
-                user.profile_picture
-            );
-
-
-        protectImage(
-            avatar
-        );
-
-
-        const dot =
-            document.createElement(
-                "span"
-            );
-
-        dot.className =
-            "status-dot" +
-            (
-                user.online
-                    ? " online"
-                    : ""
-            );
-
-
-        avatarWrapper.appendChild(
-            avatar
-        );
-
-        avatarWrapper.appendChild(
-            dot
-        );
-
-
-        const name =
-            document.createElement(
-                "div"
-            );
-
-        name.className =
-            "user-name";
-
-        name.textContent =
-            user.username;
-
-
-        const button =
-            document.createElement(
-                "button"
-            );
-
-        button.type =
-            "button";
-
-        button.className =
-            "chat-button";
-
-        button.textContent =
-            "Chat";
-
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                openChat(
-                    user
-                );
-            }
-        );
-
-
-        card.appendChild(
-            avatarWrapper
-        );
-
-        card.appendChild(
-            name
-        );
-
-        card.appendChild(
-            button
-        );
-
-
-        userList.appendChild(
-            card
-        );
-    }
+    list.forEach(g=>{
+        const x=document.createElement("div");
+        x.className="group";
+        x.textContent=g.name;
+        groups.appendChild(x);
+    });
 }
 
 
-/* =====================================================
-   MIEMBROS DEL GRUPO
-   ===================================================== */
+async function openChat(u){
 
-function renderGroupMembers(
-    users
-) {
+    target=u.username;
 
-    memberList.innerHTML =
-        "";
+    $("chatName").textContent=u.username;
+    $("chatPfp").src=pfp(u.pfp||u.profile_picture);
 
-
-    if (
-        !users ||
-        users.length === 0
-    ) {
-
-        memberList.innerHTML =
-            `
-                <div class="empty-chat">
-                    No hay usuarios.
-                </div>
-            `;
-
-        return;
-    }
-
-
-    for (
-        const user of users
-    ) {
-
-        if (
-            !user ||
-            !user.username
-        ) {
-            continue;
-        }
-
-
-        const wrapper =
-            document.createElement(
-                "div"
-            );
-
-        wrapper.className =
-            "member-item";
-
-
-        const checkbox =
-            document.createElement(
-                "input"
-            );
-
-        checkbox.type =
-            "checkbox";
-
-        checkbox.value =
-            user.username;
-
-        checkbox.id =
-            "member_" +
-            Math.random()
-                .toString(36)
-                .slice(2);
-
-
-        const label =
-            document.createElement(
-                "label"
-            );
-
-        label.htmlFor =
-            checkbox.id;
-
-        label.textContent =
-            user.username;
-
-
-        wrapper.appendChild(
-            checkbox
-        );
-
-        wrapper.appendChild(
-            label
-        );
-
-
-        memberList.appendChild(
-            wrapper
-        );
-    }
-}
-
-
-/* =====================================================
-   ABRIR CHAT
-   ===================================================== */
-
-async function openChat(
-    user
-) {
-
-    if (
-        !user ||
-        !user.username
-    ) {
-        return;
-    }
-
-
-    currentTarget =
-        user.username;
-
-
-    currentTargetData =
-        user;
-
-
-    chatTitle.textContent =
-        user.username;
-
-
-    chatSubtitle.textContent =
-        user.online
-            ? "En línea"
-            : "Desconectado";
-
-
-    chatAvatar.src =
-        getPfpURL(
-            user.pfp ||
-            user.profile_picture
-        );
-
-
-    protectImage(
-        chatAvatar
-    );
-
-
-    chat.classList.add(
-        "open"
-    );
-
+    $("chat").classList.add("open");
 
     await loadMessages();
-
-
-    messageInput.focus();
 }
 
 
-/* =====================================================
-   CERRAR CHAT
-   ===================================================== */
+async function loadMessages(){
 
-function closeChat() {
-
-    chat.classList.remove(
-        "open"
+    const list=await api(
+        "/api/chat/get/"+
+        encodeURIComponent(currentUser)+"/"+
+        encodeURIComponent(target)
     );
 
+    const box=$("messages");
+    box.innerHTML="";
 
-    currentTarget =
-        null;
-
-
-    currentTargetData =
-        null;
-
-
-    messages.innerHTML =
-        `
-            <div class="empty-chat">
-                No hay mensajes.
-            </div>
-        `;
-}
-
-
-/* =====================================================
-   MENSAJES
-   ===================================================== */
-
-async function loadMessages() {
-
-    if (
-        !currentUser ||
-        !currentTarget
-    ) {
+    if(!list.length){
+        box.innerHTML=
+            '<div style="margin:auto;color:#555;font-size:9px">No hay mensajes.</div>';
         return;
     }
 
+    list.forEach(m=>{
 
-    try {
+        const x=document.createElement("div");
 
-        const data =
-            await apiFetch(
-                "/api/chat/get/" +
-                encodeURIComponent(
-                    currentUser
-                ) +
-                "/" +
-                encodeURIComponent(
-                    currentTarget
-                )
-            );
+        x.className=
+            "msg "+
+            (m.sender===currentUser?"mine":"other");
 
+        x.textContent=m.message||"";
 
-        renderMessages(
-            data
-        );
+        box.appendChild(x);
+    });
 
-    } catch (
-        error
-    ) {
-
-        handleAPIError(
-            error
-        );
-    }
+    box.scrollTop=box.scrollHeight;
 }
 
 
-/* =====================================================
-   RENDER MENSAJES
-   ===================================================== */
+$("form").addEventListener("submit",async e=>{
 
-function renderMessages(
-    data
-) {
+    e.preventDefault();
 
-    messages.innerHTML =
-        "";
+    const text=$("message").value.trim();
+
+    if(!text||!target)return;
+
+    $("message").value="";
+
+    try{
+
+        await api("/api/chat/send",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                receiver:target,
+                message:text
+            })
+        });
+
+        await loadMessages();
+
+    }catch(e){
+        show(e.message,"error");
+    }
+});
 
 
-    if (
-        !Array.isArray(data) ||
-        data.length === 0
-    ) {
+$("back").onclick=()=>{
+    $("chat").classList.remove("open");
+    target=null;
+};
 
-        messages.innerHTML =
-            `
-                <div class="empty-chat">
-                    No hay mensajes.
-                </div>
-            `;
 
+$("createGroup").onclick=async()=>{
+
+    const name=$("groupName").value.trim();
+
+    if(!name){
+        show("Escribe un nombre.","error");
         return;
     }
 
+    const form=new FormData();
+    form.append("name",name);
+    form.append("members","");
 
-    for (
-        const item of data
-    ) {
+    try{
 
-        const bubble =
-            document.createElement(
-                "div"
-            );
+        await api("/api/groups/create",{
+            method:"POST",
+            body:form
+        });
 
+        $("groupName").value="";
 
-        bubble.className =
-            "message " +
-            (
-                item.sender ===
-                currentUser
-                    ? "mine"
-                    : "other"
-            );
+        await loadGroups();
 
+        show("Grupo creado.","ok");
 
-        if (
-            item.type === "image" &&
-            item.file
-        ) {
-
-            const image =
-                document.createElement(
-                    "img"
-                );
-
-            image.className =
-                "message-image";
-
-            image.src =
-                API +
-                "/media/chat/" +
-                encodeURIComponent(
-                    item.file
-                );
-
-            image.alt =
-                "Imagen";
+    }catch(e){
+        show(e.message,"error");
+    }
+};
 
 
-            bubble.appendChild(
-                image
-            );
+$("logout").onclick=async()=>{
 
-        } else if (
-            item.type === "video" &&
-            item.file
-        ) {
+    try{
+        await api("/api/logout",{method:"POST"});
+    }catch{}
 
-            const video =
-                document.createElement(
-                    "video"
-                );
+    localStorage.removeItem("token");
 
-            video.className =
-                "message-video";
-
-            video.controls =
-                true;
-
-            video.src =
-                API +
-                "/media/chat/" +
-                encodeURIComponent(
-                    item.file
-                );
-
-
-            bubble.appendChild(
-                video
-            );
-
-        } else {
-
-            bubble.appendChild(
-                document.createTextNode(
-                    item.message ||
-                    ""
-                )
-            );
-        }
-
-
-        const time =
-            document.createElement(
-                "span"
-            );
-
-        time.className =
-            "message-time";
-
-        time.textContent =
-            formatTime(
-                item.date
-            );
-
-
-        bubble.appendChild(
-            time
-        );
-
-
-        messages.appendChild(
-            bubble
-        );
+    if(socket){
+        try{socket.close()}catch{}
     }
 
-
-    messages.scrollTop =
-        messages.scrollHeight;
-}
+    goAuth();
+};
 
 
-/* =====================================================
-   ENVIAR MENSAJE
-   ===================================================== */
+function connectSocket(){
 
-messageForm.addEventListener(
-    "submit",
-    async event => {
+    const host=
+        API.replace(/^https?:\/\//,"");
 
-        event.preventDefault();
-
-
-        if (
-            !currentTarget
-        ) {
-            return;
-        }
-
-
-        const message =
-            messageInput.value.trim();
-
-
-        if (
-            !message
-        ) {
-            return;
-        }
-
-
-        messageInput.value =
-            "";
-
-
-        try {
-
-            await apiFetch(
-                "/api/chat/send",
-                {
-                    method:
-                        "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({
-                            receiver:
-                                currentTarget,
-
-                            message:
-                                message
-                        })
-                }
-            );
-
-
-            await loadMessages();
-
-
-        } catch (
-            error
-        ) {
-
-            handleAPIError(
-                error
-            );
-        }
-    }
-);
-
-
-/* =====================================================
-   WEBSOCKET
-   ===================================================== */
-
-function connectWebSocket() {
-
-    if (
-        !currentUser ||
-        !token
-    ) {
-        return;
-    }
-
-
-    clearTimeout(
-        reconnectTimer
+    socket=new WebSocket(
+        "wss://"+
+        host+
+        "/ws/"+
+        encodeURIComponent(currentUser)+
+        "?token="+
+        encodeURIComponent(token)
     );
 
+    socket.onmessage=async e=>{
 
-    if (
-        socket
-    ) {
+        try{
 
-        try {
-            socket.close();
-        } catch {}
-    }
+            const d=JSON.parse(e.data);
 
-
-    const isSecure =
-        API.startsWith(
-            "https://"
-        );
-
-
-    const protocol =
-        isSecure
-            ? "wss"
-            : "ws";
-
-
-    const host =
-        API.replace(
-            /^https?:\/\//,
-            ""
-        );
-
-
-    const url =
-        protocol +
-        "://" +
-        host +
-        "/ws/" +
-        encodeURIComponent(
-            currentUser
-        ) +
-        "?token=" +
-        encodeURIComponent(
-            token
-        );
-
-
-    try {
-
-        socket =
-            new WebSocket(
-                url
-            );
-
-    } catch (
-        error
-    ) {
-
-        console.error(
-            error
-        );
-
-        scheduleReconnect();
-
-        return;
-    }
-
-
-    socket.addEventListener(
-        "open",
-        () => {
-
-            showStatus(
-                "Conectado",
-                "success"
-            );
-
-            try {
-
-                socket.send(
-                    "ping"
-                );
-
-            } catch {}
-        }
-    );
-
-
-    socket.addEventListener(
-        "message",
-        async event => {
-
-            try {
-
-                const data =
-                    JSON.parse(
-                        event.data
-                    );
-
-
-                if (
-                    data.type ===
-                    "chat"
-                ) {
-
-                    await loadUsers();
-
-
-                    if (
-                        currentTarget
-                    ) {
-
-                        await loadMessages();
-                    }
-                }
-
-            } catch (
-                error
-            ) {
-
-                console.error(
-                    error
-                );
+            if(d.type==="chat"){
+                await loadUsers();
+                if(target)await loadMessages();
             }
-        }
-    );
 
+        }catch{}
+    };
 
-    socket.addEventListener(
-        "close",
-        () => {
-
-            scheduleReconnect();
-        }
-    );
+    socket.onclose=()=>{
+        setTimeout(connectSocket,4000);
+    };
 }
 
 
-/* =====================================================
-   RECONNECT
-   ===================================================== */
+async function init(){
 
-function scheduleReconnect() {
+    token=getToken();
 
-    clearTimeout(
-        reconnectTimer
-    );
-
-
-    reconnectTimer =
-        setTimeout(
-            () => {
-
-                connectWebSocket();
-
-            },
-            4000
-        );
-}
-
-
-/* =====================================================
-   CREAR GRUPO
-   ===================================================== */
-
-createGroupButton.addEventListener(
-    "click",
-    async () => {
-
-        const name =
-            groupName.value.trim();
-
-
-        if (
-            !name
-        ) {
-
-            showStatus(
-                "Escribe un nombre para el grupo.",
-                "error"
-            );
-
-            groupName.focus();
-
-            return;
-        }
-
-
-        const selected =
-            Array.from(
-                memberList.querySelectorAll(
-                    'input[type="checkbox"]:checked'
-                )
-            ).map(
-                checkbox =>
-                    checkbox.value
-            );
-
-
-        const form =
-            new FormData();
-
-
-        form.append(
-            "name",
-            name
-        );
-
-
-        form.append(
-            "members",
-            selected.join(",")
-        );
-
-
-        try {
-
-            await apiFetch(
-                "/api/groups/create",
-                {
-                    method:
-                        "POST",
-
-                    body:
-                        form
-                }
-            );
-
-
-            groupName.value =
-                "";
-
-
-            memberList
-                .querySelectorAll(
-                    'input[type="checkbox"]'
-                )
-                .forEach(
-                    checkbox => {
-                        checkbox.checked =
-                            false;
-                    }
-                );
-
-
-            showStatus(
-                "Grupo creado",
-                "success"
-            );
-
-
-        } catch (
-            error
-        ) {
-
-            handleAPIError(
-                error
-            );
-        }
-    }
-);
-
-
-/* =====================================================
-   LISTAR GRUPOS
-   ===================================================== */
-
-groupsButton.addEventListener(
-    "click",
-    async () => {
-
-        try {
-
-            const data =
-                await apiFetch(
-                    "/api/groups/list/" +
-                    encodeURIComponent(
-                        currentUser
-                    )
-                );
-
-
-            renderGroups(
-                data
-            );
-
-
-            groupsOverlay.classList.add(
-                "open"
-            );
-
-
-        } catch (
-            error
-        ) {
-
-            handleAPIError(
-                error
-            );
-        }
-    }
-);
-
-
-/* =====================================================
-   RENDER GRUPOS
-   ===================================================== */
-
-function renderGroups(
-    groups
-) {
-
-    groupList.innerHTML =
-        "";
-
-
-    if (
-        !Array.isArray(groups) ||
-        groups.length === 0
-    ) {
-
-        groupList.innerHTML =
-            `
-                <div class="group-card">
-                    <div class="group-card-name">
-                        No tienes grupos.
-                    </div>
-                </div>
-            `;
-
+    if(!token){
+        goAuth();
         return;
     }
 
-
-    groups.forEach(
-        group => {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                "group-card";
-
-
-            const name =
-                document.createElement(
-                    "div"
-                );
-
-            name.className =
-                "group-card-name";
-
-            name.textContent =
-                group.name;
-
-
-            const owner =
-                document.createElement(
-                    "div"
-                );
-
-            owner.className =
-                "group-card-owner";
-
-            owner.textContent =
-                "Creado por @" +
-                group.owner;
-
-
-            card.appendChild(
-                name
-            );
-
-            card.appendChild(
-                owner
-            );
-
-
-            groupList.appendChild(
-                card
-            );
-        }
-    );
-}
-
-
-/* =====================================================
-   CERRAR GRUPOS
-   ===================================================== */
-
-groupsOverlay.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            groupsOverlay
-        ) {
-
-            groupsOverlay.classList.remove(
-                "open"
-            );
-        }
-    }
-);
-
-
-/* =====================================================
-   VOLVER DEL CHAT
-   ===================================================== */
-
-backButton.addEventListener(
-    "click",
-    closeChat
-);
-
-
-/* =====================================================
-   LOGOUT
-   ===================================================== */
-
-logoutButton.addEventListener(
-    "click",
-    async () => {
-
-        try {
-
-            await apiFetch(
-                "/api/logout",
-                {
-                    method:
-                        "POST"
-                }
-            );
-
-        } catch (
-            error
-        ) {
-
-            console.error(
-                error
-            );
-        }
-
-
-        if (
-            socket
-        ) {
-
-            try {
-                socket.close();
-            } catch {}
-        }
-
-
-        clearInterval(
-            refreshTimer
-        );
-
-
-        clearTimeout(
-            reconnectTimer
-        );
-
-
-        clearTokens();
-
-
-        token =
-            null;
-
-        currentUser =
-            null;
-
-
-        /*
-         * Volvemos a Kn Foundation Auth.
-         */
-
-        redirectToAuth();
-    }
-);
-
-
-/* =====================================================
-   FORMATO HORA
-   ===================================================== */
-
-function formatTime(
-    value
-) {
-
-    if (
-        !value
-    ) {
-        return "";
-    }
-
-
-    const date =
-        new Date(
-            value
-        );
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-        return "";
-    }
-
-
-    return date.toLocaleTimeString(
-        [],
-        {
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    );
-}
-
-
-/* =====================================================
-   MANEJO DE ERROR
-   ===================================================== */
-
-function handleAPIError(
-    error
-) {
-
-    console.error(
-        error
-    );
-
-
-    if (
-        error &&
-        error.status === 401
-    ) {
-
-        clearTokens();
-
-        token =
-            null;
-
-        showStatus(
-            "Sesión expirada.",
-            "error"
-        );
-
-
-        setTimeout(
-            () => {
-                redirectToAuth();
-            },
-            700
-        );
-
-        return;
-    }
-
-
-    if (
-        error &&
-        error.status === 503
-    ) {
-
-        showStatus(
-            error.message ||
-            "No se puede conectar con Kn Foundation.",
-            "error"
-        );
-
-        return;
-    }
-
-
-    showStatus(
-        error &&
-        error.message
-            ? error.message
-            : "Ocurrió un error.",
-        "error"
-    );
-}
-
-
-/* =====================================================
-   ACTUALIZACIÓN AUTOMÁTICA
-   ===================================================== */
-
-function startRefresh() {
-
-    clearInterval(
-        refreshTimer
-    );
-
-
-    refreshTimer =
-        setInterval(
-            async () => {
-
-                try {
-
-                    await loadUsers();
-
-
-                    if (
-                        currentTarget
-                    ) {
-
-                        await loadMessages();
-                    }
-
-                } catch (
-                    error
-                ) {
-
-                    /*
-                     * No mostramos el error
-                     * constantemente.
-                     */
-                }
-
-            },
-            5000
-        );
-}
-
-
-/* =====================================================
-   INICIO
-   ===================================================== */
-
-async function init() {
+    localStorage.setItem("token",token);
 
     /*
-     * 1. Revisar si acabamos de
-     *    volver desde Auth.
+     * Limpiar el token de la URL.
      */
 
-    const returnedToken =
-        getReturnedToken();
-
-
-    if (
-        returnedToken
-    ) {
-
-        saveToken(
-            returnedToken
+    if(location.hash||location.search.includes("token")){
+        history.replaceState(
+            {},
+            document.title,
+            location.pathname
         );
-
-        token =
-            returnedToken;
-
-
-        cleanReturnedToken();
     }
 
+    try{
 
-    /*
-     * 2. Si no llegó token nuevo,
-     *    buscar uno existente.
-     */
+        await loadMe();
 
-    if (
-        !token
-    ) {
-
-        token =
-            getStoredToken();
-    }
-
-
-    /*
-     * 3. Sin sesión:
-     *    ir a Auth.
-     */
-
-    if (
-        !token
-    ) {
-
-        redirectToAuth();
-
-        return;
-    }
-
-
-    /*
-     * 4. Comprobar la sesión
-     *    directamente contra Kn Foundation
-     *    mediante Smart-Chat API.
-     */
-
-    try {
-
-        await loadMyAccount();
-
-
-        /*
-         * 5. Obtener usuarios.
-         */
+        app.classList.add("ready");
 
         await loadUsers();
+        await loadGroups();
 
+        connectSocket();
 
-        /*
-         * 6. Conectar WebSocket.
-         */
+    }catch(e){
 
-        connectWebSocket();
-
-
-        /*
-         * 7. Actualización periódica.
-         */
-
-        startRefresh();
-
-
-    } catch (
-        error
-    ) {
-
-        console.error(
-            error
-        );
-
-
-        if (
-            error &&
-            error.status === 401
-        ) {
-
-            clearTokens();
-
-            token =
-                null;
-
-
-            redirectToAuth();
-
+        if(e.status===401){
+            localStorage.removeItem("token");
+            goAuth();
             return;
         }
 
-
-        userList.innerHTML =
-            `
-                <div class="empty-chat">
-                    No se pudo conectar con Smart-Chat.
-                </div>
-            `;
-
-
-        memberList.innerHTML =
-            `
-                <div class="empty-chat">
-                    No se pudo conectar.
-                </div>
-            `;
-
-
-        showStatus(
-            error.message ||
-            "No se pudo conectar con el servidor.",
-            "error"
-        );
+        app.classList.add("ready");
+        show(e.message,"error");
     }
 }
 
-
-/* =====================================================
-   ARRANCAR
-   ===================================================== */
-
 init();
-
 </script>
 
 </body>
