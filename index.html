@@ -7,82 +7,41 @@
 
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:#080808;color:#fff;font-family:Arial;overflow:hidden}
+html,body{margin:0;width:100%;height:100%;background:#080808;color:#fff;font-family:Arial,sans-serif;overflow:hidden}
 #app{display:none;width:100%;height:100%;grid-template-columns:30% 40% 30%}
 #app.ready{display:grid}
-
 .left,.right{padding:10px;background:#191919;overflow:auto}
-.left{border-right:1px solid #303030}
-.right{border-left:1px solid #303030}
+.left{border-right:1px solid #303030}.right{border-left:1px solid #303030}
 .center{display:flex;align-items:center;justify-content:center;background:#080808}
-
 .title{color:#20d7ca;font-size:13px;font-weight:bold;margin-bottom:10px}
-
-.user{
-    display:flex;align-items:center;gap:7px;
-    background:#212121;border:1px solid #303030;
-    border-radius:8px;padding:6px;margin-bottom:6px
-}
-.avatar-small{width:31px;height:31px;border-radius:50%;object-fit:cover;background:#333}
-.name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
-
-.chat-btn,.create-btn{
-    background:#20d7ca;color:#07100f;border:0;border-radius:5px;
-    padding:6px 8px;font-size:9px;font-weight:bold;cursor:pointer
-}
-
+.user{display:flex;align-items:center;gap:7px;padding:6px;margin-bottom:6px;background:#212121;border:1px solid #303030;border-radius:8px}
+.small-pfp{width:31px;height:31px;border-radius:50%;object-fit:cover;background:#303030}
+.name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+button{border:0;border-radius:6px;cursor:pointer}
+.chat-btn,.create-btn{padding:6px 8px;background:#20d7ca;color:#06100f;font-size:9px;font-weight:bold}
+.chat-btn:hover,.create-btn:hover{background:#2be0d3}
 .profile{text-align:center}
-.profile img{
-    width:150px;height:150px;
-    border-radius:50%;object-fit:cover;
-    background:#292929;
-    border:3px solid #20d7ca
-}
-.profile-name{margin-top:10px;font-size:15px;font-weight:bold}
-.profile-source{color:#666;font-size:8px;margin-top:4px}
-.logout{
-    margin-top:12px;padding:7px 12px;
-    background:#292929;color:#ddd;
-    border:1px solid #383838;border-radius:6px;
-    cursor:pointer;font-size:9px
-}
-
-input{
-    width:100%;height:31px;margin:7px 0;
-    padding:0 8px;background:#202020;
-    border:1px solid #383838;border-radius:6px;color:white
-}
-
-#groups{margin-top:7px}
-.group{padding:7px;background:#222;border:1px solid #303030;border-radius:6px;margin-top:5px;font-size:9px}
-
-.status{
-    position:fixed;bottom:6px;left:6px;
-    background:#181818;border:1px solid #333;
-    padding:6px 9px;border-radius:6px;
-    font-size:8px;color:#777;opacity:0
-}
+.profile-pfp{width:150px;height:150px;border-radius:50%;object-fit:cover;background:#252525;border:3px solid #20d7ca}
+.profile-name{margin-top:11px;font-size:15px;font-weight:bold}
+.profile-source{margin-top:4px;color:#666;font-size:8px}
+.logout{margin-top:12px;padding:7px 12px;background:#292929;color:#ddd;border:1px solid #383838}
+input{width:100%;height:31px;margin:7px 0;padding:0 8px;background:#202020;border:1px solid #383838;border-radius:6px;color:#fff}
+.groups-title{margin-top:12px}.group{padding:7px;margin-top:5px;background:#222;border:1px solid #303030;border-radius:6px;font-size:9px}
+.status{position:fixed;left:6px;bottom:6px;padding:6px 9px;background:#181818;border:1px solid #333;border-radius:6px;font-size:8px;color:#777;opacity:0;z-index:999}
 .status.show{opacity:1}.status.error{color:#ff7070}.status.ok{color:#20d7ca}
-
-.chat{
-    position:fixed;inset:0;background:#080808;
-    display:none;grid-template-rows:45px 1fr 43px;z-index:10
-}
+.chat{position:fixed;inset:0;display:none;grid-template-rows:45px 1fr 43px;background:#080808;z-index:10}
 .chat.open{display:grid}
 .chat-head{display:flex;align-items:center;gap:7px;padding:7px;background:#171717;border-bottom:1px solid #303030}
-.back{width:29px;height:29px;background:#292929;color:#fff;border:0;border-radius:6px;cursor:pointer}
+.back{width:29px;height:29px;background:#292929;color:#fff;font-size:14px}
 .chat-head img{width:29px;height:29px;border-radius:50%;object-fit:cover}
 .chat-name{font-size:10px;font-weight:bold}
 .messages{overflow:auto;padding:9px;display:flex;flex-direction:column;gap:6px}
-.msg{max-width:75%;padding:7px 8px;border-radius:7px;font-size:10px}
+.msg{max-width:75%;padding:7px 8px;border-radius:7px;font-size:10px;overflow-wrap:anywhere}
 .mine{align-self:flex-end;background:#19bcb0;color:#06100f}
-.other{align-self:flex-start;background:#252525}
+.other{align-self:flex-start;background:#252525;color:#eee}
 .bar{display:flex;gap:5px;padding:6px;background:#171717;border-top:1px solid #303030}
-.bar input{margin:0}.send{width:40px;background:#20d7ca;border:0;border-radius:6px;cursor:pointer}
-
-@media(max-width:500px){
-    #app{grid-template-columns:32% 36% 32%}
-}
+.bar input{margin:0}.send{width:40px;background:#20d7ca;color:#06100f}
+@media(max-width:500px){#app{grid-template-columns:32% 36% 32%}}
 </style>
 </head>
 
@@ -97,7 +56,7 @@ input{
 
     <main class="center">
         <div class="profile">
-            <img id="myPfp" alt="PFP">
+            <img id="myPfp" class="profile-pfp" alt="PFP">
             <div id="myName" class="profile-name">@...</div>
             <div class="profile-source">Kn Foundation Account</div>
             <button id="logout" class="logout">LOG OUT</button>
@@ -113,10 +72,7 @@ input{
             Crear Grupo
         </button>
 
-        <div class="title" style="margin-top:15px">
-            Mis grupos
-        </div>
-
+        <div class="title groups-title">Mis grupos</div>
         <div id="groups">Cargando...</div>
     </aside>
 
@@ -126,17 +82,15 @@ input{
 
     <header class="chat-head">
         <button id="back" class="back">←</button>
-        <img id="chatPfp">
-        <div>
-            <div id="chatName" class="chat-name">Chat</div>
-        </div>
+        <img id="chatPfp" alt="">
+        <div id="chatName" class="chat-name">Chat</div>
     </header>
 
     <div id="messages" class="messages"></div>
 
     <form id="form" class="bar">
-        <input id="message" placeholder="Escribe un mensaje..." maxlength="5000">
-        <button class="send">→</button>
+        <input id="message" maxlength="5000" placeholder="Escribe un mensaje..." autocomplete="off">
+        <button class="send" type="submit">→</button>
     </form>
 
 </section>
@@ -144,88 +98,163 @@ input{
 <div id="status" class="status"></div>
 
 <script>
-const API="https://programs-sweet-limited-files.trycloudflare.com";
-const AUTH="https://smartium25.github.io/auth";
+"use strict";
 
-let token=null,currentUser=null,target=null,socket=null;
+const API =
+    "https://programs-sweet-limited-files.trycloudflare.com";
 
-const $=id=>document.getElementById(id);
+const AUTH =
+    "https://smartium25.github.io/auth";
 
-const app=$("app");
-const users=$("users");
-const groups=$("groups");
-const status=$("status");
+const TOKEN_KEY =
+    "knfoundation_token";
+
+let token = null;
+let currentUser = null;
+let currentTarget = null;
+let socket = null;
+
+const $ = id =>
+    document.getElementById(id);
+
+const app = $("app");
+const status = $("status");
 
 
 function show(text,type=""){
-    status.textContent=text;
-    status.className="status show "+type;
-    clearTimeout(show.t);
-    show.t=setTimeout(()=>status.className="status",2500);
+    status.textContent = text;
+    status.className = "status show " + type;
+
+    clearTimeout(show.timer);
+
+    show.timer = setTimeout(() => {
+        status.className = "status";
+    },2500);
 }
 
 
 function placeholder(){
-    return "data:image/svg+xml,"+encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-            <rect width="100" height="100" fill="#303030"/>
-            <circle cx="50" cy="35" r="18" fill="#777"/>
-            <path d="M18 92C20 68 80 68 82 92" fill="#777"/>
-        </svg>
-    `);
+    return "data:image/svg+xml;charset=utf-8," +
+        encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <rect width="100" height="100" fill="#303030"/>
+                <circle cx="50" cy="35" r="18" fill="#777"/>
+                <path d="M18 92C20 68 80 68 82 92" fill="#777"/>
+            </svg>
+        `);
 }
 
 
-function pfp(v){
-    if(!v)return placeholder();
-    if(v.startsWith("http")||v.startsWith("data:"))return v;
-    return "http://127.0.0.1:8000/"+v.replace(/^\/+/,"");
+function setImage(img,value){
+
+    img.onerror = () => {
+        img.onerror = null;
+        img.src = placeholder();
+    };
+
+    if(!value){
+        img.src = placeholder();
+        return;
+    }
+
+    value = String(value).trim();
+
+    /*
+     * Kn Foundation debería devolver una URL
+     * pública o absoluta para la PFP.
+     */
+
+    if(
+        value.startsWith("http://") ||
+        value.startsWith("https://") ||
+        value.startsWith("data:")
+    ){
+        img.src = value;
+    }else{
+        img.src = placeholder();
+    }
 }
 
 
-function getToken(){
+function getReturnedToken(){
 
-    const hash=new URLSearchParams(
-        location.hash.replace(/^#/,"")
+    const hash =
+        new URLSearchParams(
+            location.hash.replace(/^#/,"")
+        );
+
+    const query =
+        new URLSearchParams(
+            location.search
+        );
+
+    return (
+        hash.get("token") ||
+        hash.get("access_token") ||
+        query.get("token") ||
+        query.get("access_token") ||
+        null
     );
-
-    const query=new URLSearchParams(location.search);
-
-    return hash.get("token") ||
-           hash.get("access_token") ||
-           query.get("token") ||
-           query.get("access_token") ||
-           localStorage.getItem("token");
 }
 
 
-function goAuth(){
+function login(){
 
-    const url=AUTH+"?redirect="+
-        encodeURIComponent(location.href)+
+    const redirect =
+        location.href;
+
+    const url =
+        AUTH +
+        "?redirect=" +
+        encodeURIComponent(redirect) +
         "&app=smart-chat";
 
     location.replace(url);
 }
 
 
+function getStoredToken(){
+    return localStorage.getItem(TOKEN_KEY);
+}
+
+
 async function api(path,options={}){
 
-    const headers={...(options.headers||{})};
+    const headers = {
+        ...(options.headers || {})
+    };
 
-    if(token)
-        headers.Authorization="Bearer "+token;
+    headers.Authorization =
+        "Bearer " + token;
 
-    const r=await fetch(API+path,{...options,headers});
+    const response =
+        await fetch(
+            API + path,
+            {
+                ...options,
+                headers
+            }
+        );
 
-    let data=null;
+    let data = null;
 
-    try{data=await r.json()}catch{}
+    try{
+        data = await response.json();
+    }catch{}
 
-    if(!r.ok){
-        const e=new Error(data?.detail||"Error HTTP "+r.status);
-        e.status=r.status;
-        throw e;
+    if(!response.ok){
+
+        const error =
+            new Error(
+                data?.detail ||
+                "Error HTTP " +
+                response.status
+            );
+
+        error.status =
+            response.status;
+
+        throw error;
     }
 
     return data;
@@ -234,261 +263,552 @@ async function api(path,options={}){
 
 async function loadMe(){
 
-    const d=await api("/api/me");
+    const data =
+        await api("/api/me");
 
-    if(!d?.user?.username)
-        throw new Error("No se pudo obtener la cuenta.");
+    if(
+        !data?.user?.username
+    ){
+        throw new Error(
+            "Kn Foundation no devolvió el usuario."
+        );
+    }
 
-    currentUser=d.user.username;
+    currentUser =
+        data.user.username;
 
-    $("myName").textContent="@"+currentUser;
+    $("myName").textContent =
+        "@" + currentUser;
 
-    $("myPfp").src=
-        pfp(d.user.pfp||d.user.profile_picture);
+    setImage(
+        $("myPfp"),
+        data.user.pfp ||
+        data.user.profile_picture
+    );
 }
 
 
 async function loadUsers(){
 
-    const list=await api(
-        "/api/users/list/"+
-        encodeURIComponent(currentUser)
-    );
+    const list =
+        await api(
+            "/api/users/list/" +
+            encodeURIComponent(
+                currentUser
+            )
+        );
 
-    users.innerHTML="";
+    const box =
+        $("users");
 
-    if(!Array.isArray(list)||!list.length){
-        users.textContent="No hay usuarios.";
+    box.innerHTML = "";
+
+    if(
+        !Array.isArray(list) ||
+        list.length === 0
+    ){
+
+        box.textContent =
+            "No hay usuarios.";
+
         return;
     }
 
-    list.forEach(u=>{
+    list.forEach(user => {
 
-        const row=document.createElement("div");
-        row.className="user";
+        const row =
+            document.createElement("div");
 
-        const img=document.createElement("img");
-        img.className="avatar-small";
-        img.src=pfp(u.pfp||u.profile_picture);
+        row.className =
+            "user";
 
-        const name=document.createElement("div");
-        name.className="name";
-        name.textContent=u.username;
+        const img =
+            document.createElement("img");
 
-        const btn=document.createElement("button");
-        btn.className="chat-btn";
-        btn.textContent="Chat";
-        btn.onclick=()=>openChat(u);
+        img.className =
+            "small-pfp";
 
-        row.append(img,name,btn);
-        users.appendChild(row);
+        setImage(
+            img,
+            user.pfp ||
+            user.profile_picture
+        );
+
+        const name =
+            document.createElement("div");
+
+        name.className =
+            "name";
+
+        name.textContent =
+            user.username;
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "chat-btn";
+
+        button.textContent =
+            "Chat";
+
+        button.onclick =
+            () => openChat(user);
+
+        row.append(
+            img,
+            name,
+            button
+        );
+
+        box.appendChild(row);
     });
 }
 
 
 async function loadGroups(){
 
-    const list=await api(
-        "/api/groups/list/"+
-        encodeURIComponent(currentUser)
-    );
+    const list =
+        await api(
+            "/api/groups/list/" +
+            encodeURIComponent(
+                currentUser
+            )
+        );
 
-    groups.innerHTML="";
+    const box =
+        $("groups");
 
-    if(!Array.isArray(list)||!list.length){
-        groups.textContent="No tienes grupos.";
+    box.innerHTML = "";
+
+    if(
+        !Array.isArray(list) ||
+        list.length === 0
+    ){
+
+        box.textContent =
+            "No tienes grupos.";
+
         return;
     }
 
-    list.forEach(g=>{
-        const x=document.createElement("div");
-        x.className="group";
-        x.textContent=g.name;
-        groups.appendChild(x);
+    list.forEach(group => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "group";
+
+        item.textContent =
+            group.name;
+
+        box.appendChild(item);
     });
 }
 
 
-async function openChat(u){
+async function openChat(user){
 
-    target=u.username;
+    currentTarget =
+        user.username;
 
-    $("chatName").textContent=u.username;
-    $("chatPfp").src=pfp(u.pfp||u.profile_picture);
+    $("chatName").textContent =
+        user.username;
 
-    $("chat").classList.add("open");
+    setImage(
+        $("chatPfp"),
+        user.pfp ||
+        user.profile_picture
+    );
+
+    $("chat").classList.add(
+        "open"
+    );
 
     await loadMessages();
+
+    $("message").focus();
 }
 
 
 async function loadMessages(){
 
-    const list=await api(
-        "/api/chat/get/"+
-        encodeURIComponent(currentUser)+"/"+
-        encodeURIComponent(target)
-    );
+    if(
+        !currentTarget
+    )return;
 
-    const box=$("messages");
-    box.innerHTML="";
+    const list =
+        await api(
+            "/api/chat/get/" +
+            encodeURIComponent(
+                currentUser
+            ) +
+            "/" +
+            encodeURIComponent(
+                currentTarget
+            )
+        );
 
-    if(!list.length){
-        box.innerHTML=
+    const box =
+        $("messages");
+
+    box.innerHTML = "";
+
+    if(
+        !Array.isArray(list) ||
+        list.length === 0
+    ){
+
+        box.innerHTML =
             '<div style="margin:auto;color:#555;font-size:9px">No hay mensajes.</div>';
+
         return;
     }
 
-    list.forEach(m=>{
+    list.forEach(message => {
 
-        const x=document.createElement("div");
+        const item =
+            document.createElement("div");
 
-        x.className=
-            "msg "+
-            (m.sender===currentUser?"mine":"other");
+        item.className =
+            "msg " +
+            (
+                message.sender === currentUser
+                    ? "mine"
+                    : "other"
+            );
 
-        x.textContent=m.message||"";
+        if(
+            message.type === "image" &&
+            message.file
+        ){
 
-        box.appendChild(x);
+            const img =
+                document.createElement("img");
+
+            img.style.maxWidth =
+                "100%";
+
+            img.style.borderRadius =
+                "5px";
+
+            img.src =
+                API +
+                "/media/chat/" +
+                encodeURIComponent(
+                    message.file
+                );
+
+            item.appendChild(img);
+
+        }else if(
+            message.type === "video" &&
+            message.file
+        ){
+
+            const video =
+                document.createElement("video");
+
+            video.controls = true;
+            video.style.maxWidth = "100%";
+
+            video.src =
+                API +
+                "/media/chat/" +
+                encodeURIComponent(
+                    message.file
+                );
+
+            item.appendChild(video);
+
+        }else{
+
+            item.textContent =
+                message.message || "";
+        }
+
+        box.appendChild(item);
     });
 
-    box.scrollTop=box.scrollHeight;
+    box.scrollTop =
+        box.scrollHeight;
 }
 
 
-$("form").addEventListener("submit",async e=>{
+$("form").addEventListener(
+    "submit",
+    async event => {
 
-    e.preventDefault();
+        event.preventDefault();
 
-    const text=$("message").value.trim();
+        const input =
+            $("message");
 
-    if(!text||!target)return;
+        const text =
+            input.value.trim();
 
-    $("message").value="";
+        if(
+            !text ||
+            !currentTarget
+        )return;
 
-    try{
+        input.value = "";
 
-        await api("/api/chat/send",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({
-                receiver:target,
-                message:text
-            })
-        });
+        try{
 
-        await loadMessages();
+            await api(
+                "/api/chat/send",
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:JSON.stringify({
+                        receiver:
+                            currentTarget,
+                        message:
+                            text
+                    })
+                }
+            );
 
-    }catch(e){
-        show(e.message,"error");
+            await loadMessages();
+
+        }catch(error){
+
+            handleError(error);
+        }
     }
-});
+);
 
 
-$("back").onclick=()=>{
-    $("chat").classList.remove("open");
-    target=null;
-};
+$("back").onclick =
+    () => {
+
+        $("chat").classList.remove(
+            "open"
+        );
+
+        currentTarget =
+            null;
+    };
 
 
-$("createGroup").onclick=async()=>{
+$("createGroup").onclick =
+    async () => {
 
-    const name=$("groupName").value.trim();
+        const name =
+            $("groupName").value.trim();
 
-    if(!name){
-        show("Escribe un nombre.","error");
-        return;
-    }
+        if(!name){
 
-    const form=new FormData();
-    form.append("name",name);
-    form.append("members","");
+            show(
+                "Escribe un nombre.",
+                "error"
+            );
 
-    try{
+            return;
+        }
 
-        await api("/api/groups/create",{
-            method:"POST",
-            body:form
-        });
+        const form =
+            new FormData();
 
-        $("groupName").value="";
+        form.append(
+            "name",
+            name
+        );
 
-        await loadGroups();
+        form.append(
+            "members",
+            ""
+        );
 
-        show("Grupo creado.","ok");
+        try{
 
-    }catch(e){
-        show(e.message,"error");
-    }
-};
+            await api(
+                "/api/groups/create",
+                {
+                    method:"POST",
+                    body:form
+                }
+            );
+
+            $("groupName").value =
+                "";
+
+            await loadGroups();
+
+            show(
+                "Grupo creado.",
+                "ok"
+            );
+
+        }catch(error){
+
+            handleError(error);
+        }
+    };
 
 
-$("logout").onclick=async()=>{
+$("logout").onclick =
+    async () => {
 
-    try{
-        await api("/api/logout",{method:"POST"});
-    }catch{}
+        try{
+            await api(
+                "/api/logout",
+                {
+                    method:"POST"
+                }
+            );
+        }catch{}
 
-    localStorage.removeItem("token");
+        if(socket){
 
-    if(socket){
-        try{socket.close()}catch{}
-    }
+            try{
+                socket.close();
+            }catch{}
+        }
 
-    goAuth();
-};
+        localStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        location.replace(
+            AUTH
+        );
+    };
 
 
 function connectSocket(){
 
-    const host=
-        API.replace(/^https?:\/\//,"");
+    if(
+        !currentUser ||
+        !token
+    )return;
 
-    socket=new WebSocket(
-        "wss://"+
-        host+
-        "/ws/"+
-        encodeURIComponent(currentUser)+
-        "?token="+
-        encodeURIComponent(token)
+    const host =
+        API.replace(
+            /^https?:\/\//,
+            ""
+        );
+
+    socket =
+        new WebSocket(
+            "wss://" +
+            host +
+            "/ws/" +
+            encodeURIComponent(
+                currentUser
+            ) +
+            "?token=" +
+            encodeURIComponent(
+                token
+            )
+        );
+
+    socket.onmessage =
+        async event => {
+
+            try{
+
+                const data =
+                    JSON.parse(
+                        event.data
+                    );
+
+                if(
+                    data.type ===
+                    "chat"
+                ){
+
+                    await loadUsers();
+
+                    if(
+                        currentTarget
+                    ){
+                        await loadMessages();
+                    }
+                }
+
+            }catch{}
+        };
+
+    socket.onclose =
+        () => {
+
+            setTimeout(
+                connectSocket,
+                4000
+            );
+        };
+}
+
+
+function handleError(error){
+
+    console.error(error);
+
+    if(
+        error?.status === 401
+    ){
+
+        localStorage.removeItem(
+            TOKEN_KEY
+        );
+
+        token = null;
+
+        app.classList.remove(
+            "ready"
+        );
+
+        login();
+
+        return;
+    }
+
+    show(
+        error?.message ||
+        "Ocurrió un error.",
+        "error"
     );
-
-    socket.onmessage=async e=>{
-
-        try{
-
-            const d=JSON.parse(e.data);
-
-            if(d.type==="chat"){
-                await loadUsers();
-                if(target)await loadMessages();
-            }
-
-        }catch{}
-    };
-
-    socket.onclose=()=>{
-        setTimeout(connectSocket,4000);
-    };
 }
 
 
 async function init(){
 
-    token=getToken();
+    token =
+        getReturnedToken() ||
+        getStoredToken();
+
+    /*
+     * No hay sesión.
+     * Smart-Chat permanece oculto.
+     */
 
     if(!token){
-        goAuth();
+
+        login();
+
         return;
     }
 
-    localStorage.setItem("token",token);
+    localStorage.setItem(
+        TOKEN_KEY,
+        token
+    );
 
     /*
-     * Limpiar el token de la URL.
+     * Quitar token de la URL.
      */
 
-    if(location.hash||location.search.includes("token")){
+    if(
+        location.hash ||
+        location.search.includes("token")
+    ){
+
         history.replaceState(
             {},
             document.title,
@@ -500,25 +820,26 @@ async function init(){
 
         await loadMe();
 
-        app.classList.add("ready");
+        /*
+         * SOLO después de validar
+         * la sesión mostramos Smart-Chat.
+         */
+
+        app.classList.add(
+            "ready"
+        );
 
         await loadUsers();
         await loadGroups();
 
         connectSocket();
 
-    }catch(e){
+    }catch(error){
 
-        if(e.status===401){
-            localStorage.removeItem("token");
-            goAuth();
-            return;
-        }
-
-        app.classList.add("ready");
-        show(e.message,"error");
+        handleError(error);
     }
 }
+
 
 init();
 </script>
