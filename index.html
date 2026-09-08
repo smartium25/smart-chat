@@ -1,0 +1,3210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Smart-Call</title>
+
+<style>
+:root{
+--primary:#00bcd4;
+--bg:#121212;
+--card:#2c2c2c;
+--border:#444;
+--text:#fff;
+--sub:#aaa;
+--green:#4caf50;
+--red:#f44336;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+font-family:Segoe UI,sans-serif;
+background:var(--bg);
+color:var(--text);
+height:100vh;
+overflow:hidden;
+}
+
+#app{
+display:none;
+height:100vh;
+}
+
+.wrap{
+display:grid;
+grid-template-columns:320px 1fr 320px;
+height:100vh;
+gap:2px;
+background:var(--border);
+}
+
+.panel{
+background:var(--bg);
+padding:16px;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.title{
+background:var(--card);
+padding:14px;
+border-radius:16px;
+text-align:center;
+font-weight:700;
+color:var(--primary);
+margin-bottom:14px;
+}
+
+.scroll{
+flex:1;
+overflow-y:auto;
+}
+
+.user{
+display:flex;
+align-items:center;
+gap:10px;
+background:var(--card);
+padding:10px;
+border-radius:14px;
+margin-bottom:10px;
+}
+
+.user img{
+width:44px;
+height:44px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid var(--primary);
+}
+
+.online,.offline{
+width:10px;
+height:10px;
+border-radius:50%;
+flex-shrink:0;
+}
+
+.online{background:var(--green);}
+.offline{background:#666;}
+
+.name{
+flex:1;
+font-weight:600;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.center{
+background:#1a1a1a;
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+#profile{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:30px;
+}
+
+.big{
+width:170px;
+height:170px;
+border-radius:50%;
+overflow:hidden;
+border:4px solid var(--primary);
+margin-bottom:20px;
+background:var(--card);
+}
+
+.big img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+#call{
+display:none;
+height:100%;
+flex-direction:column;
+}
+
+#callHead{
+padding:15px;
+background:var(--card);
+color:var(--primary);
+text-align:center;
+font-weight:700;
+}
+
+#videos{
+flex:1;
+overflow-y:auto;
+padding:16px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+align-content:flex-start;
+}
+
+.video-box{
+position:relative;
+background:#000;
+border-radius:12px;
+overflow:hidden;
+width:260px;
+max-width:100%;
+}
+
+.video-box video{
+display:block;
+width:100%;
+height:auto;
+min-height:160px;
+background:#000;
+object-fit:cover;
+}
+
+.video-name{
+position:absolute;
+left:8px;
+bottom:8px;
+background:rgba(0,0,0,.7);
+padding:5px 8px;
+border-radius:8px;
+font-size:12px;
+}
+
+.controls{
+display:flex;
+gap:10px;
+padding:12px;
+background:var(--card);
+flex-wrap:wrap;
+}
+
+.controls button{
+flex:1;
+min-width:110px;
+}
+
+.room-card{
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+background:var(--card);
+padding:10px;
+border-radius:14px;
+margin-bottom:10px;
+min-height:64px;
+}
+
+.room-info{
+width:100%;
+text-align:center;
+padding-right:75px;
+}
+
+.room-name{
+font-weight:700;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.room-creator{
+font-size:12px;
+color:var(--sub);
+margin-top:3px;
+}
+
+.room-card button{
+position:absolute;
+right:10px;
+}
+
+.call-error{
+display:none;
+background:#2a1717;
+border:1px solid #7a3030;
+color:#ff8a80;
+padding:10px 12px;
+border-radius:10px;
+margin:12px 16px 0;
+font-size:13px;
+}
+
+.call-status{
+display:none;
+background:var(--card);
+color:var(--sub);
+padding:10px 12px;
+margin:12px 16px 0;
+border-radius:10px;
+font-size:13px;
+text-align:center;
+}
+
+.incoming-call{
+display:none;
+position:fixed;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+width:calc(100% - 40px);
+max-width:380px;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:20px;
+z-index:1000;
+box-shadow:0 15px 40px rgba(0,0,0,.5);
+text-align:center;
+}
+
+.incoming-call h3{
+color:var(--primary);
+margin-bottom:8px;
+}
+
+.incoming-call p{
+color:var(--sub);
+margin-bottom:16px;
+}
+
+.incoming-buttons{
+display:flex;
+gap:10px;
+}
+
+.incoming-buttons button{
+flex:1;
+}
+
+.audio-only{
+padding:30px;
+text-align:center;
+color:var(--sub);
+}
+
+.audio-only strong{
+display:block;
+font-size:32px;
+color:var(--primary);
+margin-bottom:10px;
+}
+
+@media(max-width:900px){
+.wrap{
+grid-template-columns:220px 1fr;
+}
+
+.wrap>.panel:last-child{
+display:none;
+}
+}
+
+@media(max-width:600px){
+.wrap{
+grid-template-columns:1fr;
+}
+
+.wrap>.panel:first-child{
+display:none;
+}
+
+.center{
+height:100vh;
+}
+
+.controls{
+gap:6px;
+}
+
+.controls button{
+min-width:0;
+font-size:12px;
+padding:12px 8px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<div class="wrap">
+
+<!-- LEFT -->
+<div class="panel">
+
+<div class="title">
+Usuarios
+</div>
+
+<div class="scroll" id="users"></div>
+
+</div>
+
+
+<!-- CENTER -->
+<div class="center">
+
+<div id="profile">
+
+<div class="big">
+<img
+id="mypfp"
+src="https://via.placeholder.com/170"
+alt="Foto de perfil"
+>
+</div>
+
+<h2 id="me"></h2>
+
+<br>
+
+<button
+class="full"
+style="background:#555;color:#fff"
+onclick="logout()"
+>
+LOG OUT
+</button>
+
+<br>
+
+<small>
+Selecciona una llamada
+</small>
+
+</div>
+
+
+<div id="call">
+
+<div id="callHead">
+Llamada
+</div>
+
+<div
+id="callStatus"
+class="call-status"
+></div>
+
+<div
+id="callError"
+class="call-error"
+></div>
+
+<div id="videos"></div>
+
+<div class="controls">
+
+<button
+class="blue"
+onclick="toggleMicrophone()"
+id="micButton"
+>
+🎤 Mic
+</button>
+
+<button
+class="blue"
+onclick="toggleCamera()"
+id="cameraButton"
+>
+📹 Cámara
+</button>
+
+<button
+class="blue"
+onclick="startCall()"
+id="startButton"
+>
+📞 Llamar
+</button>
+
+<button
+class="full"
+style="background:#555;color:#fff"
+onclick="endCall()"
+>
+Colgar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- RIGHT -->
+<div class="panel">
+
+<div class="title">
+Crear Grupo
+</div>
+
+<input
+id="room"
+placeholder="Nombre grupo"
+>
+
+<button
+class="blue full"
+onclick="joinGroup()"
+>
+Entrar Grupo
+</button>
+
+<div
+class="title"
+style="margin-top:14px;"
+>
+Salas
+</div>
+
+<div
+class="scroll"
+id="rooms"
+></div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- LLAMADA ENTRANTE -->
+
+<div
+id="incomingCall"
+class="incoming-call"
+>
+
+<h3>
+Llamada entrante
+</h3>
+
+<p id="incomingText">
+Alguien te está llamando
+</p>
+
+<div class="incoming-buttons">
+
+<button
+class="blue"
+onclick="acceptIncomingCall()"
+>
+Aceptar
+</button>
+
+<button
+style="background:#555;color:#fff"
+onclick="rejectIncomingCall()"
+>
+Rechazar
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+
+const API =
+"https://saint-mighty-stockings-smilies.trycloudflare.com";
+
+const KN_FOUNDATION =
+"https://smartium25.github.io/auth";
+
+const TOKEN_KEY =
+"knfoundation_token";
+
+
+// ============================================================
+// VARIABLES
+// ============================================================
+
+let TOKEN =
+localStorage.getItem(TOKEN_KEY) || "";
+
+let ME = "";
+
+let target = "";
+
+let currentRoom = "";
+
+let currentCallMode = "video";
+
+let ws = null;
+
+let localStream = null;
+
+let peers = {};
+
+let pendingIncomingCall = null;
+
+let pendingOutgoingCall = null;
+
+let iceServers = [
+{
+urls:"stun:stun.l.google.com:19302"
+}
+];
+
+
+// ============================================================
+// REDIRECCIÓN
+// ============================================================
+
+function redirectToKnFoundation(){
+
+const currentUrl =
+window.location.href;
+
+const redirect =
+`${KN_FOUNDATION}/?redirect=${encodeURIComponent(currentUrl)}`;
+
+window.location.replace(
+redirect
+);
+
+}
+
+
+// ============================================================
+// HEADERS
+// ============================================================
+
+function authHeaders(){
+
+return {
+"Authorization":
+`Bearer ${TOKEN}`
+};
+
+}
+
+
+// ============================================================
+// ERRORES
+// ============================================================
+
+function showCallError(
+message
+){
+
+const box =
+document.getElementById(
+"callError"
+);
+
+box.innerText =
+message;
+
+box.style.display =
+"block";
+
+}
+
+
+function hideCallError(){
+
+const box =
+document.getElementById(
+"callError"
+);
+
+box.innerText =
+"";
+
+box.style.display =
+"none";
+
+}
+
+
+function showCallStatus(
+message
+){
+
+const box =
+document.getElementById(
+"callStatus"
+);
+
+box.innerText =
+message;
+
+box.style.display =
+"block";
+
+}
+
+
+function hideCallStatus(){
+
+const box =
+document.getElementById(
+"callStatus"
+);
+
+box.innerText =
+"";
+
+box.style.display =
+"none";
+
+}
+
+
+// ============================================================
+// PFP
+// ============================================================
+
+function pfpUrl(
+value
+){
+
+if(
+!value ||
+typeof value !== "string"
+){
+
+return "https://via.placeholder.com/44";
+
+}
+
+if(
+value.startsWith("http://") ||
+value.startsWith("https://")
+){
+
+return value;
+
+}
+
+return API + value;
+
+}
+
+
+// ============================================================
+// SESIÓN
+// ============================================================
+
+async function verifySession(){
+
+if(!TOKEN){
+
+redirectToKnFoundation();
+
+return false;
+
+}
+
+try{
+
+const response =
+await fetch(
+`${API}/api/me`,
+{
+method:"GET",
+headers:authHeaders()
+}
+);
+
+
+if(
+response.status === 401 ||
+response.status === 403
+){
+
+localStorage.removeItem(
+TOKEN_KEY
+);
+
+TOKEN = "";
+
+redirectToKnFoundation();
+
+return false;
+
+}
+
+
+if(!response.ok){
+
+showCallError(
+"Error verificando la sesión."
+);
+
+return false;
+
+}
+
+
+const data =
+await response.json();
+
+const user =
+data.user ||
+data;
+
+
+ME =
+user?.username ||
+"";
+
+
+if(!ME){
+
+showCallError(
+"No se pudo obtener el usuario."
+);
+
+return false;
+
+}
+
+
+const pfp =
+user?.pfp ||
+user?.profile_picture;
+
+
+if(pfp){
+
+document.getElementById(
+"mypfp"
+).src =
+pfpUrl(pfp);
+
+}
+
+
+return true;
+
+}catch(error){
+
+console.error(
+error
+);
+
+showCallError(
+"No se pudo conectar con Smart-Call."
+);
+
+return false;
+
+}
+
+}
+
+
+// ============================================================
+// ICE / TURN
+// ============================================================
+
+async function loadRtcConfig(){
+
+try{
+
+const response =
+await fetch(
+`${API}/api/rtc-config`,
+{
+headers:authHeaders()
+}
+);
+
+
+if(!response.ok){
+
+return;
+
+}
+
+
+const data =
+await response.json();
+
+
+if(
+data &&
+Array.isArray(
+data.iceServers
+) &&
+data.iceServers.length
+){
+
+iceServers =
+data.iceServers;
+
+}
+
+}catch(error){
+
+console.warn(
+"RTC config no disponible, usando STUN.",
+error
+);
+
+}
+
+}
+
+
+// ============================================================
+// APP
+// ============================================================
+
+async function showApp(){
+
+const valid =
+await verifySession();
+
+if(!valid){
+
+return;
+
+}
+
+
+document.getElementById(
+"app"
+).style.display =
+"block";
+
+
+document.getElementById(
+"me"
+).innerText =
+"@" + ME;
+
+
+await loadRtcConfig();
+
+await loadUsers();
+
+await loadRooms();
+
+connectSocket();
+
+}
+
+
+// ============================================================
+// LOGOUT
+// ============================================================
+
+async function logout(){
+
+try{
+
+if(currentRoom){
+
+send({
+type:"leave_room",
+room:currentRoom
+});
+
+}
+
+await fetch(
+`${API}/api/logout`,
+{
+method:"POST",
+headers:authHeaders()
+}
+);
+
+}catch(error){
+
+console.error(
+error
+);
+
+}
+
+
+cleanupCall();
+
+localStorage.removeItem(
+TOKEN_KEY
+);
+
+TOKEN = "";
+
+ME = "";
+
+if(ws){
+
+try{
+ws.close();
+}catch(e){}
+
+ws = null;
+
+}
+
+redirectToKnFoundation();
+
+}
+
+
+// ============================================================
+// SOCKET
+// ============================================================
+
+function connectSocket(){
+
+if(
+!ME ||
+!TOKEN
+){
+
+return;
+
+}
+
+
+if(ws){
+
+try{
+ws.close();
+}catch(e){}
+
+}
+
+
+const wsUrl =
+API
+.replace(/^http:/,"ws:")
+.replace(/^https:/,"wss:");
+
+
+ws =
+new WebSocket(
+`${wsUrl}/ws/${encodeURIComponent(ME)}?token=${encodeURIComponent(TOKEN)}`
+);
+
+
+ws.onopen =
+()=>{
+
+console.log(
+"Smart-Call conectado."
+);
+
+};
+
+
+ws.onmessage =
+async event=>{
+
+try{
+
+const data =
+JSON.parse(event.data);
+
+
+switch(
+data.type
+){
+
+case "users":
+
+renderUsers(
+data.users || []
+);
+
+break;
+
+
+case "room_users":
+
+await handleRoomUsers(
+data
+);
+
+break;
+
+
+case "room_user_joined":
+
+break;
+
+
+case "room_user_left":
+
+if(data.username){
+
+removePeer(
+data.username
+);
+
+}
+
+break;
+
+
+case "call_invite":
+
+handleIncomingCall(
+data
+);
+
+break;
+
+
+case "call_accept":
+
+await handleCallAccepted(
+data
+);
+
+break;
+
+
+case "call_reject":
+
+handleCallRejected(
+data
+);
+
+break;
+
+
+case "call_cancel":
+
+handleCallCancelled(
+data
+);
+
+break;
+
+
+case "offer":
+
+await handleOffer(
+data
+);
+
+break;
+
+
+case "answer":
+
+await handleAnswer(
+data
+);
+
+break;
+
+
+case "ice":
+
+await handleIce(
+data
+);
+
+break;
+
+
+case "end_call":
+
+if(data.from){
+
+removePeer(
+data.from
+);
+
+}
+
+break;
+
+}
+
+}catch(error){
+
+console.error(
+"WebSocket:",
+error
+);
+
+}
+
+};
+
+
+ws.onclose =
+()=>{
+
+console.log(
+"WebSocket desconectado."
+);
+
+if(
+TOKEN &&
+ME
+){
+
+setTimeout(
+connectSocket,
+2000
+);
+
+}
+
+};
+
+
+ws.onerror =
+error=>{
+
+console.error(
+"WebSocket:",
+error
+);
+
+};
+
+}
+
+
+// ============================================================
+// SEND
+// ============================================================
+
+function send(
+data
+){
+
+if(
+ws &&
+ws.readyState ===
+WebSocket.OPEN
+){
+
+ws.send(
+JSON.stringify(data)
+);
+
+}
+
+}
+
+
+// ============================================================
+// USUARIOS
+// ============================================================
+
+async function loadUsers(){
+
+const box =
+document.getElementById(
+"users"
+);
+
+if(!box){
+
+return;
+
+}
+
+
+try{
+
+const response =
+await fetch(
+`${API}/api/users/list/${encodeURIComponent(ME)}`,
+{
+method:"GET",
+headers:authHeaders()
+}
+);
+
+
+if(
+response.status === 401 ||
+response.status === 403
+){
+
+localStorage.removeItem(
+TOKEN_KEY
+);
+
+TOKEN = "";
+
+redirectToKnFoundation();
+
+return;
+
+}
+
+
+if(!response.ok){
+
+showCallError(
+"No se pudo cargar la lista de usuarios."
+);
+
+return;
+
+}
+
+
+const data =
+await response.json();
+
+
+const list =
+Array.isArray(data)
+? data
+: (
+Array.isArray(data.users)
+? data.users
+: []
+);
+
+
+box.innerHTML =
+"";
+
+
+if(!list.length){
+
+const empty =
+document.createElement(
+"small"
+);
+
+empty.innerText =
+"No hay otros usuarios.";
+
+box.appendChild(
+empty
+);
+
+return;
+
+}
+
+
+list.forEach(
+user=>{
+
+if(
+!user ||
+!user.username ||
+user.username === ME
+){
+
+return;
+
+}
+
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"user";
+
+
+const img =
+document.createElement(
+"img"
+);
+
+img.src =
+pfpUrl(
+user.pfp ||
+user.profile_picture
+);
+
+img.onerror =
+function(){
+
+this.src =
+"https://via.placeholder.com/44";
+
+};
+
+
+const status =
+document.createElement(
+"div"
+);
+
+status.className =
+user.online
+? "online"
+: "offline";
+
+
+const name =
+document.createElement(
+"div"
+);
+
+name.className =
+"name";
+
+name.innerText =
+"@" + user.username;
+
+
+const videoButton =
+document.createElement(
+"button"
+);
+
+videoButton.className =
+"blue";
+
+videoButton.innerText =
+"📹";
+
+videoButton.title =
+"Videollamada";
+
+videoButton.onclick =
+()=>{
+openPrivate(
+user.username,
+"video"
+);
+};
+
+
+const audioButton =
+document.createElement(
+"button"
+);
+
+audioButton.className =
+"blue";
+
+audioButton.innerText =
+"🎤";
+
+audioButton.title =
+"Llamada de voz";
+
+audioButton.onclick =
+()=>{
+openPrivate(
+user.username,
+"audio"
+);
+};
+
+
+card.appendChild(
+img
+);
+
+card.appendChild(
+status
+);
+
+card.appendChild(
+name
+);
+
+card.appendChild(
+videoButton
+);
+
+card.appendChild(
+audioButton
+);
+
+box.appendChild(
+card
+);
+
+});
+
+}catch(error){
+
+console.error(
+error
+);
+
+showCallError(
+"No se pudo cargar la lista de usuarios."
+);
+
+}
+
+}
+
+
+// ============================================================
+// LLAMADA PRIVADA
+// ============================================================
+
+function openPrivate(
+username,
+mode = "video"
+){
+
+if(!username){
+
+return;
+
+}
+
+
+if(currentRoom){
+
+send({
+type:"leave_room",
+room:currentRoom
+});
+
+currentRoom = "";
+
+}
+
+
+cleanupCall();
+
+
+target =
+username;
+
+currentCallMode =
+mode;
+
+
+document.getElementById(
+"profile"
+).style.display =
+"none";
+
+
+document.getElementById(
+"call"
+).style.display =
+"flex";
+
+
+document.getElementById(
+"callHead"
+).innerText =
+mode === "audio"
+? "Llamada de voz con @" + username
+: "Videollamada con @" + username;
+
+
+hideCallError();
+hideCallStatus();
+
+}
+
+
+// ============================================================
+// INICIAR LLAMADA
+// ============================================================
+
+async function startCall(){
+
+hideCallError();
+
+
+if(
+!target ||
+currentRoom
+){
+
+showCallError(
+"Selecciona un usuario primero."
+);
+
+return;
+
+}
+
+
+if(
+pendingOutgoingCall
+){
+
+showCallStatus(
+"Ya hay una llamada saliente."
+);
+
+return;
+
+}
+
+
+if(
+!ws ||
+ws.readyState !==
+WebSocket.OPEN
+){
+
+showCallError(
+"El servidor no está conectado."
+);
+
+return;
+
+}
+
+
+const callId =
+crypto.randomUUID();
+
+
+pendingOutgoingCall = {
+id:callId,
+to:target,
+mode:currentCallMode
+};
+
+
+showCallStatus(
+"Esperando respuesta..."
+);
+
+
+send({
+
+type:"call_invite",
+
+to:target,
+
+call_id:callId,
+
+mode:currentCallMode
+
+});
+
+}
+
+
+// ============================================================
+// LLAMADA ENTRANTE
+// ============================================================
+
+function handleIncomingCall(
+data
+){
+
+if(
+!data ||
+!data.from ||
+!data.call_id
+){
+
+return;
+
+}
+
+
+// Si ya estamos ocupados.
+if(
+pendingIncomingCall ||
+pendingOutgoingCall ||
+Object.keys(peers).length
+){
+
+send({
+
+type:"call_reject",
+
+to:data.from,
+
+call_id:data.call_id,
+
+reason:"busy"
+
+});
+
+return;
+
+}
+
+
+pendingIncomingCall = {
+from:data.from,
+callId:data.call_id,
+mode:data.mode === "audio"
+? "audio"
+: "video"
+};
+
+
+document.getElementById(
+"incomingText"
+).innerText =
+data.mode === "audio"
+? "@" + data.from + " te está llamando."
+: "@" + data.from + " te está haciendo una videollamada.";
+
+
+document.getElementById(
+"incomingCall"
+).style.display =
+"block";
+
+}
+
+
+// ============================================================
+// ACEPTAR
+// ============================================================
+
+async function acceptIncomingCall(){
+
+if(
+!pendingIncomingCall
+){
+
+return;
+
+}
+
+
+const call =
+pendingIncomingCall;
+
+pendingIncomingCall =
+null;
+
+
+document.getElementById(
+"incomingCall"
+).style.display =
+"none";
+
+
+target =
+call.from;
+
+currentCallMode =
+call.mode;
+
+
+document.getElementById(
+"profile"
+).style.display =
+"none";
+
+
+document.getElementById(
+"call"
+).style.display =
+"flex";
+
+
+document.getElementById(
+"callHead"
+).innerText =
+call.mode === "audio"
+? "Llamada de voz con @" + target
+: "Videollamada con @" + target;
+
+
+hideCallError();
+
+hideCallStatus();
+
+
+send({
+
+type:"call_accept",
+
+to:target,
+
+call_id:call.callId,
+
+mode:currentCallMode
+
+});
+
+
+await initMedia(
+currentCallMode === "video"
+);
+
+}
+
+
+// ============================================================
+// RECHAZAR
+// ============================================================
+
+function rejectIncomingCall(){
+
+if(
+!pendingIncomingCall
+){
+
+return;
+
+}
+
+
+send({
+
+type:"call_reject",
+
+to:
+pendingIncomingCall.from,
+
+call_id:
+pendingIncomingCall.callId,
+
+reason:"rejected"
+
+});
+
+
+pendingIncomingCall =
+null;
+
+
+document.getElementById(
+"incomingCall"
+).style.display =
+"none";
+
+}
+
+
+// ============================================================
+// CALL ACCEPTED
+// ============================================================
+
+async function handleCallAccepted(
+data
+){
+
+if(
+!pendingOutgoingCall
+){
+
+return;
+
+}
+
+
+if(
+data.call_id !==
+pendingOutgoingCall.id
+){
+
+return;
+
+}
+
+
+target =
+data.from;
+
+
+currentCallMode =
+pendingOutgoingCall.mode;
+
+
+pendingOutgoingCall =
+null;
+
+
+hideCallStatus();
+
+
+const stream =
+await initMedia(
+currentCallMode === "video"
+);
+
+
+if(!stream){
+
+return;
+
+}
+
+
+await createPeer(
+target,
+true
+);
+
+}
+
+
+// ============================================================
+// CALL REJECTED
+// ============================================================
+
+function handleCallRejected(
+data
+){
+
+if(
+pendingOutgoingCall &&
+data.call_id ===
+pendingOutgoingCall.id
+){
+
+pendingOutgoingCall =
+null;
+
+showCallError(
+data.reason === "busy"
+? "El usuario está ocupado."
+: "La llamada fue rechazada."
+);
+
+}
+
+}
+
+
+// ============================================================
+// CALL CANCELLED
+// ============================================================
+
+function handleCallCancelled(
+data
+){
+
+if(
+pendingOutgoingCall &&
+data.call_id ===
+pendingOutgoingCall.id
+){
+
+pendingOutgoingCall =
+null;
+
+hideCallStatus();
+
+}
+
+}
+
+
+// ============================================================
+// MEDIA
+// ============================================================
+
+async function initMedia(
+videoEnabled = true
+){
+
+if(localStream){
+
+return localStream;
+
+}
+
+
+if(
+!navigator.mediaDevices ||
+!navigator.mediaDevices.getUserMedia
+){
+
+showCallError(
+"Tu navegador no permite usar la cámara y el micrófono desde esta página."
+);
+
+return null;
+
+}
+
+
+try{
+
+localStream =
+await navigator.mediaDevices.getUserMedia({
+
+video:videoEnabled,
+
+audio:true
+
+});
+
+
+addVideo(
+ME,
+localStream,
+true
+);
+
+
+updateControlButtons();
+
+
+return localStream;
+
+}catch(error){
+
+console.error(
+"getUserMedia:",
+error
+);
+
+if(
+error.name ===
+"NotAllowedError"
+){
+
+showCallError(
+"Permiso de cámara o micrófono denegado."
+);
+
+}else{
+
+showCallError(
+"No se pudo acceder a la cámara o micrófono."
+);
+
+}
+
+return null;
+
+}
+
+}
+
+
+// ============================================================
+// PEER
+// ============================================================
+
+async function createPeer(
+username,
+makeOffer = false
+){
+
+if(
+!username ||
+username === ME
+){
+
+return null;
+
+}
+
+
+if(
+peers[username]
+){
+
+return peers[username];
+
+}
+
+
+const stream =
+await initMedia(
+currentCallMode !== "audio"
+);
+
+
+if(!stream){
+
+return null;
+
+}
+
+
+const peer =
+new RTCPeerConnection({
+iceServers
+});
+
+
+stream
+.getTracks()
+.forEach(
+track =>
+peer.addTrack(
+track,
+stream
+)
+);
+
+
+peer.ontrack =
+event=>{
+
+if(
+event.streams &&
+event.streams[0]
+){
+
+addVideo(
+username,
+event.streams[0],
+false
+);
+
+}
+
+};
+
+
+peer.onicecandidate =
+event=>{
+
+if(
+!event.candidate
+){
+
+return;
+
+}
+
+
+send({
+
+type:"ice",
+
+to:username,
+
+candidate:event.candidate
+
+});
+
+};
+
+
+peer.onconnectionstatechange =
+()=>{
+
+if(
+peer.connectionState ===
+"failed" ||
+peer.connectionState ===
+"closed" ||
+peer.connectionState ===
+"disconnected"
+){
+
+removePeer(
+username
+);
+
+}
+
+};
+
+
+peers[username] =
+peer;
+
+
+if(makeOffer){
+
+await createOffer(
+username,
+peer
+);
+
+}
+
+
+return peer;
+
+}
+
+
+// ============================================================
+// CREAR OFFER
+// ============================================================
+
+async function createOffer(
+username,
+peer
+){
+
+try{
+
+const offer =
+await peer.createOffer();
+
+
+await peer.setLocalDescription(
+offer
+);
+
+
+send({
+
+type:"offer",
+
+to:username,
+
+offer:peer.localDescription
+
+});
+
+}catch(error){
+
+console.error(
+"Offer:",
+error
+);
+
+showCallError(
+"No se pudo iniciar la llamada."
+);
+
+}
+
+}
+
+
+// ============================================================
+// OFFER
+// ============================================================
+
+async function handleOffer(
+data
+){
+
+if(
+!data ||
+!data.from ||
+!data.offer
+){
+
+return;
+
+}
+
+
+const peer =
+await createPeer(
+data.from,
+false
+);
+
+
+if(!peer){
+
+return;
+
+}
+
+
+try{
+
+await peer.setRemoteDescription(
+new RTCSessionDescription(
+data.offer
+)
+);
+
+
+const answer =
+await peer.createAnswer();
+
+
+await peer.setLocalDescription(
+answer
+);
+
+
+send({
+
+type:"answer",
+
+to:data.from,
+
+answer:peer.localDescription
+
+});
+
+}catch(error){
+
+console.error(
+"handleOffer:",
+error
+);
+
+}
+
+}
+
+
+// ============================================================
+// ANSWER
+// ============================================================
+
+async function handleAnswer(
+data
+){
+
+const peer =
+peers[data.from];
+
+
+if(
+!peer ||
+!data.answer
+){
+
+return;
+
+}
+
+
+try{
+
+await peer.setRemoteDescription(
+new RTCSessionDescription(
+data.answer
+)
+);
+
+}catch(error){
+
+console.error(
+"Answer:",
+error
+);
+
+}
+
+}
+
+
+// ============================================================
+// ICE
+// ============================================================
+
+async function handleIce(
+data
+){
+
+const peer =
+peers[data.from];
+
+
+if(
+!peer ||
+!data.candidate
+){
+
+return;
+
+}
+
+
+try{
+
+await peer.addIceCandidate(
+new RTCIceCandidate(
+data.candidate
+)
+);
+
+}catch(error){
+
+console.error(
+"ICE:",
+error
+);
+
+}
+
+}
+
+
+// ============================================================
+// MICRO
+// ============================================================
+
+function toggleMicrophone(){
+
+if(!localStream){
+
+return;
+
+}
+
+
+const tracks =
+localStream.getAudioTracks();
+
+
+if(!tracks.length){
+
+return;
+
+}
+
+
+tracks.forEach(
+track=>{
+track.enabled =
+!track.enabled;
+}
+);
+
+
+updateControlButtons();
+
+}
+
+
+// ============================================================
+// CÁMARA
+// ============================================================
+
+async function toggleCamera(){
+
+if(!localStream){
+
+return;
+
+}
+
+
+const videoTracks =
+localStream.getVideoTracks();
+
+
+if(videoTracks.length){
+
+videoTracks.forEach(
+track=>{
+track.enabled =
+!track.enabled;
+}
+);
+
+updateControlButtons();
+
+return;
+
+}
+
+
+// Si era llamada de voz,
+// agregar vídeo ahora.
+
+try{
+
+const videoStream =
+await navigator.mediaDevices.getUserMedia({
+video:true
+});
+
+
+const videoTrack =
+videoStream.getVideoTracks()[0];
+
+
+if(!videoTrack){
+
+return;
+
+}
+
+
+localStream.addTrack(
+videoTrack
+);
+
+
+for(
+const username in peers
+){
+
+const peer =
+peers[username];
+
+
+peer.addTrack(
+videoTrack,
+localStream
+);
+
+
+await createOffer(
+username,
+peer
+);
+
+}
+
+
+currentCallMode =
+"video";
+
+
+addVideo(
+ME,
+localStream,
+true
+);
+
+
+updateControlButtons();
+
+}catch(error){
+
+console.error(
+error
+);
+
+showCallError(
+"No se pudo activar la cámara."
+);
+
+}
+
+}
+
+
+// ============================================================
+// BOTONES
+// ============================================================
+
+function updateControlButtons(){
+
+if(!localStream){
+
+return;
+
+}
+
+
+const mic =
+localStream.getAudioTracks();
+
+
+const video =
+localStream.getVideoTracks();
+
+
+const micButton =
+document.getElementById(
+"micButton"
+);
+
+
+const cameraButton =
+document.getElementById(
+"cameraButton"
+);
+
+
+if(micButton){
+
+micButton.innerText =
+mic.length &&
+mic[0].enabled
+? "🎤 Mic"
+: "🔇 Mic";
+
+}
+
+
+if(cameraButton){
+
+cameraButton.innerText =
+video.length &&
+video[0].enabled
+? "📹 Cámara"
+: "🚫 Cámara";
+
+}
+
+}
+
+
+// ============================================================
+// GRUPOS
+// ============================================================
+
+async function joinGroup(){
+
+hideCallError();
+
+
+const input =
+document.getElementById(
+"room"
+);
+
+
+const room =
+input.value.trim();
+
+
+if(!room){
+
+showCallError(
+"Escribe un nombre de grupo."
+);
+
+return;
+
+}
+
+
+if(
+!ws ||
+ws.readyState !==
+WebSocket.OPEN
+){
+
+showCallError(
+"El servidor no está conectado."
+);
+
+return;
+
+}
+
+
+await endCall(
+false
+);
+
+
+currentRoom =
+room;
+
+target = "";
+
+
+document.getElementById(
+"profile"
+).style.display =
+"none";
+
+
+document.getElementById(
+"call"
+).style.display =
+"flex";
+
+
+document.getElementById(
+"callHead"
+).innerText =
+"Grupo: " + room;
+
+
+currentCallMode =
+"video";
+
+
+send({
+
+type:"join_room",
+
+room:room
+
+});
+
+}
+
+
+// ============================================================
+// GRUPO USUARIOS
+// ============================================================
+
+async function handleRoomUsers(
+data
+){
+
+if(
+!data ||
+data.room !== currentRoom
+){
+
+return;
+
+}
+
+
+const stream =
+await initMedia(
+true
+);
+
+
+if(!stream){
+
+return;
+
+}
+
+
+const list =
+Array.isArray(data.users)
+? data.users
+: [];
+
+
+for(
+const username of list
+){
+
+if(
+!username ||
+username === ME
+){
+
+continue;
+
+}
+
+
+if(
+!peers[username]
+){
+
+await createPeer(
+username,
+true
+);
+
+}
+
+}
+
+}
+
+
+// ============================================================
+// SALAS
+// ============================================================
+
+async function loadRooms(){
+
+const box =
+document.getElementById(
+"rooms"
+);
+
+
+try{
+
+const response =
+await fetch(
+`${API}/api/rooms`,
+{
+headers:authHeaders()
+}
+);
+
+
+if(
+!response.ok
+){
+
+return;
+
+}
+
+
+const data =
+await response.json();
+
+
+const list =
+Array.isArray(data)
+? data
+: (
+Array.isArray(data.rooms)
+? data.rooms
+: []
+);
+
+
+box.innerHTML =
+"";
+
+
+if(!list.length){
+
+const empty =
+document.createElement(
+"small"
+);
+
+empty.innerText =
+"No hay salas activas.";
+
+box.appendChild(
+empty
+);
+
+return;
+
+}
+
+
+list.forEach(
+room=>{
+
+if(
+!room ||
+!room.name
+){
+
+return;
+
+}
+
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"room-card";
+
+
+const info =
+document.createElement(
+"div"
+);
+
+info.className =
+"room-info";
+
+
+const name =
+document.createElement(
+"div"
+);
+
+name.className =
+"room-name";
+
+name.innerText =
+room.name;
+
+
+const creator =
+document.createElement(
+"div"
+);
+
+creator.className =
+"room-creator";
+
+creator.innerText =
+"Creado por @" +
+(
+room.creator ||
+"desconocido"
+);
+
+
+info.appendChild(
+name
+);
+
+info.appendChild(
+creator
+);
+
+
+const button =
+document.createElement(
+"button"
+);
+
+button.className =
+"blue";
+
+button.innerText =
+"ENTRAR";
+
+
+button.onclick =
+()=>{
+
+document.getElementById(
+"room"
+).value =
+room.name;
+
+joinGroup();
+
+};
+
+
+card.appendChild(
+info
+);
+
+card.appendChild(
+button
+);
+
+
+box.appendChild(
+card
+);
+
+});
+
+}catch(error){
+
+console.error(
+"Salas:",
+error
+);
+
+}
+
+}
+
+
+// ============================================================
+// VIDEO
+// ============================================================
+
+function videoId(
+username
+){
+
+return (
+"video-" +
+String(username)
+.replace(
+/[^a-zA-Z0-9_-]/g,
+"_"
+)
+);
+
+}
+
+
+function addVideo(
+username,
+stream,
+local
+){
+
+if(
+!username ||
+!stream
+){
+
+return;
+
+}
+
+
+const id =
+videoId(
+username
+);
+
+
+let box =
+document.getElementById(
+id
+);
+
+
+if(!box){
+
+box =
+document.createElement(
+"div"
+);
+
+box.className =
+"video-box";
+
+box.id =
+id;
+
+
+const video =
+document.createElement(
+"video"
+);
+
+video.autoplay =
+true;
+
+video.playsInline =
+true;
+
+video.muted =
+Boolean(local);
+
+video.srcObject =
+stream;
+
+
+const label =
+document.createElement(
+"div"
+);
+
+label.className =
+"video-name";
+
+label.innerText =
+local
+? "Tú"
+: "@" + username;
+
+
+box.appendChild(
+video
+);
+
+box.appendChild(
+label
+);
+
+
+document.getElementById(
+"videos"
+).appendChild(
+box
+);
+
+}else{
+
+const video =
+box.querySelector(
+"video"
+);
+
+if(video){
+
+video.srcObject =
+stream;
+
+}
+
+}
+
+}
+
+
+// ============================================================
+// REMOVE PEER
+// ============================================================
+
+function removePeer(
+username
+){
+
+if(!username){
+
+return;
+
+}
+
+
+const peer =
+peers[username];
+
+
+if(peer){
+
+try{
+
+peer.close();
+
+}catch(e){}
+
+delete peers[
+username
+];
+
+}
+
+
+const box =
+document.getElementById(
+videoId(username)
+);
+
+
+if(box){
+
+box.remove();
+
+}
+
+}
+
+
+// ============================================================
+// CLEANUP
+// ============================================================
+
+function cleanupCall(){
+
+for(
+const username in peers
+){
+
+try{
+
+peers[
+username
+].close();
+
+}catch(e){}
+
+}
+
+
+peers = {};
+
+
+if(localStream){
+
+localStream
+.getTracks()
+.forEach(
+track =>
+track.stop()
+);
+
+localStream =
+null;
+
+}
+
+
+document.getElementById(
+"videos"
+).innerHTML =
+"";
+
+
+pendingIncomingCall =
+null;
+
+pendingOutgoingCall =
+null;
+
+document.getElementById(
+"incomingCall"
+).style.display =
+"none";
+
+hideCallStatus();
+
+}
+
+
+// ============================================================
+// COLGAR
+// ============================================================
+
+async function endCall(
+returnToProfile = true
+){
+
+const usernames =
+Object.keys(
+peers
+);
+
+
+for(
+const username of usernames
+){
+
+send({
+
+type:"end_call",
+
+to:username
+
+});
+
+}
+
+
+if(currentRoom){
+
+send({
+
+type:"leave_room",
+
+room:currentRoom
+
+});
+
+}
+
+
+cleanupCall();
+
+
+currentRoom = "";
+
+target = "";
+
+
+if(returnToProfile){
+
+document.getElementById(
+"call"
+).style.display =
+"none";
+
+
+document.getElementById(
+"profile"
+).style.display =
+"flex";
+
+}
+
+}
+
+
+// ============================================================
+// INICIO
+// ============================================================
+
+showApp();
+
+</script>
+
+</body>
+</html>
