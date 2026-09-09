@@ -347,11 +347,52 @@ function createUserCard(user,withControls=true){
 }
 
 async function loadUsers(){
-  const data=await api("/api/users/list/"+encodeURIComponent(me.username));
-  usersCache=Array.isArray(data)?data:(data.users||[]);
-
   $("usersList").innerHTML="";
   $("membersList").innerHTML="";
+
+  let data;
+
+  try{
+    data=await api("/api/users/list/"+encodeURIComponent(me.username));
+  }catch(error){
+    console.error("Smart-Chat /api/users/list:",error);
+
+    // Respaldo directo contra Kn Foundation.
+    // Esto requiere que Kn Foundation exponga GET /api/users.
+    try{
+      const response=await fetch(KN_AUTH_API+"/api/users",{
+        headers:authHeaders()
+      });
+
+      const fallbackData=await readJson(response);
+
+      if(response.status===401||response.status===403){
+        localStorage.removeItem(TOKEN_KEY);
+        token="";
+        redirectAuth();
+        return;
+      }
+
+      if(!response.ok){
+        throw new Error(getErrorMessage(fallbackData,"No se pudieron cargar los usuarios."));
+      }
+
+      data=fallbackData;
+    }catch(fallbackError){
+      console.error("Kn Foundation /api/users:",fallbackError);
+      const message=fallbackError?.message||error?.message||"No se pudieron cargar los usuarios.";
+      $("usersList").innerHTML='<div class="empty-note"></div>';
+      $("usersList").firstChild.textContent=message;
+      $("membersList").innerHTML='<div class="empty-note"></div>';
+      $("membersList").firstChild.textContent="No se pudieron cargar los usuarios.";
+      return;
+    }
+  }
+
+  usersCache=Array.isArray(data)?data:(data.users||[]);
+
+  // La lista central solo muestra otras cuentas.
+  usersCache=usersCache.filter(user=>user&&user.username&&user.username!==me.username);
 
   if(!usersCache.length){
     $("usersList").innerHTML='<div class="empty-note">No hay otros usuarios.</div>';
