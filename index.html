@@ -191,7 +191,7 @@ button,input{font:inherit}button{cursor:pointer}
 <div id="toast" class="toast"></div>
 
 <script>
-const API="https://greatly-den-trainer-classified";
+const API="https://greatly-den-trainer-classified.trycloudflare.com";
 const KN_AUTH_API="https://programs-sweet-limited-files.trycloudflare.com";
 const AUTH_URL="https://smartium25.github.io/auth/";
 const TOKEN_KEY="knfoundation_token";
@@ -219,7 +219,7 @@ function redirectAuth(){
 
 function pfpUrl(value){
   if(!value)return "";
-  if(/^https?:\\/\\//i.test(value))return value;
+  if(/^https?:\/\//i.test(value))return value;
   if(value.startsWith("/pfp/"))return KN_AUTH_API+value;
   if(value.startsWith("/media/"))return API+value;
   return value;
