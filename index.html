@@ -718,12 +718,14 @@ $("logoutBtn").onclick=logout;
 
     // Actualizar estado online periódicamente sin modificar el diseño.
     setInterval(async()=>{
-      try{
-        await loadUsers();
-      }catch(error){
-        console.error("Error actualizando usuarios:",error);
-      }
-    },10000);
+  if(currentTarget){
+    try{
+      await loadMessages();
+    }catch(error){
+      console.error("Error actualizando chat:",error);
+    }
+  }
+},5000);
   }catch(error){
     console.error(error);
     toast(error.message);
