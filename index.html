@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Smart-Chat · 3PD</title>
-
 <style>
 :root{
   --bg:#252a33;
@@ -24,27 +23,9 @@
 }
 
 *{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden
-}
-
-body{
-  font-family:"Segoe UI",Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text)
-}
-
-button,input{
-  font:inherit
-}
-
-button{
-  cursor:pointer
-}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input{font:inherit}button{cursor:pointer}
 
 .app{
   width:100%;
@@ -54,2213 +35,659 @@ button{
   background:var(--bg);
 }
 
-.section{
-  min-width:0;
-  min-height:0;
-  padding:12px
-}
-
-.left{
-  border-right:1px solid var(--line);
-  display:flex;
-  flex-direction:column;
-  gap:10px
-}
-
-.center{
-  display:flex;
-  flex-direction:column;
-  position:relative
-}
-
-.right{
-  border-left:1px solid var(--line);
-  display:flex;
-  flex-direction:column;
-  gap:10px
-}
+.section{min-width:0;min-height:0;padding:12px}
+.left{border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.center{display:flex;flex-direction:column;position:relative}
+.right{border-left:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
 
 .header-box{
-  text-align:center;
-  background:#2d333d;
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:8px 11px;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:.2px
+  text-align:center;background:#2d333d;border:1px solid var(--border);
+  border-radius:11px;padding:8px 11px;font-size:13px;font-weight:700;letter-spacing:.2px;
 }
+.header-box.cyan{color:var(--cyan)}
 
-.header-box.cyan{
-  color:var(--cyan)
-}
+.list{display:flex;flex-direction:column;gap:7px;overflow:auto;padding-right:2px}
+.list::-webkit-scrollbar,.groups-list::-webkit-scrollbar,.member-list::-webkit-scrollbar,.chat-messages::-webkit-scrollbar{width:5px}
+.list::-webkit-scrollbar-thumb,.groups-list::-webkit-scrollbar-thumb,.member-list::-webkit-scrollbar-thumb,.chat-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:999px}
 
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-  overflow:auto;
-  padding-right:2px
+.user-card,.group-card,.member-card{
+  background:var(--card);border:1px solid #3b424d;border-radius:10px;min-height:46px;
+  padding:7px 8px;display:flex;align-items:center;gap:7px;
 }
+.user-card:hover,.group-card:hover,.member-card:hover{background:#353b45}
 
-.list::-webkit-scrollbar,
-.groups-list::-webkit-scrollbar,
-.member-list::-webkit-scrollbar,
-.chat-messages::-webkit-scrollbar{
-  width:5px
-}
+.avatar{flex:0 0 auto;width:32px;height:32px;border-radius:50%;object-fit:cover;background:#20242b;border:2px solid rgba(255,255,255,.12)}
+.avatar.big{width:150px;height:150px;border:4px solid rgba(255,255,255,.92)}
+.user-main,.group-main{min-width:0;flex:1}
+.user-name,.group-name{font-weight:600;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-status{font-size:9px;color:var(--muted);margin-top:2px}
+.status-dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto;background:#626a76}
+.status-dot.online{background:var(--green)}
 
-.list::-webkit-scrollbar-thumb,
-.groups-list::-webkit-scrollbar-thumb,
-.member-list::-webkit-scrollbar-thumb,
-.chat-messages::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,.12);
-  border-radius:999px
+.chat-btn,.send-btn,.primary-btn{
+  border:0;border-radius:999px;background:var(--cyan);color:#071014;font-weight:800;
 }
+.chat-btn{padding:6px 9px;font-size:10px}
+.send-btn,.primary-btn{padding:7px 11px}
+.chat-btn:hover,.send-btn:hover,.primary-btn:hover{filter:brightness(1.03)}
 
-.user-card,
-.group-card,
-.member-card{
-  background:var(--card);
-  border:1px solid #3b424d;
-  border-radius:10px;
-  min-height:46px;
-  padding:7px 8px;
-  display:flex;
-  align-items:center;
-  gap:7px
-}
+.profile-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:0}
+.username{margin-top:13px;font-size:18px;font-weight:800;letter-spacing:.2px}
+.logout{margin-top:12px;border:0;border-radius:999px;background:var(--gray-btn);color:var(--gray-text);padding:7px 20px;font-weight:800;letter-spacing:.4px}
+.logout:hover{filter:brightness(1.03)}
+.select-chat{margin-top:18px;color:var(--faint);font-size:11px}
 
-.user-card:hover,
-.group-card:hover,
-.member-card:hover{
-  background:#353b45
-}
+.chat-panel{display:none;flex:1;min-height:0;flex-direction:column;width:100%}
+.chat-panel.open{display:flex}.profile-wrap.hidden{display:none}
+.chat-head{display:flex;align-items:center;gap:9px;padding:9px 2px 11px;border-bottom:1px solid var(--border)}
+.chat-head .mini-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#20242b}
+.chat-head-title{font-weight:800;font-size:13px}.chat-head-sub{font-size:9px;color:var(--muted);margin-top:2px}
+.chat-messages{flex:1;min-height:0;overflow:auto;padding:14px 2px;display:flex;flex-direction:column;gap:11px}
+.msg{align-self:flex-start;max-width:74%;background:var(--card);border:1px solid #3b424d;padding:8px 10px;border-radius:10px;color:#f7f7f7;font-size:12px}
+.msg.mine{align-self:flex-end;background:#0a4047;border-color:rgba(0,240,255,.25)}
+.msg-meta{font-size:9px;color:var(--muted);margin-top:5px}
+.media{max-width:100%;display:block;border-radius:8px;margin-top:5px}
+.chat-compose{display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:9px}
+.file-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:12px;background:var(--card2);color:#fff;font-size:15px}
+.chat-compose input,.group-input{min-width:0;width:100%;background:#20242b;color:#fff;border:1px solid rgba(0,240,255,.72);border-radius:12px;padding:6px 8px;outline:none}
+.chat-compose input::placeholder,.group-input::placeholder{color:rgba(255,255,255,.38)}
+.chat-compose input:focus,.group-input:focus{border-color:var(--cyan)}
 
-.avatar{
-  flex:0 0 auto;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#20242b;
-  border:2px solid rgba(255,255,255,.12)
-}
+.block{min-height:0;display:flex;flex-direction:column}
+.group-input-wrap{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.group-input{padding:8px 10px;font-size:12px}
+.member-list{display:flex;flex-direction:column;gap:7px;max-height:30vh;overflow:auto;padding-right:2px;margin-top:10px}
+.member-card{min-height:38px;padding:6px 8px;gap:9px}
+.check-wrap{margin-left:auto;width:15px;height:15px;display:flex;align-items:center;justify-content:center}
+.check-wrap input{accent-color:var(--cyan);width:15px;height:15px}
+.group-create{margin-top:9px;width:100%;padding:7px 10px;font-size:12px}
+.groups-box{flex:1;min-height:0;display:flex;flex-direction:column}
+.groups-list{display:flex;flex-direction:column;gap:9px;overflow:auto;padding-right:4px}
+.group-card{min-height:43px}.group-card .mini-group{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:#303b40;color:var(--cyan);font-size:12px}
+.empty-note{color:var(--faint);font-size:10px;padding:7px 2px}
+.status-message{position:absolute;left:14px;bottom:8px;color:#777d86;font-size:10px;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.avatar.big{
-  width:150px;
-  height:150px;
-  border:4px solid rgba(255,255,255,.92)
-}
-
-.user-main,
-.group-main{
-  min-width:0;
-  flex:1
-}
-
-.user-name,
-.group-name{
-  font-weight:600;
-  font-size:11px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis
-}
-
-.user-status{
-  font-size:9px;
-  color:var(--muted);
-  margin-top:2px
-}
-
-.status-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  flex:0 0 auto;
-  background:#626a76
-}
-
-.status-dot.online{
-  background:var(--green)
-}
-
-.chat-btn,
-.send-btn,
-.primary-btn{
-  border:0;
-  border-radius:999px;
-  background:var(--cyan);
-  color:#071014;
-  font-weight:800
-}
-
-.chat-btn{
-  padding:6px 9px;
-  font-size:10px
-}
-
-.send-btn,
-.primary-btn{
-  padding:7px 11px
-}
-
-.chat-btn:hover,
-.send-btn:hover,
-.primary-btn:hover{
-  filter:brightness(1.03)
-}
-
-.profile-wrap{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  min-height:0
-}
-
-.username{
-  margin-top:13px;
-  font-size:18px;
-  font-weight:800;
-  letter-spacing:.2px
-}
-
-.logout{
-  margin-top:12px;
-  border:0;
-  border-radius:999px;
-  background:var(--gray-btn);
-  color:var(--gray-text);
-  padding:7px 20px;
-  font-weight:800;
-  letter-spacing:.4px
-}
-
-.logout:hover{
-  filter:brightness(1.03)
-}
-
-.select-chat{
-  margin-top:18px;
-  color:var(--faint);
-  font-size:11px
-}
-
-.chat-panel{
-  display:none;
-  flex:1;
-  min-height:0;
-  flex-direction:column;
-  width:100%
-}
-
-.chat-panel.open{
-  display:flex
-}
-
-.profile-wrap.hidden{
-  display:none
-}
-
-.chat-head{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:9px 2px 11px;
-  border-bottom:1px solid var(--border)
-}
-
-.chat-head .mini-avatar{
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#20242b
-}
-
-.chat-head-title{
-  font-weight:800;
-  font-size:13px
-}
-
-.chat-head-sub{
-  font-size:9px;
-  color:var(--muted);
-  margin-top:2px
-}
-
-.chat-messages{
-  flex:1;
-  min-height:0;
-  overflow:auto;
-  padding:14px 2px;
-  display:flex;
-  flex-direction:column;
-  gap:11px
-}
-
-.msg{
-  align-self:flex-start;
-  max-width:74%;
-  background:var(--card);
-  border:1px solid #3b424d;
-  padding:8px 10px;
-  border-radius:10px;
-  color:#f7f7f7;
-  font-size:12px
-}
-
-.msg.mine{
-  align-self:flex-end;
-  background:#0a4047;
-  border-color:rgba(0,240,255,.25)
-}
-
-.msg-meta{
-  font-size:9px;
-  color:var(--muted);
-  margin-top:5px
-}
-
-.media{
-  max-width:100%;
-  display:block;
-  border-radius:8px;
-  margin-top:5px
-}
-
-.chat-compose{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  border-top:1px solid var(--border);
-  padding-top:9px
-}
-
-.file-btn{
-  width:36px;
-  height:36px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:var(--card2);
-  color:#fff;
-  font-size:15px
-}
-
-.chat-compose input,
-.group-input{
-  min-width:0;
-  width:100%;
-  background:#20242b;
-  color:#fff;
-  border:1px solid rgba(0,240,255,.72);
-  border-radius:12px;
-  padding:6px 8px;
-  outline:none
-}
-
-.chat-compose input::placeholder,
-.group-input::placeholder{
-  color:rgba(255,255,255,.38)
-}
-
-.chat-compose input:focus,
-.group-input:focus{
-  border-color:var(--cyan)
-}
-
-.block{
-  min-height:0;
-  display:flex;
-  flex-direction:column
-}
-
-.group-input-wrap{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:12px
-}
-
-.group-input{
-  padding:8px 10px;
-  font-size:12px
-}
-
-.member-list{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-  max-height:30vh;
-  overflow:auto;
-  padding-right:2px;
-  margin-top:10px
-}
-
-.member-card{
-  min-height:38px;
-  padding:6px 8px;
-  gap:9px
-}
-
-.check-wrap{
-  margin-left:auto;
-  width:15px;
-  height:15px;
-  display:flex;
-  align-items:center;
-  justify-content:center
-}
-
-.check-wrap input{
-  accent-color:var(--cyan);
-  width:15px;
-  height:15px
-}
-
-.group-create{
-  margin-top:9px;
-  width:100%;
-  padding:7px 10px;
-  font-size:12px
-}
-
-.groups-box{
-  flex:1;
-  min-height:0;
-  display:flex;
-  flex-direction:column
-}
-
-.groups-list{
-  display:flex;
-  flex-direction:column;
-  gap:9px;
-  overflow:auto;
-  padding-right:4px
-}
-
-.group-card{
-  min-height:43px
-}
-
-.group-card .mini-group{
-  width:30px;
-  height:30px;
-  border-radius:8px;
-  display:grid;
-  place-items:center;
-  background:#303b40;
-  color:var(--cyan);
-  font-size:12px
-}
-
-.empty-note{
-  color:var(--faint);
-  font-size:10px;
-  padding:7px 2px
-}
-
-.status-message{
-  position:absolute;
-  left:14px;
-  bottom:8px;
-  color:#777d86;
-  font-size:10px;
-  max-width:60%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap
-}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:18px;
-  transform:translateX(-50%);
-  background:#1d2128;
-  border:1px solid #414954;
-  color:#fff;
-  padding:9px 13px;
-  border-radius:9px;
-  font-size:12px;
-  display:none;
-  z-index:20
-}
-
-.toast.show{
-  display:block
-}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1d2128;border:1px solid #414954;color:#fff;padding:9px 13px;border-radius:9px;font-size:12px;display:none;z-index:20}
+.toast.show{display:block}
 
 @media(max-width:1000px){
-  .app{
-    grid-template-columns:240px minmax(360px,1fr) 260px
-  }
+  .app{grid-template-columns:240px minmax(360px,1fr) 260px}
 }
-
 @media(max-width:780px){
-  body{
-    overflow:auto
-  }
-
-  .app{
-    height:auto;
-    min-height:100vh;
-    grid-template-columns:1fr
-  }
-
-  .section{
-    min-height:38vh
-  }
-
-  .left,
-  .right{
-    border:0;
-    border-bottom:1px solid var(--line)
-  }
-
-  .center{
-    min-height:55vh
-  }
-
-  .avatar.big{
-    width:150px;
-    height:150px
-  }
+  body{overflow:auto}.app{height:auto;min-height:100vh;grid-template-columns:1fr}
+  .section{min-height:38vh}.left,.right{border:0;border-bottom:1px solid var(--line)}.center{min-height:55vh}
+  .avatar.big{width:150px;height:150px}
 }
 </style>
 </head>
-
 <body>
-
 <div class="app">
 
-  <!-- IZQUIERDA -->
+  <!-- LEFT -->
   <section class="section left">
-
-    <div class="header-box">
-      Usuarios
-    </div>
-
+    <div class="header-box">Usuarios</div>
     <div class="list" id="usersList">
-      <div class="empty-note">
-        Cargando usuarios...
-      </div>
+      <div class="empty-note">Cargando usuarios...</div>
     </div>
-
   </section>
 
-
-  <!-- CENTRO -->
+  <!-- CENTER -->
   <section class="section center">
-
     <div class="profile-wrap" id="profile">
-
-      <img
-        id="myAvatar"
-        class="avatar big"
-        alt="PFP"
-      >
-
-      <div
-        id="myUsername"
-        class="username"
-      >
-        @usuario
-      </div>
-
-      <button
-        id="logoutBtn"
-        class="logout"
-      >
-        LOG OUT
-      </button>
-
-      <div class="select-chat">
-        Selecciona un chat
-      </div>
-
+      <img id="myAvatar" class="avatar big" alt="PFP">
+      <div id="myUsername" class="username">@usuario</div>
+      <button id="logoutBtn" class="logout">LOG OUT</button>
+      <div class="select-chat">Selecciona un chat</div>
     </div>
 
-
-    <div
-      class="chat-panel"
-      id="chatPanel"
-    >
-
+    <div class="chat-panel" id="chatPanel">
       <div class="chat-head">
-
-        <img
-          id="chatAvatar"
-          class="mini-avatar"
-          alt=""
-        >
-
+        <img id="chatAvatar" class="mini-avatar" alt="">
         <div>
-
-          <div
-            id="chatName"
-            class="chat-head-title"
-          ></div>
-
-          <div
-            id="chatSub"
-            class="chat-head-sub"
-          >
-            Chat privado
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="chat-messages"
-        id="chatMessages"
-      >
-        <div class="empty-note">
-          Cargando...
+          <div id="chatName" class="chat-head-title"></div>
+          <div id="chatSub" class="chat-head-sub">Chat privado</div>
         </div>
       </div>
 
+      <div class="chat-messages" id="chatMessages">
+        <div class="empty-note">Cargando...</div>
+      </div>
 
       <div class="chat-compose">
-
-        <button
-          id="fileBtn"
-          class="file-btn"
-          title="Adjuntar archivo"
-        >
-          📎
-        </button>
-
-        <input
-          id="fileInput"
-          type="file"
-          hidden
-          accept="image/*,video/*"
-        >
-
-        <input
-          id="messageBox"
-          type="text"
-          placeholder="Escribe un mensaje..."
-          autocomplete="off"
-        >
-
-        <button
-          id="sendBtn"
-          class="send-btn"
-        >
-          Enviar
-        </button>
-
+        <button id="fileBtn" class="file-btn" title="Adjuntar archivo">📎</button>
+        <input id="fileInput" type="file" hidden accept="image/*,video/*">
+        <input id="messageBox" type="text" placeholder="Escribe un mensaje..." autocomplete="off">
+        <button id="sendBtn" class="send-btn">Enviar</button>
       </div>
-
     </div>
 
-
-    <div
-      id="statusMessage"
-      class="status-message"
-    ></div>
-
+    <div id="statusMessage" class="status-message"></div>
   </section>
 
-
-  <!-- DERECHA -->
+  <!-- RIGHT -->
   <section class="section right">
-
     <div class="block">
-
-      <div class="header-box cyan">
-        Crear Grupo
-      </div>
-
+      <div class="header-box cyan">Crear Grupo</div>
       <div class="group-input-wrap">
-
-        <input
-          class="group-input"
-          id="groupName"
-          placeholder="Nombre grupo"
-          maxlength="80"
-        >
-
+        <input class="group-input" id="groupName" placeholder="Nombre grupo" maxlength="80">
       </div>
 
-
-      <div
-        class="member-list"
-        id="membersList"
-      >
-        <div class="empty-note">
-          Cargando usuarios...
-        </div>
+      <div class="member-list" id="membersList">
+        <div class="empty-note">Cargando usuarios...</div>
       </div>
 
-
-      <button
-        id="createGroupBtn"
-        class="primary-btn group-create"
-      >
-        Crear Grupo
-      </button>
-
+      <button id="createGroupBtn" class="primary-btn group-create">Crear Grupo</button>
     </div>
-
 
     <div class="groups-box">
-
-      <div class="header-box">
-        Mis Grupos
+      <div class="header-box">Mis Grupos</div>
+      <div class="groups-list" id="groupsList">
+        <div class="empty-note">Cargando grupos...</div>
       </div>
-
-      <div
-        class="groups-list"
-        id="groupsList"
-      >
-        <div class="empty-note">
-          Cargando grupos...
-        </div>
-      </div>
-
     </div>
-
   </section>
-
 </div>
 
-
-<div
-  id="toast"
-  class="toast"
-></div>
-
+<div id="toast" class="toast"></div>
 
 <script>
-const API =
-  "https://calendars-included-pvc-whereas.trycloudflare.com";
+const API="https://calendars-included-pvc-whereas.trycloudflare.com";
+const KN_AUTH_API="https://programs-sweet-limited-files.trycloudflare.com";
+const AUTH_URL="https://smartium25.github.io/auth/";
+const TOKEN_KEY="knfoundation_token";
 
-const KN_AUTH_API =
-  "https://programs-sweet-limited-files.trycloudflare.com";
+let token=localStorage.getItem(TOKEN_KEY)||"";
+let me=null;
+let currentTarget=null;
+let currentType=null;
+let socket=null;
+let usersCache=[];
+let toastTimer=null;
 
-const AUTH_URL =
-  "https://smartium25.github.io/auth/";
+const $=id=>document.getElementById(id);
 
-const TOKEN_KEY =
-  "knfoundation_token";
-
-
-let token =
-  localStorage.getItem(TOKEN_KEY) || "";
-
-let me =
-  null;
-
-let currentTarget =
-  null;
-
-let currentType =
-  null;
-
-let socket =
-  null;
-
-let usersCache =
-  [];
-
-let toastTimer =
-  null;
-
-
-const $ =
-  id => document.getElementById(id);
-
-
-function authHeaders(extra = {}){
-
-  const headers = {
-    ...extra
-  };
-
-  if(token){
-    headers.Authorization =
-      `Bearer ${token}`;
-  }
-
+function authHeaders(extra={}){
+  const headers={...extra};
+  if(token)headers.Authorization=`Bearer ${token}`;
   return headers;
 }
 
-
 function redirectAuth(){
-
-  location.href =
-    AUTH_URL +
-    "?redirect=" +
-    encodeURIComponent(location.href);
-
+  const returnUrl=window.location.href;
+  location.replace(AUTH_URL+"?redirect="+encodeURIComponent(returnUrl));
 }
-
 
 function pfpUrl(value){
-
-  if(!value){
-    return "";
-  }
-
-  /*
-   * IMPORTANTE:
-   * Esta expresión debe tener exactamente
-   * una sola capa de escape.
-   */
-  if(/^https?:\/\//i.test(value)){
-    return value;
-  }
-
-  if(value.startsWith("/pfp/")){
-    return KN_AUTH_API + value;
-  }
-
-  if(value.startsWith("/media/")){
-    return API + value;
-  }
-
+  if(!value)return "";
+  if(/^https?:\\/\\//i.test(value))return value;
+  if(value.startsWith("/pfp/"))return KN_AUTH_API+value;
+  if(value.startsWith("/media/"))return API+value;
   return value;
-
 }
-
 
 function toast(message){
-
-  const box =
-    $("toast");
-
-  box.textContent =
-    message || "Error.";
-
+  const box=$("toast");
+  box.textContent=message||"Error.";
   box.classList.add("show");
-
-  clearTimeout(
-    toastTimer
-  );
-
-  toastTimer =
-    setTimeout(
-      () => box.classList.remove("show"),
-      2800
-    );
-
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>box.classList.remove("show"),2800);
 }
-
 
 function setStatus(message){
-
-  $("statusMessage").textContent =
-    message || "";
-
+  $("statusMessage").textContent=message||"";
 }
-
 
 async function readJson(response){
-
-  try{
-    return await response.json();
-  }catch{
-    return {};
-  }
-
+  try{return await response.json()}catch{return {}}
 }
 
-
-function getErrorMessage(
-  data,
-  fallback = "Error en Smart-Chat."
-){
-
-  const detail =
-    data?.detail ??
-    data?.message;
-
-  if(typeof detail === "string"){
-    return detail;
-  }
-
-  if(Array.isArray(detail)){
-    return detail
-      .map(
-        item =>
-          item?.msg ||
-          item?.message ||
-          JSON.stringify(item)
-      )
-      .join(" • ");
-  }
-
-  if(
-    detail &&
-    typeof detail === "object"
-  ){
-
-    return (
-      detail.msg ||
-      detail.message ||
-      JSON.stringify(detail)
-    );
-
-  }
-
+function getErrorMessage(data,fallback="Error en Smart-Chat."){
+  const detail=data?.detail??data?.message;
+  if(typeof detail==="string")return detail;
+  if(Array.isArray(detail))return detail.map(x=>x?.msg||x?.message||JSON.stringify(x)).join(" • ");
+  if(detail&&typeof detail==="object")return detail.msg||detail.message||JSON.stringify(detail);
   return fallback;
-
 }
 
+async function api(path,options={}){
+  const response=await fetch(API+path,{
+    ...options,
+    headers:{
+      ...authHeaders(),
+      ...(options.headers||{})
+    }
+  });
 
-async function api(
-  path,
-  options = {}
-){
+  const data=await readJson(response);
 
-  const response =
-    await fetch(
-      API + path,
-      {
-        ...options,
-
-        headers:{
-          ...authHeaders(),
-          ...(options.headers || {})
-        }
-      }
-    );
-
-  const data =
-    await readJson(response);
-
-
-  if(
-    response.status === 401 ||
-    response.status === 403
-  ){
-
-    localStorage.removeItem(
-      TOKEN_KEY
-    );
-
-    token = "";
-
+  if(response.status===401||response.status===403){
+    localStorage.removeItem(TOKEN_KEY);
+    token="";
   }
-
 
   if(!response.ok){
-
-    throw new Error(
-      getErrorMessage(data)
-    );
-
+    throw new Error(getErrorMessage(data));
   }
-
 
   return data;
-
 }
-
 
 async function loadMe(){
-
   if(!token){
-
     redirectAuth();
-
     return false;
-
   }
 
-
   try{
-
-    const data =
-      await api("/api/me");
-
-    me =
-      data.user ||
-      data;
-
+    const data=await api("/api/me");
+    me=data.user||data;
 
     if(!me?.username){
-
-      throw new Error(
-        "No se pudo obtener el usuario."
-      );
-
+      throw new Error("No se pudo obtener el usuario.");
     }
 
+    $("myUsername").textContent="@"+me.username;
 
-    $("myUsername").textContent =
-      "@" + me.username;
-
-
-    const avatar =
-      pfpUrl(
-        me.pfp ||
-        me.profile_picture
-      );
-
-
-    if(avatar){
-
-      $("myAvatar").src =
-        avatar;
-
-    }
-
+    const avatar=pfpUrl(me.pfp||me.profile_picture);
+    if(avatar)$("myAvatar").src=avatar;
 
     return true;
-
   }catch(error){
-
     console.error(error);
-
     redirectAuth();
-
     return false;
-
   }
-
 }
-
 
 function fallbackAvatar(img){
-
-  img.onerror =
-    () => {
-
-      img.onerror =
-        null;
-
-      img.src =
-        "data:image/svg+xml;charset=UTF-8," +
-        encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">' +
-          '<rect width="100" height="100" fill="#303640"/>' +
-          '<circle cx="50" cy="38" r="18" fill="#cbd5e1"/>' +
-          '<path d="M23 89c2-18 14-28 27-28s25 10 27 28" fill="#cbd5e1"/>' +
-          '</svg>'
-        );
-
-    };
-
+  img.onerror=()=>{
+    img.onerror=null;
+    img.src="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#303640"/><circle cx="50" cy="38" r="18" fill="#cbd5e1"/><path d="M23 89c2-18 14-28 27-28s25 10 27 28" fill="#cbd5e1"/></svg>');
+  };
 }
 
+function createUserCard(user,withControls=true){
+  const el=document.createElement("div");
+  el.className="user-card";
 
-function createUserCard(
-  user,
-  withControls = true
-){
-
-  const el =
-    document.createElement("div");
-
-  el.className =
-    "user-card";
-
-
-  const img =
-    document.createElement("img");
-
-  img.className =
-    "avatar";
-
-  img.alt =
-    "";
-
-
-  const avatar =
-    pfpUrl(
-      user.pfp ||
-      user.profile_picture
-    );
-
-
-  if(avatar){
-    img.src =
-      avatar;
-  }
-
-
+  const img=document.createElement("img");
+  img.className="avatar";
+  img.alt="";
+  const avatar=pfpUrl(user.pfp||user.profile_picture);
+  if(avatar)img.src=avatar;
   fallbackAvatar(img);
 
+  const info=document.createElement("div");
+  info.className="user-main";
 
-  const info =
-    document.createElement("div");
+  const name=document.createElement("div");
+  name.className="user-name";
+  name.textContent="@"+user.username;
 
-  info.className =
-    "user-main";
+  const status=document.createElement("div");
+  status.className="user-status";
+  status.textContent=user.online?"En línea":"Desconectado";
 
+  info.append(name,status);
 
-  const name =
-    document.createElement("div");
+  const dot=document.createElement("span");
+  dot.className="status-dot"+(user.online?" online":"");
 
-  name.className =
-    "user-name";
-
-  name.textContent =
-    "@" + user.username;
-
-
-  const status =
-    document.createElement("div");
-
-  status.className =
-    "user-status";
-
-  status.textContent =
-    user.online
-      ? "En línea"
-      : "Desconectado";
-
-
-  info.append(
-    name,
-    status
-  );
-
-
-  const dot =
-    document.createElement("span");
-
-  dot.className =
-    "status-dot" +
-    (
-      user.online
-        ? " online"
-        : ""
-    );
-
-
-  el.append(
-    img,
-    info,
-    dot
-  );
-
+  el.append(img,info,dot);
 
   if(withControls){
-
-    const button =
-      document.createElement("button");
-
-    button.className =
-      "chat-btn";
-
-    button.textContent =
-      "Chat";
-
-    button.onclick =
-      () => openPrivate(
-        user.username
-      );
-
-    el.appendChild(
-      button
-    );
-
+    const button=document.createElement("button");
+    button.className="chat-btn";
+    button.textContent="Chat";
+    button.onclick=()=>openPrivate(user.username);
+    el.appendChild(button);
   }
-
 
   return el;
-
 }
-
 
 async function loadUsers(){
+  const data=await api("/api/users/list/"+encodeURIComponent(me.username));
+  usersCache=Array.isArray(data)?data:(data.users||[]);
 
-  const data =
-    await api(
-      "/api/users/list/" +
-      encodeURIComponent(
-        me.username
-      )
-    );
-
-
-  usersCache =
-    Array.isArray(data)
-      ? data
-      : (
-          data.users ||
-          []
-        );
-
-
-  $("usersList").innerHTML =
-    "";
-
-  $("membersList").innerHTML =
-    "";
-
+  $("usersList").innerHTML="";
+  $("membersList").innerHTML="";
 
   if(!usersCache.length){
-
-    $("usersList").innerHTML =
-      '<div class="empty-note">' +
-      'No hay otros usuarios.' +
-      '</div>';
-
-    $("membersList").innerHTML =
-      '<div class="empty-note">' +
-      'No hay usuarios para agregar.' +
-      '</div>';
-
+    $("usersList").innerHTML='<div class="empty-note">No hay otros usuarios.</div>';
+    $("membersList").innerHTML='<div class="empty-note">No hay usuarios para agregar.</div>';
     return;
-
   }
 
+  usersCache.forEach(user=>{
+    $("usersList").appendChild(createUserCard(user,true));
 
-  usersCache.forEach(
-    user => {
+    const member=document.createElement("label");
+    member.className="member-card";
 
-      $("usersList")
-        .appendChild(
-          createUserCard(
-            user,
-            true
-          )
-        );
+    const img=document.createElement("img");
+    img.className="avatar";
+    img.alt="";
+    const avatar=pfpUrl(user.pfp||user.profile_picture);
+    if(avatar)img.src=avatar;
+    fallbackAvatar(img);
 
+    const info=document.createElement("div");
+    info.className="user-main";
+    const name=document.createElement("div");
+    name.className="user-name";
+    name.textContent="@"+user.username;
+    info.appendChild(name);
 
-      const member =
-        document.createElement("label");
+    const wrap=document.createElement("span");
+    wrap.className="check-wrap";
 
-      member.className =
-        "member-card";
+    const checkbox=document.createElement("input");
+    checkbox.type="checkbox";
+    checkbox.value=user.username;
 
-
-      const img =
-        document.createElement("img");
-
-      img.className =
-        "avatar";
-
-      img.alt =
-        "";
-
-
-      const avatar =
-        pfpUrl(
-          user.pfp ||
-          user.profile_picture
-        );
-
-
-      if(avatar){
-        img.src =
-          avatar;
-      }
-
-
-      fallbackAvatar(img);
-
-
-      const info =
-        document.createElement("div");
-
-      info.className =
-        "user-main";
-
-
-      const name =
-        document.createElement("div");
-
-      name.className =
-        "user-name";
-
-      name.textContent =
-        "@" + user.username;
-
-
-      info.appendChild(
-        name
-      );
-
-
-      const wrap =
-        document.createElement("span");
-
-      wrap.className =
-        "check-wrap";
-
-
-      const checkbox =
-        document.createElement("input");
-
-      checkbox.type =
-        "checkbox";
-
-      checkbox.value =
-        user.username;
-
-
-      wrap.appendChild(
-        checkbox
-      );
-
-
-      member.append(
-        img,
-        info,
-        wrap
-      );
-
-
-      $("membersList")
-        .appendChild(
-          member
-        );
-
-    }
-  );
-
+    wrap.appendChild(checkbox);
+    member.append(img,info,wrap);
+    $("membersList").appendChild(member);
+  });
 }
-
 
 async function loadGroups(){
+  const data=await api("/api/groups/list/"+encodeURIComponent(me.username));
+  const groups=Array.isArray(data)?data:(data.groups||[]);
 
-  const data =
-    await api(
-      "/api/groups/list/" +
-      encodeURIComponent(
-        me.username
-      )
-    );
-
-
-  const groups =
-    Array.isArray(data)
-      ? data
-      : (
-          data.groups ||
-          []
-        );
-
-
-  $("groupsList").innerHTML =
-    "";
-
+  $("groupsList").innerHTML="";
 
   if(!groups.length){
-
-    $("groupsList").innerHTML =
-      '<div class="empty-note">' +
-      'No estás en ningún grupo.' +
-      '</div>';
-
+    $("groupsList").innerHTML='<div class="empty-note">No estás en ningún grupo.</div>';
     return;
-
   }
 
+  groups.forEach(group=>{
+    const card=document.createElement("div");
+    card.className="group-card";
 
-  groups.forEach(
-    group => {
+    const icon=document.createElement("div");
+    icon.className="mini-group";
+    icon.textContent="👥";
 
-      const card =
-        document.createElement("div");
+    const main=document.createElement("div");
+    main.className="group-main";
 
-      card.className =
-        "group-card";
+    const name=document.createElement("div");
+    name.className="group-name";
+    name.textContent=group.name;
+    main.appendChild(name);
 
+    const button=document.createElement("button");
+    button.className="chat-btn";
+    button.textContent="Chat";
+    button.onclick=()=>openGroup(group.name);
 
-      const icon =
-        document.createElement("div");
-
-      icon.className =
-        "mini-group";
-
-      icon.textContent =
-        "👥";
-
-
-      const main =
-        document.createElement("div");
-
-      main.className =
-        "group-main";
-
-
-      const name =
-        document.createElement("div");
-
-      name.className =
-        "group-name";
-
-      name.textContent =
-        group.name;
-
-
-      main.appendChild(
-        name
-      );
-
-
-      const button =
-        document.createElement("button");
-
-      button.className =
-        "chat-btn";
-
-      button.textContent =
-        "Chat";
-
-      button.onclick =
-        () => openGroup(
-          group.name
-        );
-
-
-      card.append(
-        icon,
-        main,
-        button
-      );
-
-
-      $("groupsList")
-        .appendChild(
-          card
-        );
-
-    }
-  );
-
+    card.append(icon,main,button);
+    $("groupsList").appendChild(card);
+  });
 }
-
 
 function openPrivate(username){
+  currentTarget=username;
+  currentType="private";
+  $("profile").classList.add("hidden");
+  $("chatPanel").classList.add("open");
 
-  currentTarget =
-    username;
+  const user=usersCache.find(u=>u.username===username);
+  const avatar=pfpUrl(user?.pfp||user?.profile_picture);
 
-  currentType =
-    "private";
-
-
-  $("profile")
-    .classList
-    .add("hidden");
-
-
-  $("chatPanel")
-    .classList
-    .add("open");
-
-
-  const user =
-    usersCache.find(
-      item =>
-        item.username ===
-        username
-    );
-
-
-  const avatar =
-    pfpUrl(
-      user?.pfp ||
-      user?.profile_picture
-    );
-
-
-  $("chatName").textContent =
-    "@" + username;
-
-
-  $("chatSub").textContent =
-    user?.online
-      ? "En línea"
-      : "Desconectado";
-
-
-  $("chatAvatar").src =
-    avatar || "";
-
-
-  fallbackAvatar(
-    $("chatAvatar")
-  );
-
+  $("chatName").textContent="@"+username;
+  $("chatSub").textContent=user?.online?"En línea":"Desconectado";
+  $("chatAvatar").src=avatar||"";
+  fallbackAvatar($("chatAvatar"));
 
   loadMessages();
-
 }
-
 
 function openGroup(name){
-
-  currentTarget =
-    name;
-
-  currentType =
-    "group";
-
-
-  $("profile")
-    .classList
-    .add("hidden");
-
-
-  $("chatPanel")
-    .classList
-    .add("open");
-
-
-  $("chatName").textContent =
-    name;
-
-  $("chatSub").textContent =
-    "Grupo";
-
-
-  $("chatAvatar").src =
-    "";
-
-
-  fallbackAvatar(
-    $("chatAvatar")
-  );
-
-
+  currentTarget=name;
+  currentType="group";
+  $("profile").classList.add("hidden");
+  $("chatPanel").classList.add("open");
+  $("chatName").textContent=name;
+  $("chatSub").textContent="Grupo";
+  $("chatAvatar").src="";
+  fallbackAvatar($("chatAvatar"));
   loadMessages();
-
 }
-
 
 async function loadMessages(){
+  if(!currentTarget)return;
 
-  if(!currentTarget){
-    return;
-  }
+  $("chatMessages").innerHTML='<div class="empty-note">Cargando...</div>';
 
-
-  $("chatMessages").innerHTML =
-    '<div class="empty-note">' +
-    'Cargando...' +
-    '</div>';
-
-
-  const path =
-    currentType === "group"
-      ? (
-          "/api/groups/get/" +
-          encodeURIComponent(
-            me.username
-          ) +
-          "/" +
-          encodeURIComponent(
-            currentTarget
-          )
-        )
-      : (
-          "/api/chat/get/" +
-          encodeURIComponent(
-            me.username
-          ) +
-          "/" +
-          encodeURIComponent(
-            currentTarget
-          )
-        );
-
+  const path=currentType==="group"
+    ?"/api/groups/get/"+encodeURIComponent(me.username)+"/"+encodeURIComponent(currentTarget)
+    :"/api/chat/get/"+encodeURIComponent(me.username)+"/"+encodeURIComponent(currentTarget);
 
   try{
-
-    const data =
-      await api(path);
-
-
-    const list =
-      Array.isArray(data)
-        ? data
-        : (
-            data.messages ||
-            []
-          );
-
-
-    renderMessages(
-      list
-    );
-
+    const data=await api(path);
+    const list=Array.isArray(data)?data:(data.messages||[]);
+    renderMessages(list);
   }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    $("chatMessages").innerHTML =
-      '<div class="empty-note">' +
-      'No se pudieron cargar los mensajes.' +
-      '</div>';
-
+    console.error(error);
+    $("chatMessages").innerHTML='<div class="empty-note">No se pudieron cargar los mensajes.</div>';
   }
-
 }
-
 
 function renderMessages(list){
-
-  const box =
-    $("chatMessages");
-
-
-  box.innerHTML =
-    "";
-
+  const box=$("chatMessages");
+  box.innerHTML="";
 
   if(!list.length){
-
-    box.innerHTML =
-      '<div class="empty-note">' +
-      'No hay mensajes todavía.' +
-      '</div>';
-
+    box.innerHTML='<div class="empty-note">No hay mensajes todavía.</div>';
     return;
-
   }
 
+  list.forEach(message=>{
+    const wrap=document.createElement("div");
+    wrap.className="msg"+(message.sender===me.username?" mine":"");
 
-  list.forEach(
-    message => {
-
-      const wrap =
-        document.createElement("div");
-
-      wrap.className =
-        "msg" +
-        (
-          message.sender === me.username
-            ? " mine"
-            : ""
-        );
-
-
-      if(message.message){
-
-        const text =
-          document.createElement("div");
-
-        text.textContent =
-          message.message;
-
-        wrap.appendChild(
-          text
-        );
-
-      }
-
-
-      if(message.file){
-
-        const url =
-          API +
-          "/media/chat/" +
-          encodeURIComponent(
-            message.file
-          );
-
-
-        if(message.type === "image"){
-
-          const img =
-            document.createElement("img");
-
-          img.src =
-            url;
-
-          img.className =
-            "media";
-
-          img.alt =
-            "Imagen";
-
-          wrap.appendChild(
-            img
-          );
-
-        }else if(
-          message.type === "video"
-        ){
-
-          const video =
-            document.createElement("video");
-
-          video.src =
-            url;
-
-          video.controls =
-            true;
-
-          video.playsInline =
-            true;
-
-          video.className =
-            "media";
-
-          wrap.appendChild(
-            video
-          );
-
-        }
-
-      }
-
-
-      const meta =
-        document.createElement("div");
-
-      meta.className =
-        "msg-meta";
-
-
-      meta.textContent =
-        (
-          message.sender
-            ? "@" + message.sender
-            : ""
-        ) +
-        (
-          message.date
-            ? " · " + message.date
-            : ""
-        );
-
-
-      wrap.appendChild(
-        meta
-      );
-
-
-      box.appendChild(
-        wrap
-      );
-
+    if(message.message){
+      const text=document.createElement("div");
+      text.textContent=message.message;
+      wrap.appendChild(text);
     }
-  );
 
+    if(message.file){
+      const url=API+"/media/chat/"+encodeURIComponent(message.file);
 
-  box.scrollTop =
-    box.scrollHeight;
+      if(message.type==="image"){
+        const img=document.createElement("img");
+        img.src=url;
+        img.className="media";
+        img.alt="Imagen";
+        wrap.appendChild(img);
+      }else if(message.type==="video"){
+        const video=document.createElement("video");
+        video.src=url;
+        video.controls=true;
+        video.playsInline=true;
+        video.className="media";
+        wrap.appendChild(video);
+      }
+    }
 
+    const meta=document.createElement("div");
+    meta.className="msg-meta";
+    meta.textContent=(message.sender?"@"+message.sender:"")+(message.date?" · "+message.date:"");
+    wrap.appendChild(meta);
+
+    box.appendChild(wrap);
+  });
+
+  box.scrollTop=box.scrollHeight;
 }
-
 
 async function sendMessage(){
+  const input=$("messageBox");
+  const text=input.value.trim();
 
-  const input =
-    $("messageBox");
+  if(!currentTarget||!text)return;
 
-
-  const text =
-    input.value.trim();
-
-
-  if(
-    !currentTarget ||
-    !text
-  ){
-    return;
-  }
-
-
-  const path =
-    currentType === "group"
-      ? "/api/groups/send"
-      : "/api/chat/send";
-
+  const path=currentType==="group"?"/api/groups/send":"/api/chat/send";
 
   try{
+    await api(path,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({receiver:currentTarget,message:text})
+    });
 
-    await api(
-      path,
-      {
-        method:
-          "POST",
-
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify({
-            receiver:
-              currentTarget,
-
-            message:
-              text
-          })
-      }
-    );
-
-
-    input.value =
-      "";
-
-
+    input.value="";
     await loadMessages();
-
   }catch(error){
-
-    toast(
-      error.message
-    );
-
+    toast(error.message);
   }
-
 }
-
 
 async function sendFile(file){
+  if(!currentTarget||!file)return;
 
-  if(
-    !currentTarget ||
-    !file
-  ){
-    return;
-  }
+  const form=new FormData();
+  form.append("receiver",currentTarget);
+  form.append("file",file);
 
-
-  const form =
-    new FormData();
-
-
-  form.append(
-    "receiver",
-    currentTarget
-  );
-
-
-  form.append(
-    "file",
-    file
-  );
-
-
-  const path =
-    currentType === "group"
-      ? "/api/groups/upload"
-      : "/api/chat/upload";
-
+  const path=currentType==="group"?"/api/groups/upload":"/api/chat/upload";
 
   try{
-
-    await api(
-      path,
-      {
-        method:
-          "POST",
-
-        body:
-          form
-      }
-    );
-
-
+    await api(path,{method:"POST",body:form});
     await loadMessages();
-
   }catch(error){
-
-    toast(
-      error.message
-    );
-
+    toast(error.message);
   }
-
 }
-
 
 async function createGroup(){
-
-  const name =
-    $("groupName")
-      .value
-      .trim();
-
+  const name=$("groupName").value.trim();
 
   if(!name){
-
-    toast(
-      "Escribe un nombre de grupo."
-    );
-
-
+    toast("Escribe un nombre de grupo.");
     $("groupName").focus();
-
     return;
-
   }
 
+  const selected=[...$("membersList").querySelectorAll("input[type=checkbox]:checked")]
+    .map(input=>input.value);
 
-  const selected =
-    [
-      ...$("membersList")
-        .querySelectorAll(
-          "input[type=checkbox]:checked"
-        )
-    ]
-    .map(
-      input =>
-        input.value
-    );
-
-
-  const form =
-    new FormData();
-
-
-  form.append(
-    "name",
-    name
-  );
-
-
-  form.append(
-    "members",
-    selected.join(",")
-  );
-
+  const form=new FormData();
+  form.append("name",name);
+  form.append("members",selected.join(","));
 
   try{
+    await api("/api/groups/create",{
+      method:"POST",
+      body:form
+    });
 
-    await api(
-      "/api/groups/create",
-      {
-        method:
-          "POST",
-
-        body:
-          form
-      }
-    );
-
-
-    $("groupName").value =
-      "";
-
-
-    $("membersList")
-      .querySelectorAll(
-        "input[type=checkbox]"
-      )
-      .forEach(
-        input =>
-          input.checked =
-            false
-      );
-
+    $("groupName").value="";
+    $("membersList").querySelectorAll("input[type=checkbox]").forEach(input=>input.checked=false);
 
     await loadGroups();
-
-
-    openGroup(
-      name
-    );
-
-
-    toast(
-      "Grupo creado."
-    );
-
+    openGroup(name);
+    toast("Grupo creado.");
   }catch(error){
-
-    toast(
-      error.message
-    );
-
+    toast(error.message);
   }
-
 }
-
 
 function connectSocket(){
-
   if(socket){
-
-    try{
-      socket.close();
-    }catch{}
-
+    try{socket.close()}catch{}
   }
 
+  if(!me?.username||!token)return;
 
-  if(
-    !me?.username ||
-    !token
-  ){
-    return;
-  }
-
-
-  const wsUrl =
-    API
-      .replace(
-        /^http:/,
-        "ws:"
-      )
-      .replace(
-        /^https:/,
-        "wss:"
-      );
-
-
-  socket =
-    new WebSocket(
-      wsUrl +
-      "/ws/" +
-      encodeURIComponent(
-        me.username
-      ) +
-      "?token=" +
-      encodeURIComponent(
-        token
-      )
-    );
-
-
-  socket.onopen =
-    () => {
-
-      setStatus(
-        ""
-      );
-
-
-      socket.pingTimer =
-        setInterval(
-          () => {
-
-            try{
-              socket.send(
-                "ping"
-              );
-            }catch{}
-
-          },
-          25000
-        );
-
-    };
-
-
-  socket.onmessage =
-    async event => {
-
-      try{
-
-        const data =
-          JSON.parse(
-            event.data
-          );
-
-
-        if(
-          data.type === "chat" &&
-          currentTarget
-        ){
-
-          await loadMessages();
-
-        }
-
-      }catch(error){
-
-        console.error(
-          "WebSocket:",
-          error
-        );
-
-      }
-
-    };
-
-
-  socket.onclose =
-    () => {
-
-      if(socket?.pingTimer){
-
-        clearInterval(
-          socket.pingTimer
-        );
-
-      }
-
-    };
-
-
-  socket.onerror =
-    () => {
-
-      setStatus(
-        "WebSocket desconectado"
-      );
-
-    };
-
-}
-
-
-async function logout(){
-
-  try{
-
-    await api(
-      "/api/logout",
-      {
-        method:
-          "POST"
-      }
-    );
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  if(socket){
-
-    try{
-      socket.close();
-    }catch{}
-
-  }
-
-
-  localStorage.removeItem(
-    TOKEN_KEY
+  const wsUrl=API.replace(/^http:/,"ws:").replace(/^https:/,"wss:");
+  socket=new WebSocket(
+    wsUrl+"/ws/"+encodeURIComponent(me.username)+"?token="+encodeURIComponent(token)
   );
 
-
-  token =
-    "";
-
-
-  redirectAuth();
-
-}
-
-
-$("sendBtn").onclick =
-  sendMessage;
-
-
-$("messageBox")
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if(event.key === "Enter"){
-        sendMessage();
-      }
-
-    }
-  );
-
-
-$("fileBtn").onclick =
-  () => $("fileInput").click();
-
-
-$("fileInput").onchange =
-  event => {
-
-    const file =
-      event.target.files?.[0];
-
-
-    if(file){
-      sendFile(
-        file
-      );
-    }
-
-
-    event.target.value =
-      "";
-
+  socket.onopen=()=>{
+    setStatus("");
+    socket.pingTimer=setInterval(()=>{
+      try{socket.send("ping")}catch{}
+    },25000);
   };
 
+  socket.onmessage=async event=>{
+    try{
+      const data=JSON.parse(event.data);
+      if(data.type==="chat"&&currentTarget){
+        await loadMessages();
+      }
+    }catch(error){
+      console.error("WebSocket:",error);
+    }
+  };
 
-$("createGroupBtn").onclick =
-  createGroup;
+  socket.onclose=()=>{
+    if(socket?.pingTimer)clearInterval(socket.pingTimer);
+  };
 
+  socket.onerror=()=>{
+    setStatus("WebSocket desconectado");
+  };
+}
 
-$("logoutBtn").onclick =
-  logout;
+async function logout(){
+  try{
+    await api("/api/logout",{method:"POST"});
+  }catch(error){
+    console.error(error);
+  }
 
+  if(socket){
+    try{socket.close()}catch{}
+  }
+
+  localStorage.removeItem(TOKEN_KEY);
+  token="";
+  redirectAuth();
+}
+
+$("sendBtn").onclick=sendMessage;
+$("messageBox").addEventListener("keydown",event=>{
+  if(event.key==="Enter")sendMessage();
+});
+$("fileBtn").onclick=()=>$("fileInput").click();
+$("fileInput").onchange=event=>{
+  const file=event.target.files?.[0];
+  if(file)sendFile(file);
+  event.target.value="";
+};
+$("createGroupBtn").onclick=createGroup;
+$("logoutBtn").onclick=logout;
 
 (async()=>{
-
-  const authenticated =
-    await loadMe();
-
-
-  if(!authenticated){
-    return;
-  }
-
+  const authenticated=await loadMe();
+  if(!authenticated)return;
 
   try{
-
     await loadUsers();
-
     await loadGroups();
-
     connectSocket();
 
-
-    setInterval(
-      async () => {
-
-        try{
-
-          await loadUsers();
-
-        }catch(error){
-
-          console.error(
-            "Error actualizando usuarios:",
-            error
-          );
-
-        }
-
-      },
-      10000
-    );
-
-
+    // Actualizar estado online periódicamente sin modificar el diseño.
+    setInterval(async()=>{
+      try{
+        await loadUsers();
+      }catch(error){
+        console.error("Error actualizando usuarios:",error);
+      }
+    },10000);
   }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    toast(
-      error.message
-    );
-
+    console.error(error);
+    toast(error.message);
   }
-
 })();
 </script>
-
 </body>
 </html>
