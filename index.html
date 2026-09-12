@@ -2,168 +2,119 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart-Chat · 3PD</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Smart-Chat</title>
 
 <style>
-:root{
-    --cyan:#00f0ff;
-    --bg:#252a33;
-    --card:#303640;
-    --card2:#2b313b;
-    --green:#42d66f;
-    --text:#ffffff;
-    --muted:#9ea8b3;
-    --border:#414956;
-}
-
 *{
     box-sizing:border-box;
 }
 
-html,
-body{
+html,body{
     margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
-}
-
-body{
-    background:var(--bg);
-    color:var(--text);
     font-family:Arial,Helvetica,sans-serif;
+    background:#090d12;
+    color:#fff;
 }
 
-button,
-input,
-textarea{
-    font-family:inherit;
+button,input,textarea{
+    font:inherit;
 }
 
 button{
     cursor:pointer;
 }
 
-
-/* =========================================================
-   APP
-========================================================= */
-
 .app{
+    display:grid;
+    grid-template-columns:280px 1fr 280px;
     width:100%;
     height:100vh;
-    display:grid;
-    grid-template-columns:230px minmax(360px,1fr) 250px;
-    gap:10px;
-    padding:10px;
 }
 
+/* =========================
+   LEFT
+========================= */
 
-/* =========================================================
-   GENERALES
-========================================================= */
-
-.panel{
+.sidebar{
+    background:#0d1218;
+    border-right:1px solid #1d2933;
+    display:flex;
+    flex-direction:column;
     min-width:0;
-    min-height:0;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    overflow:hidden;
 }
 
-.header{
-    height:52px;
+.logo{
+    height:65px;
     display:flex;
     align-items:center;
-    padding:0 14px;
-    border-bottom:1px solid var(--border);
-}
-
-.title{
-    color:var(--cyan);
-    font-size:17px;
+    padding:0 18px;
+    border-bottom:1px solid #1d2933;
+    color:#00eaff;
+    font-size:21px;
     font-weight:bold;
 }
 
-.subtitle{
-    color:var(--muted);
-    font-size:11px;
-}
-
-
-/* =========================================================
-   LEFT - USUARIOS
-========================================================= */
-
-.left-panel{
-    display:flex;
-    flex-direction:column;
-}
-
-.users-title{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    width:100%;
-}
-
-.users-count{
-    font-size:10px;
-    color:var(--muted);
+.section-title{
+    padding:16px 16px 9px;
+    color:#7f929f;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
 }
 
 .users-list{
     flex:1;
     overflow-y:auto;
-    padding:8px;
+    padding:4px 8px 10px;
 }
 
 .user-card{
     display:flex;
     align-items:center;
-    gap:8px;
-    padding:8px;
-    margin-bottom:5px;
-    border-radius:9px;
-    background:transparent;
+    gap:10px;
+    padding:9px;
+    border-radius:10px;
+    margin-bottom:4px;
     transition:background .15s;
 }
 
 .user-card:hover{
-    background:var(--card2);
+    background:#141d25;
 }
 
 .avatar-wrap{
-    width:38px;
-    height:38px;
     position:relative;
-    flex:none;
+    width:42px;
+    height:42px;
+    flex-shrink:0;
 }
 
 .avatar{
-    width:38px;
-    height:38px;
+    width:42px;
+    height:42px;
     border-radius:50%;
     object-fit:cover;
-    background:#20252d;
+    background:#17222b;
     display:block;
 }
 
 .status-dot{
-    width:9px;
-    height:9px;
     position:absolute;
     right:-1px;
-    bottom:1px;
+    bottom:0;
+    width:11px;
+    height:11px;
     border-radius:50%;
-    background:#68727c;
-    border:2px solid var(--card);
+    background:#59636b;
+    border:2px solid #0d1218;
 }
 
 .status-dot.online{
-    background:var(--green);
+    background:#00e676;
 }
 
 .user-info{
@@ -172,70 +123,68 @@ button{
 }
 
 .username{
-    font-size:12px;
-    font-weight:bold;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
+    font-weight:bold;
+    font-size:14px;
 }
 
 .user-status{
-    margin-top:2px;
-    font-size:10px;
-    color:var(--muted);
+    color:#758590;
+    font-size:11px;
+    margin-top:3px;
 }
 
-.chat-button{
-    width:28px;
-    height:28px;
+.chat-btn{
     border:0;
-    border-radius:7px;
-    background:var(--card2);
-    color:var(--cyan);
-    font-size:13px;
-    flex:none;
+    background:#17232c;
+    color:#00eaff;
+    width:32px;
+    height:30px;
+    border-radius:8px;
+    font-size:16px;
 }
 
-.chat-button:hover{
-    background:#3a424e;
+.chat-btn:hover{
+    background:#1c333f;
 }
 
-
-/* =========================================================
+/* =========================
    CENTER
-========================================================= */
+========================= */
 
-.center-panel{
+.main{
+    min-width:0;
     display:flex;
     flex-direction:column;
+    background:#090d12;
 }
 
-.center-header{
-    height:60px;
+.topbar{
+    height:65px;
+    flex-shrink:0;
+    border-bottom:1px solid #1d2933;
     display:flex;
     align-items:center;
-    gap:10px;
-    padding:7px 12px;
-    border-bottom:1px solid var(--border);
-    flex:none;
+    padding:0 18px;
+    gap:12px;
 }
 
-.chat-avatar{
+.top-avatar{
     width:40px;
     height:40px;
-    object-fit:cover;
     border-radius:50%;
-    background:#20252d;
-    flex:none;
+    object-fit:cover;
+    background:#17222b;
 }
 
-.chat-head{
+.chat-title{
     min-width:0;
-    flex:1;
 }
 
 .chat-name{
-    font-size:14px;
+    font-size:15px;
     font-weight:bold;
     white-space:nowrap;
     overflow:hidden;
@@ -243,29 +192,15 @@ button{
 }
 
 .chat-sub{
-    margin-top:2px;
-    color:var(--muted);
-    font-size:10px;
-}
-
-.logout-button{
-    border:1px solid var(--border);
-    background:var(--card2);
-    color:#ff6464;
-    padding:7px 9px;
-    border-radius:7px;
-    font-size:10px;
-}
-
-.logout-button:hover{
-    background:#373d47;
+    font-size:11px;
+    color:#72828d;
+    margin-top:3px;
 }
 
 .messages{
     flex:1;
-    min-height:0;
     overflow-y:auto;
-    padding:12px;
+    padding:20px;
 }
 
 .empty{
@@ -273,131 +208,122 @@ button{
     display:flex;
     align-items:center;
     justify-content:center;
+    color:#63727d;
     text-align:center;
-    color:var(--muted);
-    font-size:12px;
 }
 
 .message{
     display:flex;
-    margin-bottom:8px;
+    margin-bottom:12px;
 }
 
 .message.mine{
     justify-content:flex-end;
 }
 
-.message-bubble{
-    max-width:75%;
-    background:var(--card2);
-    border-radius:10px;
-    padding:8px 10px;
-    border:1px solid #3d4550;
+.bubble{
+    max-width:min(70%,550px);
+    padding:10px 13px;
+    border-radius:14px;
+    background:#141d25;
+    border:1px solid #202e38;
+    word-wrap:break-word;
 }
 
-.message.mine .message-bubble{
-    background:#183f45;
-    border-color:#21616a;
+.message.mine .bubble{
+    background:#063b46;
+    border-color:#075765;
 }
 
-.message-sender{
-    color:var(--cyan);
-    font-size:10px;
+.message-user{
+    font-size:11px;
+    color:#00eaff;
+    margin-bottom:4px;
     font-weight:bold;
-    margin-bottom:3px;
 }
 
 .message-text{
     white-space:pre-wrap;
-    word-break:break-word;
-    font-size:12px;
-    line-height:1.35;
+    line-height:1.4;
+    font-size:14px;
 }
 
 .message-time{
-    margin-top:4px;
-    color:#7f8993;
-    font-size:8px;
+    margin-top:5px;
+    color:#65747e;
+    font-size:9px;
     text-align:right;
 }
 
-.file-box{
+.file-link{
+    display:inline-block;
+    color:#00eaff;
+    text-decoration:none;
     margin-top:5px;
 }
 
-.file-box a{
-    color:var(--cyan);
-    text-decoration:none;
-    font-size:11px;
-}
-
 .composer{
-    min-height:60px;
+    min-height:70px;
+    border-top:1px solid #1d2933;
     display:flex;
     align-items:center;
-    gap:7px;
-    padding:9px;
-    border-top:1px solid var(--border);
-    flex:none;
+    gap:8px;
+    padding:12px;
 }
 
-.message-input{
+.composer textarea{
     flex:1;
-    min-width:0;
-    height:39px;
     resize:none;
-    outline:none;
-    border:1px solid var(--border);
-    border-radius:8px;
-    background:var(--card2);
+    height:44px;
+    max-height:100px;
+    border:1px solid #22313c;
+    border-radius:10px;
+    background:#10171e;
     color:#fff;
-    padding:10px;
-    font-size:11px;
+    outline:none;
+    padding:12px;
 }
 
-.message-input:focus{
-    border-color:var(--cyan);
+.composer textarea:focus{
+    border-color:#00bcd4;
 }
 
-.attach-button,
-.send-button{
-    width:39px;
-    height:39px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    background:var(--card2);
+.icon-btn,
+.send-btn{
+    width:44px;
+    height:44px;
+    border-radius:10px;
+    border:1px solid #22313c;
+    background:#10171e;
+    color:#00eaff;
 }
 
-.attach-button{
-    color:var(--cyan);
-}
-
-.send-button{
-    background:var(--cyan);
-    border-color:var(--cyan);
-    color:#062126;
+.send-btn{
+    background:#00a9bd;
+    border-color:#00a9bd;
+    color:#001014;
     font-weight:bold;
 }
 
-.send-button:hover{
-    filter:brightness(1.08);
+.send-btn:hover{
+    background:#00d4ec;
 }
 
-
-/* =========================================================
+/* =========================
    RIGHT
-========================================================= */
+========================= */
 
-.right-panel{
-    display:flex;
-    flex-direction:column;
+.rightbar{
+    background:#0d1218;
+    border-left:1px solid #1d2933;
+    padding:15px;
     overflow-y:auto;
 }
 
 .profile-box{
-    padding:15px;
     text-align:center;
-    border-bottom:1px solid var(--border);
+    padding:10px 5px 18px;
+    border-bottom:1px solid #1d2933;
 }
 
 .big-avatar{
@@ -405,115 +331,107 @@ button{
     height:150px;
     border-radius:50%;
     object-fit:cover;
-    background:#20252d;
+    background:#17222b;
+    margin:5px auto 13px;
     display:block;
-    margin:0 auto 9px;
 }
 
 .profile-name{
-    font-size:14px;
+    font-size:17px;
     font-weight:bold;
 }
 
-.profile-sub{
-    margin-top:3px;
-    font-size:10px;
-    color:var(--muted);
-}
-
-.section{
-    padding:12px;
-}
-
-.section-title{
-    color:var(--cyan);
+.profile-status{
     font-size:11px;
-    font-weight:bold;
-    margin-bottom:8px;
+    color:#71818b;
+    margin-top:5px;
 }
 
-.group-name-input{
+.panel-title{
+    font-size:12px;
+    color:#81929d;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin:18px 0 10px;
+}
+
+.group-form{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.group-form input{
     width:100%;
-    height:34px;
-    border:1px solid var(--border);
-    border-radius:7px;
-    outline:none;
-    background:var(--card2);
+    border:1px solid #22313c;
+    background:#10171e;
     color:#fff;
-    padding:8px;
-    font-size:11px;
+    outline:none;
+    padding:10px;
+    border-radius:8px;
 }
 
-.group-name-input:focus{
-    border-color:var(--cyan);
+.primary{
+    border:0;
+    background:#00a9bd;
+    color:#001014;
+    padding:10px;
+    border-radius:8px;
+    font-weight:bold;
 }
 
-.members-list{
-    max-height:115px;
+.members{
+    max-height:180px;
     overflow-y:auto;
-    margin-top:7px;
-    border:1px solid var(--border);
-    border-radius:7px;
+    border:1px solid #1d2933;
+    border-radius:8px;
     padding:5px;
 }
 
 .member{
     display:flex;
     align-items:center;
-    gap:6px;
-    padding:4px;
-    font-size:10px;
+    gap:7px;
+    padding:6px;
+    font-size:12px;
 }
 
 .member input{
-    accent-color:var(--cyan);
+    accent-color:#00d9ed;
 }
 
-.create-group-button{
-    width:100%;
-    height:34px;
-    margin-top:7px;
-    border:0;
-    border-radius:7px;
-    background:var(--cyan);
-    color:#062126;
-    font-size:11px;
-    font-weight:bold;
-}
-
-.groups-list{
+.groups{
     display:flex;
     flex-direction:column;
     gap:6px;
 }
 
-.group-card{
-    padding:8px;
+.group-item{
+    padding:10px;
+    background:#111a21;
+    border:1px solid #1d2933;
     border-radius:8px;
-    border:1px solid var(--border);
-    background:var(--card2);
     cursor:pointer;
 }
 
-.group-card:hover{
-    border-color:var(--cyan);
+.group-item:hover{
+    border-color:#00a9bd;
 }
 
-.group-card-name{
-    font-size:11px;
+.group-name{
+    font-size:13px;
     font-weight:bold;
 }
 
-.group-card-owner{
-    margin-top:2px;
-    color:var(--muted);
-    font-size:9px;
+.group-members{
+    color:#687983;
+    font-size:10px;
+    margin-top:3px;
 }
 
-
-/* =========================================================
-   SCROLLBARS
-========================================================= */
+/* =========================
+   SCROLLBAR
+========================= */
 
 ::-webkit-scrollbar{
     width:6px;
@@ -525,94 +443,77 @@ button{
 }
 
 ::-webkit-scrollbar-thumb{
-    background:#4a5360;
+    background:#26343d;
     border-radius:10px;
 }
 
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:900px){
-
     .app{
-        grid-template-columns:200px minmax(300px,1fr);
+        grid-template-columns:220px 1fr;
     }
 
-    .right-panel{
+    .rightbar{
         display:none;
     }
-
 }
 
-@media(max-width:620px){
-
+@media(max-width:650px){
     .app{
         grid-template-columns:1fr;
     }
 
-    .left-panel{
+    .sidebar{
         display:none;
     }
 
+    .messages{
+        padding:12px;
+    }
+
+    .bubble{
+        max-width:85%;
+    }
 }
 </style>
 </head>
-
 
 <body>
 
 <div class="app">
 
-    <!-- =====================================================
-         LEFT
-    ====================================================== -->
+    <!-- LEFT -->
+    <aside class="sidebar">
 
-    <section class="panel left-panel">
-
-        <div class="header">
-
-            <div class="users-title">
-
-                <div class="title">
-                    Usuarios
-                </div>
-
-                <div
-                    id="usersCount"
-                    class="users-count"
-                >
-                    0
-                </div>
-
-            </div>
-
+        <div class="logo">
+            Smart-Chat
         </div>
 
-        <div
-            id="usersList"
-            class="users-list"
-        ></div>
+        <div class="section-title">
+            Usuarios
+        </div>
 
-    </section>
+        <div id="usersList" class="users-list"></div>
+
+    </aside>
 
 
-    <!-- =====================================================
-         CENTER
-    ====================================================== -->
+    <!-- CENTER -->
+    <main class="main">
 
-    <section class="panel center-panel">
-
-        <div class="center-header">
+        <div class="topbar">
 
             <img
                 id="chatAvatar"
-                class="chat-avatar"
+                class="top-avatar"
+                src=""
                 alt=""
             >
 
-            <div class="chat-head">
+            <div class="chat-title">
 
                 <div
                     id="chatName"
@@ -629,13 +530,6 @@ button{
                 </div>
 
             </div>
-
-            <button
-                id="logoutButton"
-                class="logout-button"
-            >
-                LOG OUT
-            </button>
 
         </div>
 
@@ -657,47 +551,43 @@ button{
             <input
                 id="fileInput"
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/ogg"
                 hidden
             >
 
             <button
-                id="attachButton"
-                class="attach-button"
-                title="Adjuntar"
+                id="fileBtn"
+                class="icon-btn"
+                title="Enviar archivo"
             >
                 📎
             </button>
 
             <textarea
                 id="messageInput"
-                class="message-input"
                 placeholder="Escribe un mensaje..."
             ></textarea>
 
             <button
-                id="sendButton"
-                class="send-button"
+                id="sendBtn"
+                class="send-btn"
             >
                 ➤
             </button>
 
         </div>
 
-    </section>
+    </main>
 
 
-    <!-- =====================================================
-         RIGHT
-    ====================================================== -->
-
-    <section class="panel right-panel">
+    <!-- RIGHT -->
+    <aside class="rightbar">
 
         <div class="profile-box">
 
             <img
                 id="myAvatar"
                 class="big-avatar"
+                src=""
                 alt=""
             >
 
@@ -708,82 +598,76 @@ button{
                 Cargando...
             </div>
 
-            <div class="profile-sub">
-                Kn Foundation
+            <div class="profile-status">
+                Tu perfil
             </div>
 
         </div>
 
 
-        <div class="section">
+        <div class="panel-title">
+            Crear grupo
+        </div>
 
-            <div class="section-title">
-                Crear grupo
-            </div>
+        <div class="group-form">
 
             <input
                 id="groupName"
-                class="group-name-input"
                 type="text"
-                maxlength="80"
                 placeholder="Nombre del grupo"
             >
 
             <div
                 id="membersList"
-                class="members-list"
+                class="members"
             ></div>
 
             <button
-                id="createGroupButton"
-                class="create-group-button"
+                id="createGroupBtn"
+                class="primary"
             >
-                CREAR GRUPO
+                Crear grupo
             </button>
 
         </div>
 
 
-        <div class="section">
-
-            <div class="section-title">
-                Mis Grupos
-            </div>
-
-            <div
-                id="groupsList"
-                class="groups-list"
-            ></div>
-
+        <div class="panel-title">
+            Mis grupos
         </div>
 
-    </section>
+        <div
+            id="groupsList"
+            class="groups"
+        ></div>
+
+    </aside>
 
 </div>
 
 
 <script>
 
-/* =========================================================
-   CONFIG
-========================================================= */
+/* =====================================
+   CONFIGURACIÓN
+===================================== */
 
 const API =
-    "https://dive-still-minneapolis-held.trycloudflare.com";
+"https://dive-still-minneapolis-held.trycloudflare.com";
 
 const KN_AUTH_API =
-    "https://programs-sweet-limited-files.trycloudflare.com";
+"https://programs-sweet-limited-files.trycloudflare.com";
 
 const AUTH_URL =
-    "https://smartium25.github.io/auth/";
+"https://smartium25.github.io/auth/";
 
 const TOKEN_KEY =
-    "knfoundation_token";
+"knfoundation_token";
 
 
-/* =========================================================
+/* =====================================
    ESTADO
-========================================================= */
+===================================== */
 
 let me = null;
 
@@ -797,128 +681,77 @@ let currentTarget = null;
 
 let socket = null;
 
-let reconnectTimer = null;
-
 let pingTimer = null;
 
 
-/* =========================================================
+/* =====================================
    HELPERS
-========================================================= */
+===================================== */
 
 function $(id){
     return document.getElementById(id);
 }
 
 
-function token(){
+function getToken(){
 
-    return localStorage.getItem(
-        TOKEN_KEY
-    );
+    return localStorage.getItem(TOKEN_KEY);
 
 }
 
 
-function headers(extra = {}){
+function authHeaders(){
 
-    const t =
-        token();
+    const token = getToken();
 
-    return {
-        ...extra,
-        ...(t
-            ? {
-                "Authorization":
-                    "Bearer " + t
-            }
-            : {}
-        )
+    return token
+        ? {
+            "Authorization":"Bearer "+token
+        }
+        : {};
+
+}
+
+
+async function api(path,options={}){
+
+    const headers = {
+        ...(options.headers || {}),
+        ...authHeaders()
     };
 
-}
-
-
-async function api(
-    path,
-    options = {}
-){
-
     const response =
-        await fetch(
-            API + path,
-            {
-                ...options,
-                headers:
-                    headers(
-                        options.headers || {}
-                    )
-            }
-        );
-
+        await fetch(API+path,{
+            ...options,
+            headers
+        });
 
     if(!response.ok){
 
-        let detail = "";
+        let text = "";
 
         try{
-            detail =
-                await response.text();
+            text = await response.text();
         }catch{}
 
-
         throw new Error(
-            "HTTP " +
-            response.status +
-            (
-                detail
-                ? " - " + detail
-                : ""
-            )
+            "HTTP "+response.status+
+            (text ? ": "+text : "")
         );
 
     }
 
-
     const type =
-        response.headers.get(
-            "content-type"
-        ) || "";
+        response.headers.get("content-type") || "";
 
-
-    if(
-        type.includes(
-            "application/json"
-        )
-    ){
-
+    if(type.includes("application/json")){
         return await response.json();
-
     }
-
 
     return await response.text();
 
 }
 
-
-function escapeHTML(value){
-
-    return String(
-        value ?? ""
-    )
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================================
-   PFP
-========================================================= */
 
 function pfpUrl(value){
 
@@ -926,302 +759,102 @@ function pfpUrl(value){
         return "";
     }
 
-
-    value =
-        String(value);
-
-
     if(
-        value.startsWith(
-            "https://"
-        ) ||
-        value.startsWith(
-            "http://"
-        ) ||
-        value.startsWith(
-            "data:"
-        )
+        value.startsWith("http://") ||
+        value.startsWith("https://") ||
+        value.startsWith("data:")
     ){
-
         return value;
-
     }
 
-
-    if(
-        value.startsWith(
-            "/pfp/"
-        )
-    ){
-
-        return (
-            KN_AUTH_API +
-            value
-        );
-
+    if(value.startsWith("/")){
+        return API+value;
     }
 
-
-    if(
-        value.startsWith(
-            "/"
-        )
-    ){
-
-        return (
-            KN_AUTH_API +
-            value
-        );
-
-    }
-
-
-    return (
-        KN_AUTH_API +
-        "/" +
-        value
-    );
+    return API+"/"+value;
 
 }
 
 
-/* =========================================================
-   PERFIL
-========================================================= */
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================
+   CARGAR MI CUENTA
+===================================== */
 
 async function loadMe(){
 
     const data =
-        await api(
-            "/api/me"
-        );
+        await api("/api/me");
 
-
-    me =
-        data.user || data;
-
+    me = data.user || data;
 
     $("myName").textContent =
-        me.username || "";
-
+        me.username || "Usuario";
 
     const avatar =
         pfpUrl(
             me.pfp ||
-            me.profile_picture
+            me.profile_picture ||
+            me.avatar
         );
 
+    if(avatar){
 
-    if(
-        avatar &&
-        $("myAvatar").getAttribute(
-            "src"
-        ) !== avatar
-    ){
-
-        $("myAvatar").src =
-            avatar;
+        $("myAvatar").src = avatar;
 
     }
 
 }
 
 
-async function refreshMeSilently(){
-
-    if(!me){
-        return;
-    }
-
-
-    try{
-
-        const data =
-            await api(
-                "/api/me"
-            );
-
-
-        const user =
-            data.user || data;
-
-
-        if(
-            user.username &&
-            $("myName").textContent !==
-            user.username
-        ){
-
-            $("myName").textContent =
-                user.username;
-
-        }
-
-
-        const avatar =
-            pfpUrl(
-                user.pfp ||
-                user.profile_picture
-            );
-
-
-        if(
-            avatar &&
-            $("myAvatar").getAttribute(
-                "src"
-            ) !== avatar
-        ){
-
-            $("myAvatar").src =
-                avatar;
-
-        }
-
-
-    }catch(error){
-
-        console.error(
-            "Refresh de perfil:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   USUARIOS
-========================================================= */
-
-async function getUsers(){
-
-    const data =
-        await api(
-            "/api/users/list/" +
-            encodeURIComponent(
-                me.username
-            )
-        );
-
-
-    return Array.isArray(data)
-        ? data
-        : (
-            data.users ||
-            []
-        );
-
-}
-
-
-function updateUserCard(
-    card,
-    user
-){
-
-    const dot =
-        card.querySelector(
-            ".status-dot"
-        );
-
-    const status =
-        card.querySelector(
-            ".user-status"
-        );
-
-    const image =
-        card.querySelector(
-            ".avatar"
-        );
-
-
-    if(dot){
-
-        dot.classList.toggle(
-            "online",
-            !!user.online
-        );
-
-    }
-
-
-    if(status){
-
-        const newText =
-            user.online
-            ? "En línea"
-            : "Desconectado";
-
-
-        if(
-            status.textContent !==
-            newText
-        ){
-
-            status.textContent =
-                newText;
-
-        }
-
-    }
-
-
-    const avatar =
-        pfpUrl(
-            user.pfp ||
-            user.profile_picture
-        );
-
-
-    if(
-        image &&
-        avatar &&
-        image.getAttribute(
-            "src"
-        ) !== avatar
-    ){
-
-        image.src =
-            avatar;
-
-    }
-
-}
-
+/* =====================================
+   TARJETA DE USUARIO
+===================================== */
 
 function createUserCard(
-    user
+    user,
+    withControls=true
 ){
 
-    const card =
-        document.createElement(
-            "div"
-        );
+    const el =
+        document.createElement("div");
 
-
-    card.className =
+    el.className =
         "user-card";
 
+    /* IMPORTANTE:
+       Se usa para actualizar
+       esta tarjeta sin reconstruirla.
+    */
 
-    card.dataset.username =
+    el.dataset.username =
         user.username;
-
 
     const avatar =
         pfpUrl(
             user.pfp ||
-            user.profile_picture
+            user.profile_picture ||
+            user.avatar
         );
 
-
-    card.innerHTML = `
+    el.innerHTML = `
 
         <div class="avatar-wrap">
 
             <img
                 class="avatar"
-                src="${escapeHTML(avatar)}"
+                src="${escapeHtml(avatar || "")}"
                 alt=""
             >
 
@@ -1234,7 +867,7 @@ function createUserCard(
         <div class="user-info">
 
             <div class="username">
-                ${escapeHTML(user.username)}
+                ${escapeHtml(user.username)}
             </div>
 
             <div class="user-status">
@@ -1243,166 +876,188 @@ function createUserCard(
 
         </div>
 
-        <button
-            class="chat-button"
-            title="Abrir chat"
-        >
-            💬
-        </button>
+        ${
+            withControls
+            ?
+            `
+            <button
+                class="chat-btn"
+                title="Abrir chat"
+            >
+                💬
+            </button>
+            `
+            :
+            ""
+        }
+
     `;
 
 
-    card.querySelector(
-        ".chat-button"
-    )
-    .addEventListener(
-        "click",
-        event => {
+    if(withControls){
 
-            event.stopPropagation();
+        const button =
+            el.querySelector(".chat-btn");
 
-            openPrivate(
-                user.username
-            );
+        button.addEventListener(
+            "click",
+            event => {
 
-        }
-    );
+                event.stopPropagation();
 
+                openPrivate(
+                    user.username
+                );
 
-    card.addEventListener(
-        "dblclick",
-        () => {
-
-            openPrivate(
-                user.username
-            );
-
-        }
-    );
-
-
-    return card;
-
-}
-
-
-function updateMembersList(
-    users
-){
-
-    const selected =
-        new Set(
-            Array.from(
-                $("membersList")
-                .querySelectorAll(
-                    "input[type=checkbox]:checked"
-                )
-            )
-            .map(
-                input =>
-                    input.value
-            )
+            }
         );
 
+        el.addEventListener(
+            "dblclick",
+            () => {
 
-    $("membersList")
-        .innerHTML = "";
-
-
-    users.forEach(
-        user => {
-
-            const label =
-                document.createElement(
-                    "label"
+                openPrivate(
+                    user.username
                 );
 
+            }
+        );
 
-            label.className =
-                "member";
+    }
 
-
-            label.innerHTML = `
-
-                <input
-                    type="checkbox"
-                    value="${escapeHTML(user.username)}"
-                    ${selected.has(user.username) ? "checked" : ""}
-                >
-
-                <span>
-                    ${escapeHTML(user.username)}
-                </span>
-
-            `;
-
-
-            $("membersList")
-                .appendChild(
-                    label
-                );
-
-        }
-    );
+    return el;
 
 }
 
+
+/* =====================================
+   CARGAR USUARIOS
+===================================== */
+
+async function getUsers(){
+
+    try{
+
+        const data =
+            await api(
+                "/api/users/list/"+
+                encodeURIComponent(me.username)
+            );
+
+        return Array.isArray(data)
+            ? data
+            : (data.users || []);
+
+    }catch(error){
+
+        console.warn(
+            "API de Smart-Chat no respondió. Intentando Kn Foundation...",
+            error
+        );
+
+        try{
+
+            const response =
+                await fetch(
+                    KN_AUTH_API+"/api/users",
+                    {
+                        headers:authHeaders()
+                    }
+                );
+
+            if(!response.ok){
+                throw new Error(
+                    "HTTP "+response.status
+                );
+            }
+
+            const data =
+                await response.json();
+
+            return Array.isArray(data)
+                ? data
+                : (data.users || []);
+
+        }catch(fallbackError){
+
+            console.error(
+                "No se pudieron cargar los usuarios:",
+                fallbackError
+            );
+
+            return [];
+
+        }
+
+    }
+
+}
+
+
+/* =====================================
+   CARGA INICIAL DE USUARIOS
+===================================== */
 
 async function loadUsers(){
 
     const users =
         await getUsers();
 
-
     usersCache =
         users.filter(
             user =>
                 user &&
                 user.username &&
-                user.username !==
-                me.username
+                user.username !== me.username
         );
-
-
-    renderUsersInitial();
-
-}
-
-
-function renderUsersInitial(){
 
     const list =
         $("usersList");
 
+    list.innerHTML = "";
 
-    list.innerHTML =
-        "";
+    const members =
+        $("membersList");
 
-
-    usersCache.forEach(
-        user => {
-
-            list.appendChild(
-                createUserCard(
-                    user
-                )
-            );
-
-        }
-    );
+    members.innerHTML = "";
 
 
-    $("usersCount")
-        .textContent =
-        usersCache.length;
+    usersCache.forEach(user => {
+
+        list.appendChild(
+            createUserCard(user,true)
+        );
 
 
-    updateMembersList(
-        usersCache
-    );
+        const member =
+            document.createElement("label");
+
+        member.className =
+            "member";
+
+        member.innerHTML = `
+
+            <input
+                type="checkbox"
+                value="${escapeHtml(user.username)}"
+            >
+
+            <span>
+                ${escapeHtml(user.username)}
+            </span>
+
+        `;
+
+        members.appendChild(member);
+
+    });
 
 }
 
+
+/* =====================================
+   REFRESH SILENCIOSO
+===================================== */
 
 async function refreshUsersSilently(){
 
@@ -1411,116 +1066,172 @@ async function refreshUsersSilently(){
     }
 
 
-    let users;
+    const users =
+        await getUsers();
 
 
-    try{
-
-        users =
-            await getUsers();
-
-    }catch(error){
-
-        console.error(
-            "Refresh de usuarios:",
-            error
-        );
-
-        return;
-
-    }
-
-
-    users =
+    const filtered =
         users.filter(
             user =>
                 user &&
                 user.username &&
-                user.username !==
-                me.username
+                user.username !== me.username
         );
 
 
     usersCache =
-        users;
+        filtered;
 
 
     const list =
         $("usersList");
 
 
+    /*
+       NO hacemos:
+
+       list.innerHTML = "";
+
+       NO reconstruimos toda la lista.
+
+       Solamente actualizamos
+       lo que cambió.
+    */
+
+
     const existing =
         new Map();
 
 
-    list
-    .querySelectorAll(
+    list.querySelectorAll(
         ".user-card[data-username]"
-    )
-    .forEach(
-        card => {
+    ).forEach(card => {
 
-            existing.set(
-                card.dataset.username,
-                card
+        existing.set(
+            card.dataset.username,
+            card
+        );
+
+    });
+
+
+    filtered.forEach(user => {
+
+        let card =
+            existing.get(
+                user.username
             );
 
-        }
-    );
 
+        /*
+           Si apareció un usuario nuevo,
+           agregamos solamente su tarjeta.
+        */
+
+        if(!card){
+
+            card =
+                createUserCard(
+                    user,
+                    true
+                );
+
+            list.appendChild(card);
+
+            return;
+
+        }
+
+
+        /*
+           Estado online/offline
+        */
+
+        const dot =
+            card.querySelector(
+                ".status-dot"
+            );
+
+        const status =
+            card.querySelector(
+                ".user-status"
+            );
+
+
+        if(dot){
+
+            const online =
+                !!user.online;
+
+            if(online){
+                dot.classList.add("online");
+            }else{
+                dot.classList.remove("online");
+            }
+
+        }
+
+
+        if(status){
+
+            const text =
+                user.online
+                ? "En línea"
+                : "Desconectado";
+
+            if(status.textContent !== text){
+                status.textContent = text;
+            }
+
+        }
+
+
+        /*
+           Foto de perfil
+        */
+
+        const image =
+            card.querySelector(".avatar");
+
+
+        const avatar =
+            pfpUrl(
+                user.pfp ||
+                user.profile_picture ||
+                user.avatar
+            );
+
+
+        if(
+            image &&
+            avatar &&
+            image.getAttribute("src") !== avatar
+        ){
+
+            image.src = avatar;
+
+        }
+
+    });
+
+
+    /*
+       Eliminar solamente usuarios
+       que ya no existen.
+    */
 
     const valid =
         new Set(
-            users.map(
-                user =>
-                    user.username
+            filtered.map(
+                user => user.username
             )
         );
 
 
-    users.forEach(
-        user => {
-
-            let card =
-                existing.get(
-                    user.username
-                );
-
-
-            if(!card){
-
-                card =
-                    createUserCard(
-                        user
-                    );
-
-
-                list.appendChild(
-                    card
-                );
-
-                return;
-
-            }
-
-
-            updateUserCard(
-                card,
-                user
-            );
-
-        }
-    );
-
-
     existing.forEach(
-        (card, username) => {
+        (card,username) => {
 
-            if(
-                !valid.has(
-                    username
-                )
-            ){
+            if(!valid.has(username)){
 
                 card.remove();
 
@@ -1530,34 +1241,17 @@ async function refreshUsersSilently(){
     );
 
 
-    $("usersCount")
-        .textContent =
-        users.length;
-
-
     /*
-       Actualizamos los checks sin
-       destruir los ya existentes.
-    */
-
-    updateMembersList(
-        users
-    );
-
-
-    /*
-       Si el usuario que tienes abierto
-       cambió de estado o PFP.
+       Actualizar subtítulo del chat abierto.
     */
 
     if(
-        currentType ===
-        "private" &&
+        currentType === "private" &&
         currentTarget
     ){
 
         const user =
-            users.find(
+            filtered.find(
                 item =>
                     item.username ===
                     currentTarget
@@ -1566,42 +1260,26 @@ async function refreshUsersSilently(){
 
         if(user){
 
-            const newStatus =
+            $("chatSub").textContent =
                 user.online
                 ? "En línea"
                 : "Desconectado";
 
 
-            if(
-                $("chatSub")
-                .textContent !==
-                newStatus
-            ){
-
-                $("chatSub")
-                    .textContent =
-                    newStatus;
-
-            }
-
-
             const avatar =
                 pfpUrl(
                     user.pfp ||
-                    user.profile_picture
+                    user.profile_picture ||
+                    user.avatar
                 );
 
 
             if(
                 avatar &&
-                $("chatAvatar")
-                .getAttribute(
-                    "src"
-                ) !== avatar
+                $("chatAvatar").src !== avatar
             ){
 
-                $("chatAvatar")
-                    .src =
+                $("chatAvatar").src =
                     avatar;
 
             }
@@ -1613,286 +1291,130 @@ async function refreshUsersSilently(){
 }
 
 
-/* =========================================================
+/* =====================================
    GRUPOS
-========================================================= */
+===================================== */
 
 async function loadGroups(){
 
-    const data =
-        await api(
-            "/api/groups/list/" +
-            encodeURIComponent(
-                me.username
-            )
-        );
-
-
-    groupsCache =
-        Array.isArray(data)
-        ? data
-        : (
-            data.groups ||
-            []
-        );
-
-
-    renderGroupsInitial();
-
-}
-
-
-function createGroupCard(
-    group
-){
-
-    const card =
-        document.createElement(
-            "div"
-        );
-
-
-    card.className =
-        "group-card";
-
-
-    card.dataset.groupId =
-        String(
-            group.id
-        );
-
-
-    card.innerHTML = `
-
-        <div class="group-card-name">
-            ${escapeHTML(group.name)}
-        </div>
-
-        <div class="group-card-owner">
-            ${escapeHTML(group.owner || "")}
-        </div>
-
-    `;
-
-
-    card.addEventListener(
-        "click",
-        () => {
-
-            openGroup(
-                group.id,
-                group.name
-            );
-
-        }
-    );
-
-
-    return card;
-
-}
-
-
-function renderGroupsInitial(){
-
-    const list =
-        $("groupsList");
-
-
-    list.innerHTML =
-        "";
-
-
-    groupsCache.forEach(
-        group => {
-
-            list.appendChild(
-                createGroupCard(
-                    group
-                )
-            );
-
-        }
-    );
-
-}
-
-
-async function refreshGroupsSilently(){
-
-    if(!me){
-        return;
-    }
-
-
-    let data;
-
-
     try{
 
-        data =
+        const data =
             await api(
-                "/api/groups/list/" +
-                encodeURIComponent(
-                    me.username
-                )
+                "/api/groups/list/"+
+                encodeURIComponent(me.username)
             );
+
+
+        groupsCache =
+            Array.isArray(data)
+            ? data
+            : (data.groups || []);
+
+
+        renderGroups();
 
     }catch(error){
 
         console.error(
-            "Refresh de grupos:",
+            "Error cargando grupos:",
             error
         );
+
+        $("groupsList").innerHTML =
+            "";
+
+    }
+
+}
+
+
+function renderGroups(){
+
+    const list =
+        $("groupsList");
+
+    list.innerHTML = "";
+
+
+    if(!groupsCache.length){
+
+        list.innerHTML = `
+            <div style="
+                color:#63727d;
+                font-size:11px;
+                padding:5px;
+            ">
+                No tienes grupos.
+            </div>
+        `;
 
         return;
 
     }
 
 
-    const groups =
-        Array.isArray(data)
-        ? data
-        : (
-            data.groups ||
-            []
+    groupsCache.forEach(group => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "group-item";
+
+
+        const members =
+            group.members ||
+            group.users ||
+            [];
+
+
+        item.innerHTML = `
+
+            <div class="group-name">
+                ${escapeHtml(
+                    group.name ||
+                    group.group_name ||
+                    "Grupo"
+                )}
+            </div>
+
+            <div class="group-members">
+                ${
+                    Array.isArray(members)
+                    ? members.length+" miembros"
+                    : ""
+                }
+            </div>
+
+        `;
+
+
+        item.addEventListener(
+            "click",
+            () => {
+
+                openGroup(
+                    group.id ||
+                    group.group_id
+                );
+
+            }
         );
 
 
-    groupsCache =
-        groups;
+        list.appendChild(item);
 
-
-    const list =
-        $("groupsList");
-
-
-    const existing =
-        new Map();
-
-
-    list
-    .querySelectorAll(
-        ".group-card[data-group-id]"
-    )
-    .forEach(
-        card => {
-
-            existing.set(
-                card.dataset.groupId,
-                card
-            );
-
-        }
-    );
-
-
-    const valid =
-        new Set();
-
-
-    groups.forEach(
-        group => {
-
-            const id =
-                String(
-                    group.id
-                );
-
-
-            valid.add(id);
-
-
-            const card =
-                existing.get(id);
-
-
-            if(!card){
-
-                list.appendChild(
-                    createGroupCard(
-                        group
-                    )
-                );
-
-                return;
-
-            }
-
-
-            const name =
-                card.querySelector(
-                    ".group-card-name"
-                );
-
-
-            const owner =
-                card.querySelector(
-                    ".group-card-owner"
-                );
-
-
-            if(name){
-
-                const value =
-                    group.name || "";
-
-
-                if(
-                    name.textContent !==
-                    value
-                ){
-
-                    name.textContent =
-                        value;
-
-                }
-
-            }
-
-
-            if(owner){
-
-                const value =
-                    group.owner || "";
-
-
-                if(
-                    owner.textContent !==
-                    value
-                ){
-
-                    owner.textContent =
-                        value;
-
-                }
-
-            }
-
-        }
-    );
-
-
-    existing.forEach(
-        (card,id) => {
-
-            if(!valid.has(id)){
-                card.remove();
-            }
-
-        }
-    );
+    });
 
 }
 
 
-/* =========================================================
-   ABRIR CHAT
-========================================================= */
+/* =====================================
+   CHAT PRIVADO
+===================================== */
 
-async function openPrivate(
-    username
-){
+async function openPrivate(username){
 
     currentType =
         "private";
@@ -1904,327 +1426,107 @@ async function openPrivate(
     const user =
         usersCache.find(
             item =>
-                item.username ===
-                username
+                item.username === username
         );
 
 
-    $("chatName")
-        .textContent =
+    $("chatName").textContent =
         username;
 
 
-    $("chatSub")
-        .textContent =
+    $("chatSub").textContent =
         user && user.online
         ? "En línea"
         : "Desconectado";
 
 
     const avatar =
+        user
+        ?
         pfpUrl(
-            user?.pfp ||
-            user?.profile_picture
-        );
+            user.pfp ||
+            user.profile_picture ||
+            user.avatar
+        )
+        :
+        "";
 
 
     if(avatar){
 
-        $("chatAvatar")
-            .src =
+        $("chatAvatar").src =
             avatar;
 
     }else{
 
-        $("chatAvatar")
-            .removeAttribute(
-                "src"
-            );
+        $("chatAvatar").removeAttribute(
+            "src"
+        );
 
     }
 
 
-    await loadMessages(
-        true
-    );
+    await loadMessages();
 
 }
 
 
-async function openGroup(
-    groupId,
-    groupName
-){
+/* =====================================
+   CHAT DE GRUPO
+===================================== */
+
+async function openGroup(groupId){
 
     currentType =
         "group";
 
     currentTarget =
-        groupName;
+        groupId;
 
 
-    $("chatName")
-        .textContent =
-        groupName;
+    const group =
+        groupsCache.find(
+            item =>
+                (
+                    item.id ||
+                    item.group_id
+                ) == groupId
+        );
 
 
-    $("chatSub")
-        .textContent =
+    $("chatName").textContent =
+        group
+        ? (
+            group.name ||
+            group.group_name ||
+            "Grupo"
+        )
+        : "Grupo";
+
+
+    $("chatSub").textContent =
         "Chat grupal";
 
 
-    $("chatAvatar")
-        .removeAttribute(
-            "src"
-        );
-
-
-    await loadMessages(
-        true
+    $("chatAvatar").removeAttribute(
+        "src"
     );
+
+
+    await loadMessages();
 
 }
 
 
-/* =========================================================
+/* =====================================
    MENSAJES
-========================================================= */
+===================================== */
 
-function messageEndpoint(){
-
-    if(
-        currentType ===
-        "private"
-    ){
-
-        return (
-            "/api/chat/get/" +
-            encodeURIComponent(
-                me.username
-            ) +
-            "/" +
-            encodeURIComponent(
-                currentTarget
-            )
-        );
-
-    }
-
-
-    return (
-        "/api/groups/get/" +
-        encodeURIComponent(
-            me.username
-        ) +
-        "/" +
-        encodeURIComponent(
-            currentTarget
-        )
-    );
-
-}
-
-
-function messageKey(
-    message
-){
-
-    if(
-        message.id !== undefined &&
-        message.id !== null
-    ){
-
-        return String(
-            message.id
-        );
-
-    }
-
-
-    return [
-        message.sender,
-        message.receiver,
-        message.date,
-        message.message,
-        message.file
-    ]
-    .join("|");
-
-}
-
-
-function formatTime(
-    value
-){
-
-    if(!value){
-        return "";
-    }
-
-
-    try{
-
-        return new Date(
-            value
-        )
-        .toLocaleTimeString(
-            "es-MX",
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
-
-    }catch{
-
-        return "";
-
-    }
-
-}
-
-
-function createMessageElement(
-    message
-){
-
-    const sender =
-        message.sender ||
-        "";
-
-
-    const mine =
-        sender ===
-        me.username;
-
-
-    const el =
-        document.createElement(
-            "div"
-        );
-
-
-    el.className =
-        "message" +
-        (
-            mine
-            ? " mine"
-            : ""
-        );
-
-
-    el.dataset.messageId =
-        messageKey(
-            message
-        );
-
-
-    let fileHtml =
-        "";
-
-
-    if(message.file){
-
-        let url =
-            String(
-                message.file
-            );
-
-
-        if(
-            !url.startsWith(
-                "http://"
-            ) &&
-            !url.startsWith(
-                "https://"
-            )
-        ){
-
-            url =
-                API +
-                "/media/chat/" +
-                encodeURIComponent(
-                    url
-                );
-
-        }
-
-
-        fileHtml = `
-
-            <div class="file-box">
-
-                <a
-                    href="${escapeHTML(url)}"
-                    target="_blank"
-                    rel="noopener"
-                >
-                    📎 Archivo
-                </a>
-
-            </div>
-
-        `;
-
-    }
-
-
-    el.innerHTML = `
-
-        <div class="message-bubble">
-
-            ${
-                !mine && sender
-                ?
-                `
-                <div class="message-sender">
-                    ${escapeHTML(sender)}
-                </div>
-                `
-                :
-                ""
-            }
-
-            ${
-                message.message
-                ?
-                `
-                <div class="message-text">
-                    ${escapeHTML(message.message)}
-                </div>
-                `
-                :
-                ""
-            }
-
-            ${fileHtml}
-
-            <div class="message-time">
-                ${escapeHTML(
-                    formatTime(
-                        message.date
-                    )
-                )}
-            </div>
-
-        </div>
-
-    `;
-
-
-    return el;
-
-}
-
-
-async function loadMessages(
-    forceRender = false
-){
+async function loadMessages(){
 
     if(
         !currentType ||
-        !currentTarget ||
-        !me
+        !currentTarget
     ){
 
         return;
@@ -2232,15 +1534,43 @@ async function loadMessages(
     }
 
 
-    let data;
+    const box =
+        $("messages");
 
 
     try{
 
-        data =
-            await api(
-                messageEndpoint()
-            );
+        let endpoint;
+
+
+        if(currentType === "private"){
+
+            endpoint =
+                "/api/messages/private/"+
+                encodeURIComponent(me.username)+
+                "/"+
+                encodeURIComponent(currentTarget);
+
+        }else{
+
+            endpoint =
+                "/api/messages/group/"+
+                encodeURIComponent(currentTarget);
+
+        }
+
+
+        const data =
+            await api(endpoint);
+
+
+        const messages =
+            Array.isArray(data)
+            ? data
+            : (data.messages || []);
+
+
+        renderMessages(messages);
 
     }catch(error){
 
@@ -2249,160 +1579,197 @@ async function loadMessages(
             error
         );
 
-        return;
+
+        box.innerHTML = `
+            <div class="empty">
+                No se pudieron cargar los mensajes.
+            </div>
+        `;
 
     }
 
+}
 
-    const messages =
-        Array.isArray(data)
-        ? data
-        : (
-            data.messages ||
-            []
-        );
 
+/* =====================================
+   RENDER MENSAJES
+===================================== */
+
+function renderMessages(messages){
 
     const box =
         $("messages");
 
 
-    /*
-       Si cambiamos de chat:
-       render completo SOLO una vez.
-    */
-
-    if(forceRender){
-
-        box.innerHTML =
-            "";
-
-
-        if(!messages.length){
-
-            box.innerHTML = `
-                <div class="empty">
-                    No hay mensajes todavía.
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        const fragment =
-            document.createDocumentFragment();
-
-
-        messages.forEach(
-            message => {
-
-                fragment.appendChild(
-                    createMessageElement(
-                        message
-                    )
-                );
-
-            }
-        );
-
-
-        box.appendChild(
-            fragment
-        );
-
-
-        box.scrollTop =
-            box.scrollHeight;
-
-
-        return;
-
-    }
-
-
-    /*
-       REFRESH SILENCIOSO
-
-       No borramos NADA.
-       No usamos innerHTML.
-       Solamente agregamos mensajes
-       que todavía no están.
-    */
-
-    const existing =
-        new Set();
-
-
-    box.querySelectorAll(
-        ".message[data-message-id]"
-    )
-    .forEach(
-        element => {
-
-            existing.add(
-                element.dataset.messageId
-            );
-
-        }
-    );
-
-
-    let added = false;
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    messages.forEach(
-        message => {
-
-            const key =
-                messageKey(
-                    message
-                );
-
-
-            if(
-                !existing.has(
-                    key
-                )
-            ){
-
-                fragment.appendChild(
-                    createMessageElement(
-                        message
-                    )
-                );
-
-                added = true;
-
-            }
-
-        }
-    );
-
-
-    if(!added){
-        return;
-    }
-
-
-    const atBottom =
+    const shouldScroll =
         box.scrollHeight -
         box.scrollTop -
         box.clientHeight <
-        80;
+        120;
 
 
-    box.appendChild(
-        fragment
-    );
+    box.innerHTML = "";
 
 
-    if(atBottom){
+    if(!messages.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                No hay mensajes todavía.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    messages.forEach(message => {
+
+        const sender =
+            message.username ||
+            message.sender ||
+            message.from ||
+            "";
+
+
+        const text =
+            message.content ??
+            message.message ??
+            message.text ??
+            "";
+
+
+        const mine =
+            sender === me.username;
+
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "message"+
+            (mine ? " mine" : "");
+
+
+        let fileHtml = "";
+
+
+        const file =
+            message.file ||
+            message.file_url ||
+            message.attachment;
+
+
+        if(file){
+
+            const url =
+                String(file).startsWith("http")
+                ? file
+                : API+(
+                    String(file).startsWith("/")
+                    ? String(file)
+                    : "/"+String(file)
+                );
+
+
+            fileHtml = `
+
+                <a
+                    class="file-link"
+                    href="${escapeHtml(url)}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    📎 Archivo
+                </a>
+
+            `;
+
+        }
+
+
+        const date =
+            message.created_at ||
+            message.timestamp ||
+            "";
+
+
+        let time = "";
+
+
+        if(date){
+
+            try{
+
+                time =
+                    new Date(date)
+                    .toLocaleTimeString(
+                        "es-MX",
+                        {
+                            hour:"2-digit",
+                            minute:"2-digit"
+                        }
+                    );
+
+            }catch{}
+
+        }
+
+
+        wrapper.innerHTML = `
+
+            <div class="bubble">
+
+                ${
+                    !mine && sender
+                    ?
+                    `
+                    <div class="message-user">
+                        ${escapeHtml(sender)}
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+                ${
+                    text
+                    ?
+                    `
+                    <div class="message-text">
+                        ${escapeHtml(text)}
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+                ${fileHtml}
+
+                ${
+                    time
+                    ?
+                    `
+                    <div class="message-time">
+                        ${escapeHtml(time)}
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
+        `;
+
+
+        box.appendChild(wrapper);
+
+    });
+
+
+    if(shouldScroll){
 
         box.scrollTop =
             box.scrollHeight;
@@ -2412,9 +1779,9 @@ async function loadMessages(
 }
 
 
-/* =========================================================
+/* =====================================
    ENVIAR MENSAJE
-========================================================= */
+===================================== */
 
 async function sendMessage(){
 
@@ -2437,23 +1804,21 @@ async function sendMessage(){
 
 
     if(!text){
+
         return;
+
     }
 
 
-    input.value =
-        "";
+    input.value = "";
 
 
     try{
 
-        if(
-            currentType ===
-            "private"
-        ){
+        if(currentType === "private"){
 
             await api(
-                "/api/chat/send",
+                "/api/messages/private",
                 {
                     method:"POST",
                     headers:{
@@ -2461,10 +1826,9 @@ async function sendMessage(){
                             "application/json"
                     },
                     body:JSON.stringify({
-                        receiver:
-                            currentTarget,
-                        message:
-                            text
+                        sender:me.username,
+                        recipient:currentTarget,
+                        content:text
                     })
                 }
             );
@@ -2472,7 +1836,7 @@ async function sendMessage(){
         }else{
 
             await api(
-                "/api/groups/send",
+                "/api/messages/group",
                 {
                     method:"POST",
                     headers:{
@@ -2480,10 +1844,9 @@ async function sendMessage(){
                             "application/json"
                     },
                     body:JSON.stringify({
-                        receiver:
-                            currentTarget,
-                        message:
-                            text
+                        sender:me.username,
+                        group_id:currentTarget,
+                        content:text
                     })
                 }
             );
@@ -2491,9 +1854,7 @@ async function sendMessage(){
         }
 
 
-        await loadMessages(
-            false
-        );
+        await loadMessages();
 
 
     }catch(error){
@@ -2503,7 +1864,6 @@ async function sendMessage(){
             error
         );
 
-
         input.value =
             text;
 
@@ -2512,13 +1872,11 @@ async function sendMessage(){
 }
 
 
-/* =========================================================
-   ARCHIVOS
-========================================================= */
+/* =====================================
+   ENVIAR ARCHIVO
+===================================== */
 
-async function sendFile(
-    file
-){
+async function sendFile(file){
 
     if(
         !file ||
@@ -2535,101 +1893,70 @@ async function sendFile(
         new FormData();
 
 
-    if(
-        currentType ===
-        "private"
-    ){
+    form.append(
+        "file",
+        file
+    );
+
+
+    form.append(
+        "sender",
+        me.username
+    );
+
+
+    if(currentType === "private"){
 
         form.append(
-            "receiver",
+            "recipient",
             currentTarget
         );
-
-
-        form.append(
-            "file",
-            file
-        );
-
-
-        try{
-
-            await api(
-                "/api/chat/upload",
-                {
-                    method:"POST",
-                    body:form
-                }
-            );
-
-
-            await loadMessages(
-                false
-            );
-
-        }catch(error){
-
-            console.error(
-                "Error subiendo archivo:",
-                error
-            );
-
-        }
-
 
     }else{
 
         form.append(
-            "receiver",
+            "group_id",
             currentTarget
         );
 
+    }
 
-        form.append(
-            "file",
-            file
+
+    try{
+
+        await api(
+            "/api/messages/file",
+            {
+                method:"POST",
+                body:form
+            }
         );
 
 
-        try{
+        await loadMessages();
 
-            await api(
-                "/api/groups/upload",
-                {
-                    method:"POST",
-                    body:form
-                }
-            );
+    }catch(error){
 
-
-            await loadMessages(
-                false
-            );
-
-        }catch(error){
-
-            console.error(
-                "Error subiendo archivo:",
-                error
-            );
-
-        }
+        console.error(
+            "Error enviando archivo:",
+            error
+        );
 
     }
 
 }
 
 
-/* =========================================================
+/* =====================================
    CREAR GRUPO
-========================================================= */
+===================================== */
 
 async function createGroup(){
 
     const name =
         $("groupName")
-            .value
-            .trim();
+        .value
+        .trim();
 
 
     if(!name){
@@ -2652,35 +1979,29 @@ async function createGroup(){
         );
 
 
-    const form =
-        new FormData();
-
-
-    form.append(
-        "name",
-        name
-    );
-
-
-    form.append(
-        "members",
-        selected.join(",")
-    );
-
-
     try{
 
         await api(
             "/api/groups/create",
             {
                 method:"POST",
-                body:form
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
+                body:JSON.stringify({
+                    name:name,
+                    owner:me.username,
+                    members:[
+                        me.username,
+                        ...selected
+                    ]
+                })
             }
         );
 
 
-        $("groupName")
-            .value =
+        $("groupName").value =
             "";
 
 
@@ -2689,16 +2010,12 @@ async function createGroup(){
                 "input[type=checkbox]"
             )
             .forEach(
-                checkbox => {
-
-                    checkbox.checked =
-                        false;
-
-                }
+                checkbox =>
+                    checkbox.checked = false
             );
 
 
-        await refreshGroupsSilently();
+        await loadGroups();
 
 
     }catch(error){
@@ -2713,67 +2030,69 @@ async function createGroup(){
 }
 
 
-/* =========================================================
+/* =====================================
    WEBSOCKET
-========================================================= */
+===================================== */
 
 function connectSocket(){
 
     if(!me){
-        return;
-    }
-
-
-    if(
-        socket &&
-        socket.readyState ===
-        WebSocket.OPEN
-    ){
 
         return;
 
     }
 
 
-    const t =
-        token();
+    if(socket){
 
+        try{
+            socket.close();
+        }catch{}
 
-    if(!t){
-        return;
     }
 
 
-    const websocketBase =
+    const token =
+        getToken();
+
+
+    if(!token){
+
+        console.warn(
+            "No existe "+TOKEN_KEY
+        );
+
+        return;
+
+    }
+
+
+    const wsBase =
         API
         .replace(
-            "https://",
-            "wss://"
+            /^https:/,
+            "wss:"
         )
         .replace(
-            "http://",
-            "ws://"
+            /^http:/,
+            "ws:"
         );
 
 
     const url =
-        websocketBase +
-        "/ws/" +
+        wsBase+
+        "/ws/"+
         encodeURIComponent(
             me.username
-        ) +
-        "?token=" +
-        encodeURIComponent(
-            t
-        );
+        )+
+        "?token="+
+        encodeURIComponent(token);
 
 
     try{
 
         socket =
-            new WebSocket(
-                url
-            );
+            new WebSocket(url);
 
     }catch(error){
 
@@ -2792,16 +2111,12 @@ function connectSocket(){
         () => {
 
             console.log(
-                "Smart-Chat WebSocket conectado"
+                "Smart-Chat conectado"
             );
 
 
             if(pingTimer){
-
-                clearInterval(
-                    pingTimer
-                );
-
+                clearInterval(pingTimer);
             }
 
 
@@ -2816,7 +2131,9 @@ function connectSocket(){
                         ){
 
                             socket.send(
-                                "ping"
+                                JSON.stringify({
+                                    type:"ping"
+                                })
                             );
 
                         }
@@ -2846,22 +2163,22 @@ function connectSocket(){
                     "chat"
                 ){
 
-                    /*
-                       Solo actualiza mensajes nuevos.
-                       No reconstruye el chat.
-                    */
+                    if(
+                        currentType &&
+                        currentTarget
+                    ){
 
-                    await loadMessages(
-                        false
-                    );
+                        await loadMessages();
+
+                    }
 
                 }
 
 
             }catch(error){
 
-                console.error(
-                    "Error WebSocket:",
+                console.warn(
+                    "Mensaje WS inválido:",
                     error
                 );
 
@@ -2881,30 +2198,39 @@ function connectSocket(){
                     pingTimer
                 );
 
-                pingTimer =
-                    null;
+                pingTimer = null;
 
             }
 
 
-            if(reconnectTimer){
+            /*
+               Reconexión sin recargar
+               la página.
+            */
 
-                clearTimeout(
-                    reconnectTimer
-                );
+            setTimeout(
+                () => {
 
-            }
-
-
-            reconnectTimer =
-                setTimeout(
-                    () => {
-
+                    if(me){
                         connectSocket();
+                    }
 
-                    },
-                    3000
-                );
+                },
+                3000
+            );
+
+        }
+    );
+
+
+    socket.addEventListener(
+        "error",
+        error => {
+
+            console.warn(
+                "WebSocket error:",
+                error
+            );
 
         }
     );
@@ -2912,52 +2238,11 @@ function connectSocket(){
 }
 
 
-/* =========================================================
-   LOG OUT
-========================================================= */
-
-async function logout(){
-
-    try{
-
-        await api(
-            "/api/logout",
-            {
-                method:"POST"
-            }
-        );
-
-    }catch(error){
-
-        console.error(
-            "Logout:",
-            error
-        );
-
-    }
-
-
-    localStorage.removeItem(
-        TOKEN_KEY
-    );
-
-
-    localStorage.removeItem(
-        "knfoundation_user"
-    );
-
-
-    window.location.href =
-        AUTH_URL;
-
-}
-
-
-/* =========================================================
+/* =====================================
    EVENTOS
-========================================================= */
+===================================== */
 
-$("sendButton")
+$("sendBtn")
 .addEventListener(
     "click",
     sendMessage
@@ -2970,8 +2255,7 @@ $("messageInput")
     event => {
 
         if(
-            event.key ===
-            "Enter" &&
+            event.key === "Enter" &&
             !event.shiftKey
         ){
 
@@ -2985,13 +2269,12 @@ $("messageInput")
 );
 
 
-$("attachButton")
+$("fileBtn")
 .addEventListener(
     "click",
     () => {
 
-        $("fileInput")
-            .click();
+        $("fileInput").click();
 
     }
 );
@@ -3008,67 +2291,35 @@ $("fileInput")
 
         if(file){
 
-            await sendFile(
-                file
-            );
+            await sendFile(file);
 
         }
 
 
-        event.target.value =
-            "";
+        event.target.value = "";
 
     }
 );
 
 
-$("createGroupButton")
+$("createGroupBtn")
 .addEventListener(
     "click",
     createGroup
 );
 
 
-$("logoutButton")
-.addEventListener(
-    "click",
-    logout
-);
-
-
-/* =========================================================
-   REFRESH GENERAL SILENCIOSO
-========================================================= */
-
-async function refreshEverythingSilently(){
-
-    /*
-       IMPORTANTE:
-
-       Esto es el "refresh" periódico,
-       pero NO recarga index.html.
-
-       Actualiza toda la información
-       necesaria y conserva el DOM.
-    */
-
-    await Promise.allSettled([
-        refreshMeSilently(),
-        refreshUsersSilently(),
-        refreshGroupsSilently(),
-        loadMessages(false)
-    ]);
-
-}
-
-
-/* =========================================================
+/* =====================================
    INICIO
-========================================================= */
+===================================== */
 
 async function init(){
 
-    if(!token()){
+    const token =
+        getToken();
+
+
+    if(!token){
 
         window.location.href =
             AUTH_URL;
@@ -3090,29 +2341,36 @@ async function init(){
 
 
         /*
-           REFRESH GENERAL CADA 10 SEGUNDOS.
+           IMPORTANTE:
 
-           No hay location.reload().
-           No se borra .messages.
-           No se reconstruyen los usuarios.
+           Esto NO recarga la lista.
+           Solo cambia estados, PFPs,
+           usuarios nuevos/eliminados
+           y el estado del chat.
+
+           Así no existe el efecto
+           visual de que todo desaparece.
         */
 
         setInterval(
-    () => {
+            async () => {
 
-        refreshEverythingSilently()
-            .catch(
-                error => {
+                try{
+
+                    await refreshUsersSilently();
+
+                }catch(error){
+
                     console.error(
-                        "Refresh general:",
+                        "Error actualizando usuarios:",
                         error
                     );
-                }
-            );
 
-    },
-    5000
-);
+                }
+
+            },
+            10000
+        );
 
 
     }catch(error){
@@ -3123,14 +2381,13 @@ async function init(){
         );
 
 
-        $("chatName")
-            .textContent =
+        $("chatName").textContent =
             "Error";
 
 
-        $("chatSub")
-            .textContent =
-            "No se pudo conectar con Smart-Chat";
+        $("chatSub").textContent =
+            error.message ||
+            "No se pudo conectar con el servidor";
 
     }
 
